@@ -2,7 +2,7 @@ galaxy_info:
   author: Thomas CHALMEL
   description: Ansible role to configure Linux OS (Security, prerequisite packages and tools, etc ...)
   company: CLMA CONSULTING
-  role_name: shmii.os.os_common
+  role_name: os_common
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
   # issue_tracker_url: http://example.com/issue/tracker
