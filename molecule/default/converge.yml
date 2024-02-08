@@ -84,7 +84,7 @@
             owner: "root"
             group: "root"
             mode: '755'
-        lvm_create: false
+        lvm_create: true
         pvs_create: true
         lvs_create: true
         vgs_create: true
