@@ -1,0 +1,27 @@
+---
+- name: "OS Common - Users - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - os_common.users: "{{ os_common.users | default('') }}"
+      - os_common.users_create: "{{ os_common.users_create | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_users
+    - os_common_debug
+
+- name: "OS Common - Users - Check"
+  ansible.builtin.include_tasks: user.yml
+  loop: "{{ os_common.users | default([], true) }}"
+  loop_control:
+    loop_var: user
+  when:
+    - os_common.users_create  | default(true)
+    - os_common.users
+  tags:
+    - os_common
+    - os_common_users
+    - os_common_debug
+
+...

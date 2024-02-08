@@ -1,0 +1,88 @@
+---
+- name: "OS Common - Users - User - Debug Informations : {{ user.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - user: "{{ user | default('') }}"
+  when:
+    - os_common_role_debug | default(true)
+  tags:
+    - os_common
+    - os_common_users
+    - os_common_user
+    - os_common_debug
+
+- name: "OS Common - Users - User - Check : {{ user.name | default('') }}"
+  ansible.builtin.user:
+    name: "{{ user.name }}"
+    append: "{{ user.append | default(omit) }}"
+    authorization: "{{ user.authorization | default(omit) }}"
+    comment: "{{ user.comment | default(omit) }}"
+    create_home: "{{ user.create_home | default(omit) }}"
+    expires: "{{ user.expires | default(omit) }}"
+    force: "{{ user.force | default(omit) }}"
+    generate_ssh_key: "{{ user.generate_ssh_key | default(omit) }}"
+    group: "{{ user.group | default(omit) }}"
+    groups: "{{ user.groups | default(omit) }}"
+    hidden: "{{ user.hidden | default(omit) }}"
+    home: "{{ user.home | default(omit) }}"
+    local: "{{ user.local | default(omit) }}"
+    login_class: "{{ user.login_class | default(omit) }}"
+    move_home: "{{ user.login_class | default(omit) }}"
+    non_unique: "{{ user.non_unique | default(omit) }}"
+    password: "{{ user.move_home | default(omit) }}"
+    password_expire_max: "{{ user.password_expire_max | default(omit) }}"
+    password_expire_min: "{{ user.password_expire_min | default(omit) }}"
+    password_expire_warn: "{{ user.password_expire_warn | default(omit) }}"
+    password_lock: "{{ user.password_lock | default(omit) }}"
+    profile: "{{ user.profile | default(omit) }}"
+    remove: "{{ user.remove | default(omit) }}"
+    role: "{{ user.role | default(omit) }}"
+    seuser: "{{ user.seuser | default(omit) }}"
+    shell: "{{ user.shell | default(omit) }}"
+    skeleton: "{{ user.skeleton | default(omit) }}"
+    ssh_key_bits: "{{ user.ssh_key_bits | default(omit) }}"
+    ssh_key_comment: "{{ user.ssh_key_comment | default(omit) }}"
+    ssh_key_file: "{{ user.ssh_key_file | default(omit) }}"
+    ssh_key_passphrase: "{{ user.ssh_key_passphrase | default(omit) }}"
+    ssh_key_type: "{{ user.ssh_key_type | default(omit) }}"
+    state: "{{ user.state | default(omit) }}"
+    system: "{{ user.system | default(omit) }}"
+    uid: "{{ user.uid | default(omit) }}"
+    umask: "{{ user.umask | default(omit) }}"
+    update_password: "{{ user.update_password | default(omit) }}"
+  when:
+    - user.create | default(true)
+    - user
+  tags:
+    - os_common
+    - os_common_users
+    - os_common_user
+    - os_common_user_check
+
+- name: "OS Common - Users - User - Authorized Keys - Check : {{ user.name | default('') }}"
+  ansible.posix.authorized_key:
+    user: "{{ user.name }}"
+    key: "{{ authorized_key.authorized_key }}"
+    comment: "{{ authorized_key.comment | default(omit) }}"
+    exclusive: "{{ authorized_key.exclusive | default(omit) }}"
+    follow: "{{ authorized_key.follow | default(omit) }}"
+    key_options: "{{ authorized_key.key_options | default(omit) }}"
+    manage_dir: "{{ authorized_key.manage_dir | default(omit) }}"
+    path: "{{ authorized_key.path | default(omit) }}"
+    state: "{{ authorized_key.state | default(omit) }}"
+    validate_certs: "{{ authorized_key.validate_certs | default(omit) }}"
+  loop: "{{ user.authorized_keys | default([], true) }}"
+  loop_control:
+    loop_var: authorized_key
+  when:
+    - user
+    - user.create | default(true)
+    - user.authorized_keys_create | default(true)
+    - user.authorized_keys
+  tags:
+    - os_common
+    - os_common_users
+    - os_common_user
+    - os_common_user_authorized_keys_check
+
+...

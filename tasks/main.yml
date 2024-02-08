@@ -1,0 +1,36 @@
+---
+# Loading OS correct vars
+- name: "OS Common - Vars - Load"
+  ansible.builtin.import_tasks: load_vars.yml
+  tags:
+    - os_common
+    - os_common_vars
+    - os_common_vars_load
+
+- name: "OS Common - Vars - Print Informations"
+  ansible.builtin.debug:
+    msg:
+      - "os_common : {{ os_common | default([]) }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_vars
+    - os_common_vars_debug
+
+# Run Tasks.
+- name: "OS Common - Redhat Familly"
+  ansible.builtin.import_tasks: rhel_main.yml
+  when: ( ansible_os_family == 'RedHat' or ansible_os_family == 'Rocky' )
+  tags:
+    - os_common
+    - os_common_rhel
+
+- name: "OS Common - Debian Familly"
+  ansible.builtin.import_tasks: debian_main.yml
+  when: (ansible_facts['os_family'] == "Debian")
+  tags:
+    - os_common
+    - os_common_debian
+
+...

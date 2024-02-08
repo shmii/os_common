@@ -1,0 +1,40 @@
+---
+- name: "OS Common - Debian Familly - Repository - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - "ansible_os_family: {{ ansible_os_family | default('') }}"
+      - "ansible_distribution: {{ ansible_distribution | default('') }}"
+      - "ansible_distribution_version: {{ ansible_distribution_version | default('') }}"
+      - "ansible_distribution_major_version: {{ ansible_distribution_major_version | default('') }}"
+  when:
+    - os_common_role_debug | default(true)
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_debian
+    - os_common_debian_repositories
+    - os_common_debian_repositories
+
+- name: "OS Common - Debian Familly - Repo APT - Check"
+  ansible.builtin.apt_repository:
+    repo: "{{ repository.repo }}"
+    state: "{{ repository.state | default(omit) }}"
+    filename: "{{ repository.filename | default(omit) }}"
+    validate_certs: "{{ repository.validate_certs | default(omit) }}"
+    update_cache: "{{ repository.update_cache | default(false) }}"
+    update_cache_retries: "{{ repository.update_cache_retries | default(omit) }}"
+  loop: "{{ __os_common_base_repo_list | default([], true) }}"
+  loop_control:
+    loop_var: repository
+  register: repository_check_status
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  until: repository_check_status is success
+  when:
+    - __os_common_base_repo_update | default(false)
+  tags:
+    - os_common
+    - os_common_repository
+    - os_common_repository_check
+
+...

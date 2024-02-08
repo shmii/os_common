@@ -1,0 +1,12 @@
+---
+__os_common_package_manager_backend: "yum"
+__os_common_tools_packages:
+  - redhat-lsb-core
+  - bash-completion
+  - htop
+  - vim
+  - curl
+  - tmux
+  - screen
+  - telnet
+  - cifs-utils

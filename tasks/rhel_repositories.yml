@@ -1,0 +1,32 @@
+---
+
+# The goal of EPEL is to make high quality Fedora packages available for RHEL and compatible derivatives.
+# EPEL Packages a already included on Fedora distribution (ansible_distribution != 'Fedora')
+
+- name: OS Common - Redhat Familly - Repository - Epel
+  ansible.builtin.import_tasks: rhel_repository_epel.yml
+  when:
+    - ansible_distribution != 'Fedora'
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repository_epel
+
+# PowerTools is a repository of software that adds more utilities and resources for programs and development.
+# PowerTools expands the user choice by offering extra packages with tools.
+
+- name: OS Common - Redhat Familly - Repository - PowerTools
+  ansible.builtin.import_tasks: rhel_repository_powertools.yml
+  when:
+    - (ansible_facts['distribution_major_version'] >= "8" and
+       ansible_distribution != 'Fedora' and ansible_distribution != 'RedHat')
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repository_powertools
+
+...

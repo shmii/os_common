@@ -1,0 +1,62 @@
+---
+- name: "OS Common - Redhat Familly - Repositories - EPEL Repository - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - ansible_pkg_mgr: "{{ ansible_pkg_mgr | default('') }}"
+      - __os_common_epel_repo_path: "{{ __os_common_epel_repo_path | default('') }}"
+      - __os_common_epel_repo_key: "{{ __os_common_epel_repo_key | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_repositories_debug
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repositories_debug
+    - os_common_rhel_repository_epel
+    - os_common_rhel_repository_epel_debug
+
+- name: "OS Common - Redhat Familly - Repositories - EPEL Repository - Check repofile."
+  ansible.builtin.stat:
+    path: "{{ __os_common_epel_repo_path }}"
+  register: epel_repofile_result
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repository_epel
+    - os_common_rhel_repository_epel_check_repofile
+
+- name: "OS Common - Redhat Familly - Repositories - EPEL Repository - Check GPG Key."
+  ansible.builtin.rpm_key:
+    state: present
+    key: "{{ __os_common_epel_repo_key }}"
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repository_epel
+    - os_common_rhel_repository_epel_check_gpg_key
+
+- name: "OS Common - Redhat Familly - Repositories - EPEL Repository - Check Repository."
+  ansible.builtin.yum:
+    name: "{{ __os_common_epel_repo_path }}"
+    state: present
+    update_cache: false
+  register: result
+  until: result is succeeded
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  when: not epel_repofile_result.stat.exists
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repository_epel
+    - os_common_rhel_repository_epel_check_repository
+
+...

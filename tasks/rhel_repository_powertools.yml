@@ -1,0 +1,53 @@
+---
+- name: "OS Common - Redhat Familly - Repositories - PowerTools Repository - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - ansible_pkg_mgr: "{{ ansible_pkg_mgr | default('') }}"
+      - __os_common_powertools_repository_file: "{{ __os_common_powertools_repository_file | default('') }}"
+      - __os_common_powertools_repository_name: "{{ __os_common_powertools_repository_name | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_repositories_debug
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repositories_debug
+    - os_common_rhel_repository_powertools
+    - os_common_rhel_repository_powertools_debug
+
+- name: "OS Common - Redhat Familly - Repositories - PowerTools Repository - Enable powertools (dnf plugins core)"
+  ansible.builtin.dnf:
+    name: "dnf-plugins-core"
+    state: present
+    enablerepo: "epel"
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_repositories_debug
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repositories_debug
+    - os_common_rhel_repository_powertools
+    - os_common_rhel_repository_powertools_dnf_enable
+
+- name: "OS Common - Redhat Familly - Repositories - PowerTools Repository - Enable powertools"
+  community.general.ini_file:
+    path: "/etc/yum.repos.d/{{ __os_common_powertools_repository_file }}"
+    section: "{{ __os_common_powertools_repository_name }}"
+    option: enabled
+    value: "1"
+    mode: "0644"
+  notify:
+    - Yum update cache
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_repositories_debug
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repositories_debug
+    - os_common_rhel_repository_powertools
+    - os_common_rhel_repository_powertools_enable
+...

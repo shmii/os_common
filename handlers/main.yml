@@ -1,0 +1,12 @@
+---
+- name: Yum update cache
+  ansible.builtin.yum:
+    update_cache: true
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+
+- name: Dnf update cache
+  ansible.builtin.dnf:
+    update_cache: true
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"

@@ -1,0 +1,50 @@
+---
+__os_common_base_repo_update: true
+__os_common_base_repo_list:
+  - name : "http_archive.debian.org_debian_stretch"
+    repo: "deb http://archive.debian.org/debian-archive/debian/ stretch main"
+    validate_certs: false
+    state: present
+
+  - name : "http_archive.debian.org_debian-security_stretch/updates"
+    repo: "deb http://archive.debian.org/debian-security/ stretch/updates main"
+    validate_certs: false
+    state: present
+
+  - name : "https_archive.debian.org_debian_stretch"
+    repo: "deb https://archive.debian.org/debian-archive/debian/ stretch main"
+    state: absent
+
+  - name : "https_archive.debian.org_debian-security_stretch/updates"
+    repo: "deb https://archive.debian.org/debian-security/ stretch/updates main"
+    state: absent
+
+  - name : "ftp.debian.org_stretch"
+    repo: "deb http://ftp.debian.org/debian/ stretch main"
+    state: absent
+
+  - name : "ftp.debian.org_stretch_src"
+    repo: "deb-src http://ftp.debian.org/debian/ stretch main"
+    state: absent
+
+  - name : "ftp.us.debian.org_stretch"
+    repo: "deb http://ftp.us.debian.org/debian/ stretch main"
+    state: absent
+
+  - name : "ftp.us.debian.org_stretch_src"
+    repo: "deb-src http://ftp.us.debian.org/debian/ stretch main"
+    state: absent
+
+  - name : "security.debian.org_stretch_update"
+    repo: "deb http://security.debian.org/debian-security stretch/updates main"
+    state: absent
+
+  - name : "security.debian.org_stretch_update_src"
+    repo: "deb-src http://security.debian.org/debian-security stretch/updates main"
+    state: absent
+
+  - name : "ftp.debian.org_stretch_update"
+    repo: "deb http://ftp.debian.org/debian/ stretch-updates main"
+    state: absent
+
+...

@@ -1,0 +1,29 @@
+---
+- name: "OS Common - LVM - VGs - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - os_common.vgs_create: "{{ os_common.vgs_create | default('') }}"
+      - os_common.vgs: "{{ os_common.vgs | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vgs_debug
+
+- name: "OS Common - LVM - VGs - VG"
+  ansible.builtin.include_tasks: lvm.vg.yml
+  loop: "{{ os_common.vgs | default([], true) }}"
+  loop_control:
+    loop_var: vg
+  when:
+    - os_common.vgs_create | default(true)
+    - os_common.vgs
+  tags:
+    - os_common
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+...

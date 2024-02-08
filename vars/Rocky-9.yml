@@ -1,0 +1,20 @@
+---
+__os_common_tools_packages:
+  # - redhat-lsb-core
+  # The lsb packages is not provided curently in RHEL9.
+  # There are a couple of open bugzillas, one to add it to RHEL 9 proper and another to branch it for EPEL 9.
+  #
+  # https://bugzilla.redhat.com/show_bug.cgi?id=2088203
+  # https://bugzilla.redhat.com/show_bug.cgi?id=2088871
+  #
+  #  /!\ We need to re-add it when it's provided
+  #
+  - bash-completion
+  - htop
+  - vim
+  - curl
+  - tmux
+  - screen
+  - python3-pexpect
+  - telnet
+  - cifs-utils

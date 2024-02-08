@@ -1,0 +1,163 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  become: true
+  roles:
+    - role: os_common
+  vars:
+    - os_common_role_debug: true
+    - os_common:
+        groups_create: true
+        groups:
+          - name: group_one
+            gid: '1042'
+          - name: group_two
+          - name: 'group_three'
+            system: true
+          - name: group_four
+            state: absent
+            force: true
+          - name: group_five
+            create: true
+          - name: group_six
+            create: false
+        users_create: true
+        users:
+          - name: 'tchalmel'
+            authorized_keys_create: true
+            authorized_keys:
+              - authorized_key: 'https://raw.githubusercontent.com/shmii/public_key/main/id_ecdsa.pub'
+                manage_dir: true
+                state: present
+              - authorized_key: 'https://raw.githubusercontent.com/shmii/public_key/main/id_rsa.pub'
+                manage_dir: true
+                state: present
+          - name: 'user_one'
+          - name: 'user_two'
+            state: present
+            group: 'group_two'
+          - name: 'user_three'
+            append: true
+            groups: 'group_one, group_two'
+          - name: 'user_four'
+            append: true
+            groups:
+              - group_one
+              - group_two
+          - name: 'user_five'
+            state: absent
+            remove: true
+        directories_create: true
+        directories:
+          - path: '/mnt'
+          - path: '/mnt/mount_point_one'
+            owner: 'user_one'
+          - path: '/mnt/mount_point_two'
+            owner: 'user_two'
+            group: 'group_two'
+          - path: '/mnt/mount_point_three'
+            owner: 'user_three'
+            group: 'group_three'
+            mode: '755'
+          - path: '/mnt/mount_point_four'
+            owner: 'root'
+            group: 'root'
+            mode: '755'
+          - path: '/mnt/mount_point_five'
+            owner: 'root'
+            group: 'root'
+            mode: '755'
+          - path: '/mnt/mount_point_six'
+            owner: 'root'
+            group: 'root'
+            mode: '755'
+          - path: /app
+            owner: "root"
+            group: "root"
+            mode: '755'
+          - path: /app/infra
+            owner: "root"
+            group: "root"
+            mode: '755'
+          - path: /app/test
+            owner: "root"
+            group: "root"
+            mode: '755'
+        lvm_create: false
+        pvs_create: true
+        lvs_create: true
+        vgs_create: true
+        vgs:
+          - name: "vg_one"
+            tag: 'VGONE'
+            create: true
+            lvs_create: true
+            lvs:
+              - name: "lv_one"
+                size: '500m'
+                create: true
+                fs:
+                  fstype: 'ext2'
+                  resizefs: true
+                  create: true
+                mount_point:
+                  path: /mnt/mount_point_one
+                  mode: '755'
+                  create: true
+              - name: "lv_two"
+                size: '500m'
+                fs:
+                  fstype: 'ext3'
+                  resizefs: true
+                mount_point:
+                  path: /mnt/mount_point_two
+                  mode: '755'
+              - name: "lv_three"
+                size: '500m'
+                fs:
+                  fstype: 'ext4'
+                  resizefs: true
+                mount_point:
+                  path: /mnt/mount_point_three
+                  mode: '755'
+          - name: "vg_two"
+            tag: 'VGTWO'
+            create: true
+            lvs_create: true
+            lvs:
+              - name: "lv_four"
+                size: '500m'
+                fs:
+                  fstype: 'xfs'
+                mount_point:
+                  path: /mnt/mount_point_four
+                  mode: '755'
+                  create: true
+              - name: "lv_five"
+                size: '500m'
+                fs:
+                  fstype: 'xfs'
+                mount_point:
+                  path: /mnt/mount_point_five
+                  mode: '755'
+              - name: "lv_six"
+                size: '500m'
+                fs:
+                  fstype: 'xfs'
+                mount_point:
+                  path: /mnt/mount_point_six
+                  mode: '755'
+        disks:
+          - path: '/dev/vdb'
+            tag: 'VGONE'
+          - path: '/dev/vdc'
+            tag: 'VGONE'
+          - path: '/dev/vdd'
+            tag: 'VGTWO'
+          - path: '/dev/vde'
+            tag: 'VGTWO'
+
+...
+
+

@@ -1,0 +1,71 @@
+---
+- name: "OS Common - Debian Familly - Tools - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - "ansible_os_family: {{ ansible_os_family }}"
+      - "ansible_distribution: {{ ansible_distribution }}"
+      - "ansible_distribution_release: {{ ansible_distribution_release }}"
+      - "ansible_distribution_version: {{ ansible_distribution_version }}"
+      - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
+      - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
+      - "__os_common_package_manager_backend: {{ __os_common_package_manager_backend | default('') }}"
+      - "__os_common_tools_packages: {{ __os_common_tools_packages | default('') }}"
+      - "__os_common_repositories_retry: {{ __os_common_repositories_retry | default('') }}"
+      - "__os_common_repositories_delay: {{ __os_common_repositories_delay | default('') }}"
+  tags:
+    - os_common
+    - os_common_tools
+    - os_common_tools_debug
+    - os_common_debian
+    - os_common_debian_tools
+    - os_common_debian_tools_debug
+
+- name: "Ubuntu Familly - Install DSI tools - flush_handlers"
+  ansible.builtin.meta: flush_handlers
+
+- name: "OS Common - Debian Familly - Tools - Check (Allow Unauthenticated Repo)"
+  ansible.builtin.apt:
+    name: "{{ __os_common_tools_packages }}"
+    state: present
+    update_cache: true
+    allow_unauthenticated: true
+    install_recommends: false
+  register: apt_res
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  until: apt_res is success
+  when:
+    - ansible_distribution_major_version <= "9"
+  tags:
+    - os_common
+    - os_common_tools
+    - os_common_tools_check
+    - os_common_tools_check_unauthenticated
+    - os_common_debian
+    - os_common_debian_tools
+    - os_common_debian_tools_check
+    - os_common_debian_tools_check_unauthenticated
+
+- name: "OS Common - Debian Familly - Tools - Check"
+  ansible.builtin.apt:
+    name: "{{ __os_common_tools_packages }}"
+    state: present
+    update_cache: true
+    install_recommends: false
+  register: apt_res
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  until: apt_res is success
+  when:
+    - ansible_distribution_major_version >= "10"
+  tags:
+    - os_common
+    - os_common_tools
+    - os_common_tools_check
+    - os_common_tools_check_authenticated
+    - os_common_debian
+    - os_common_debian_tools
+    - os_common_debian_tools_check
+    - os_common_debian_tools_check_authenticated
+
+...

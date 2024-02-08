@@ -1,0 +1,121 @@
+---
+- name: "Applications Common - LVMs - VGs - VG - LV - Debug Informations : {{ lv.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - vg: "{{ vg }}"
+      - lv: "{{ lv }}"
+  when:
+    - os_common_role_debug | default(false)
+    - vg
+    - lv
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_lvs
+    - os_common_lv
+    - os_common_lv_debug
+
+- name: "Applications Common - LVMs - VGs - VG - LV - Check Logical Volume : {{ lv.name | default('') }}"
+  community.general.lvol:
+    lv: "{{ lv.name }}"
+    vg: "{{ vg.name }}"
+    active: "{{ lv.active | default(omit) }}"
+    force: "{{ lv.force | default(omit) }}"
+    opts: "{{ lv.opts | default(omit) }}"
+    pvs: "{{ lv.pvs | default(omit) }}"
+    resizefs: "{{ lv.resizefs | default(omit) }}"
+    shrink: "{{ lv.shrink | default(omit) }}"
+    size: "{{ lv.size | default(omit) }}"
+    snapshot: "{{ lv.snapshot | default(omit) }}"
+    state: "{{ lv.state | default(omit) }}"
+    thinpool: "{{ lv.thinpool | default(omit) }}"
+
+  when:
+    - lv.create | default( true )
+    - vg.name
+    - lv.name
+
+  tags:
+    - os_common
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_lvs
+    - os_common_lv
+    - os_common_lv_check
+
+- name: "Applications Common - LVMs - VGs - VG - LV - Check File System (FS) : {{ lv.name | default('') }}"
+  community.general.filesystem:
+    dev: "/dev/mapper/{{ vg.name }}-{{ lv.name }}"
+    force: "{{ lv.fs.force | default(omit) }}"
+    fstype: "{{ lv.fs.fstype | default(omit) }}"
+    opts: "{{ lv.fs.opts | default(omit) }}"
+    resizefs: "{{ lv.fs.resizefs | default(omit) }}"
+    state: "{{ lv.fs.state | default(omit) }}"
+    uuid: "{{ lv.fs.uuid | default(omit) }}"
+  when:
+    - lv.create | default( true )
+    - lv.fs.create | default( true )
+    - vg.name
+    - lv.name
+    - lv.fs
+  tags:
+    - os_common
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_lvs
+    - os_common_lv
+    - os_common_fs
+
+- name: "Applications Common - LVMs - VGs - VG - LV - Check Mount Point Directory : {{ lv.name | default('') }}"
+  ansible.builtin.file:
+    path: "{{ lv.mount_point.path }}"
+    state: directory
+    recurse: false
+    follow: false
+    mode: "{{ lv.mount_point.mode | default(omit) }}"
+  when:
+    - lv.create | default( true )
+    - lv.fs.create | default( true )
+    - lv.mount_point.create | default( true )
+    - vg.name
+    - lv.name
+    - lv.fs
+    - lv.mount_point.path
+  tags:
+    - os_common
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_lvs
+    - os_common_lv
+    - os_common_mount_point
+    - os_common_mount_point_directory_check
+
+- name: "Applications Common - LVMs - VGs - VG - LV - Check Mount Point : {{ lv.name | default('') }}"
+  ansible.posix.mount:
+    src: "/dev/mapper/{{ vg.name }}-{{ lv.name }}"
+    path: "{{ lv.mount_point.path }}"
+    fstype: "{{ lv.fs.fstype }}"
+    state: mounted
+    backup: "{{ lv.mount_point.backup | default(true) }}"
+    boot: "{{ lv.mount_point.boot | default(omit) }}"
+    dump: "{{ lv.mount_point.dump | default(omit) }}"
+    fstab: "{{ lv.mount_point.fstab | default(omit) }}"
+    opts: "{{ lv.mount_point.opts | default('defaults') }}"
+    passno: "{{ lv.mount_point.passno | default(omit) }}"
+  tags:
+    - os_common
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_lvs
+    - os_common_lv
+    - os_common_mount_point
+    - os_common_mount_point_check
+
+...

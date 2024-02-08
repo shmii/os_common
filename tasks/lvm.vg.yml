@@ -1,0 +1,99 @@
+---
+- name: "OS Common - LVM - VGs - VG - Debug Informations : {{ vg.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - os_common.disks: "{{ os_common.disks | default('') }}"
+      - vg: "{{ vg | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_vg_debug
+
+- name: "OS Common - LVMs - VGs - VG - Physical Volumes (pvs) - Create Empty Pvs list : {{ vg.name | default('') }}"
+  ansible.builtin.set_fact:
+    pvs: []
+  tags:
+    - os_common
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_pvs
+    - os_common_pvs_list
+    - os_common_pvs_list_create
+
+- name: "OS Common - LVMs - VGs - VG - Physical Volumes (pvs) - Fill Pvs list with disks: {{ vg.name | default('') }}"
+  ansible.builtin.set_fact:
+    pvs: "{{ pvs + [disk.path] }}"
+  loop: "{{ os_common.disks | default([], true) }}"
+  loop_control:
+    loop_var: disk
+  when:
+    - vg
+    - vg.tag
+    - disk
+    - disk.tag
+    - disk.path
+    - vg.tag == disk.tag
+  tags:
+    - os_common
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_pvs
+    - os_common_pvs_list
+    - os_common_pvs_list_fill
+
+- name: "OS Common - LVMs - VGs - VG - Physical Volumes (pvs) - Debug Informations : {{ vg.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - vg.name: "{{ vg.name | default('') }}"
+      - vg.tag: "{{ vg.tag | default('') }}"
+      - pvs: "{{ pvs | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_pvs
+    - os_common_pvs_list
+    - os_common_pvs_list_debug
+
+- name: "OS Common - LVMs - VGs - VG - Check : {{ vg.name | default('') }}"
+  community.general.lvg:
+    vg: "{{ vg.name }}"
+    pvs: "{{ pvs }}"
+  when:
+    - vgs_create | default(true)
+    - vg.create | default(true)
+    - vg.name
+    - pvs
+  tags:
+    - os_common
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_vg_check
+
+- name: "Applications Common - LVMs - VGs - VG - LVs : {{ vg.name | default('') }}"
+  ansible.builtin.include_tasks: lvm.lv.yml
+  loop: "{{ vg.lvs }}"
+  loop_control:
+    loop_var: lv
+  when:
+    - os_common.lvs_create | default(true)
+  tags:
+    - os_common
+    - os_common_lvm
+    - os_common_vgs
+    - os_common_vg
+    - os_common_lvs
+
+...

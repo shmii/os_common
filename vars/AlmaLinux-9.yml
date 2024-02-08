@@ -1,0 +1,12 @@
+---
+__os_common_tools_packages:
+  - bash-completion
+  - htop
+  - vim
+  - curl
+  - tmux
+  - screen
+  - python3-pexpect
+  - telnet
+  - cifs-utils
+  - tree

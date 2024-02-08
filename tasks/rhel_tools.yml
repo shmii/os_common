@@ -1,0 +1,70 @@
+---
+- name: "OS Common - Redhat Familly - DSI tools - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - "ansible_os_family: {{ ansible_os_family }}"
+      - "ansible_distribution: {{ ansible_distribution }}"
+      - "ansible_distribution_release: {{ ansible_distribution_release }}"
+      - "ansible_distribution_version: {{ ansible_distribution_version }}"
+      - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
+      - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
+      - "__os_common_package_manager_backend: {{ __os_common_package_manager_backend | default('') }}"
+      - "__os_common_tools_packages: {{ __os_common_tools_packages | default('') }}"
+      - "__os_common_repositories_retry: {{ __os_common_repositories_retry | default('') }}"
+      - "__os_common_repositories_delay: {{ __os_common_repositories_delay | default('') }}"
+  tags:
+    - os_common
+    - os_common_tools
+    - os_common_tools_debug
+    - os_common_rhel
+    - os_common_rhel_tools
+    - os_common_rhel_tools_debug
+
+- name: "OS Common - Redhat Familly - DSI tools - flush_handlers"
+  ansible.builtin.meta: flush_handlers
+
+- name: "OS Common - Redhat Familly - DSI tools - Yum - (Without PowerTools)"
+  ansible.builtin.yum:
+    name: "{{ __os_common_tools_packages }}"
+    state: present
+    enablerepo: "epel"
+    use_backend: "{{ ansible_pkg_mgr | default(omit) }}"
+  register: yum_res
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  until: yum_res is success
+  when:
+    - (ansible_distribution_major_version <= "7" and ansible_distribution == 'CentOS') or
+      (ansible_distribution_major_version <= "7" and ansible_distribution ==  'RedHat') or
+      (ansible_distribution == 'Fedora') or (ansible_distribution == 'Amazon')
+    - ansible_pkg_mgr == 'yum'
+  tags:
+    - os_common
+    - os_common_tools
+    - os_common_rhel
+    - os_common_rhel_tools
+    - os_common_rhel_tools_check_yum
+
+- name: "OS Common - Redhat Familly - DSI tools - dnf - (With PowerTools)"
+  ansible.builtin.dnf:
+    name: "{{ __os_common_tools_packages }}"
+    state: present
+    enablerepo: "epel, {{ __os_common_powertools_repository_name }}"
+    use_backend: "{{ ansible_pkg_mgr | default(omit) }}"
+    allowerasing: true
+  register: dnf_res
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  until: dnf_res is success
+  when:
+    - (ansible_distribution_major_version >= "8" and ansible_distribution == 'CentOS') or
+      (ansible_distribution != 'Fedora' and ansible_distribution != 'Amazon' and not
+      (ansible_distribution_major_version <= "7" and ansible_distribution == 'CentOS'))
+    - ansible_pkg_mgr == 'dnf'
+  tags:
+    - os_common
+    - os_common_tools
+    - os_common_rhel
+    - os_common_rhel_tools
+    - os_common_rhel_tools_check_dnf
+...

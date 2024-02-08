@@ -1,0 +1,30 @@
+---
+- name: Cleanup
+  hosts: all
+  become: true
+  gather_facts: true
+  # vars:
+  tasks:
+    - name: "Molecule(os_common): cleanup.yml - Redhat Familly - RHEL - Display Distribution informations"
+      ansible.builtin.debug:
+        msg:
+          - "ansible_os_family: {{ ansible_os_family }}"
+          - "ansible_distribution: {{ ansible_distribution }}"
+          - "ansible_distribution_release: {{ ansible_distribution_release }}"
+          - "ansible_distribution_version: {{ ansible_distribution_version }}"
+          - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
+      when:
+        - ansible_os_family == 'RedHat'
+        - ansible_distribution == 'RedHat'
+
+    - name: "Molecule(os_common): cleanup.yml - Redhat Familly - RHEL - Unregister Subscriptions"
+      community.general.redhat_subscription:
+        state: absent
+        username: "{{ rhel_account_user }}"
+        password: "{{ rhel_account_password }}"
+        auto_attach: true
+      when:
+        - ansible_os_family == 'RedHat'
+        - ansible_distribution == 'RedHat'
+
+...

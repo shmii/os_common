@@ -1,0 +1,37 @@
+---
+__os_common_powertools_repositories_names:
+  RedHat: powertools
+  AlmaLinux_9: crb
+  Rocky_9: crb
+
+__os_common_powertools_repository_name: "{{ __os_common_powertools_repositories_names[ansible_distribution ~ '_'~ ansible_distribution_major_version] | default(
+                                            __os_common_powertools_repositories_names[ansible_distribution] ) | default(
+                                            __os_common_powertools_repositories_names[ansible_os_family] ) }}"
+
+__os_common_powertools_repositories_files:
+  RedHat: "{{ ansible_distribution }}-powertools.repo"
+  AlmaLinux_8: "almalinux-powertools.repo"
+  AlmaLinux_9: "almalinux-crb.repo"
+  Rocky_8: "rockylinux-powertools.repo"
+  Rocky_9: "rockylinux-crb.repo"
+
+__os_common_powertools_repository_file: "{{ __os_common_powertools_repositories_files[ansible_distribution ~ '_'~ ansible_distribution_major_version] | default(
+                                            __os_common_powertools_repositories_files[ansible_distribution] ) | default(
+                                            __os_common_powertools_repositories_files[ansible_os_family] ) }}"
+
+
+__os_common_epel_repo_path: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+__os_common_epel_repo_key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+
+__os_common_tools_packages:
+  - redhat-lsb-core
+  - bash-completion
+  - htop
+  - vim
+  - curl
+  - tmux
+  - screen
+  - python3-pexpect
+  - telnet
+  - cifs-utils
+  - tree

@@ -1,0 +1,27 @@
+---
+- name: "OS Common - Groups - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - os_common.groups: "{{ os_common.groups | default('') }}"
+      - os_common.groups_create: "{{ os_common.groups_create | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_groups
+    - os_common_groups_debug
+
+- name: "OS Common - Groups - Check"
+  ansible.builtin.include_tasks: group.yml
+  loop: "{{ os_common.groups | default([], true) }}"
+  loop_control:
+    loop_var: group
+  when:
+    - os_common.groups_create | default(false)
+    - os_common.groups
+  tags:
+    - os_common
+    - os_common_groups
+    - os_common_groups_check
+...

@@ -1,0 +1,28 @@
+---
+- name: "OS Common - Directories - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - os_common.directories: "{{ os_common.directories | default('') }}"
+      - os_common.directories_create: "{{ os_common.directories_create | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_directories
+    - os_common_directories_debug
+
+- name: "OS Common - Directories - Check"
+  ansible.builtin.include_tasks: directory.yml
+  loop: "{{ os_common.directories | default([], true) }}"
+  loop_control:
+    loop_var: directory
+  when:
+    - os_common.directories_create | default(false)
+    - os_common.directories
+  tags:
+    - os_common
+    - os_common_directories
+    - os_common_directories_check
+
+...

@@ -1,0 +1,44 @@
+---
+- name: "OS Common - Directories - Directory - Debug Informations : {{ directory.path | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - directory: "{{ directory | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_directories
+    - os_common_directory
+    - os_common_directory_debug
+
+- name: "OS Common - Directories - Directory - Check : {{ directory.path | default('') }}"
+  ansible.builtin.file:
+    path: "{{ directory.path }}"
+    state: directory
+    access_time: "{{ directory.access_time | default(omit) }}"
+    access_time_format: "{{ directory.access_time_format | default(omit) }}"
+    attributes: "{{ directory.attributes | default(omit) }}"
+    follow: "{{ directory.follow | default(omit) }}"
+    force: "{{ directory.force | default(omit) }}"
+    group: "{{ directory.group | default(omit) }}"
+    mode: "{{ directory.mode | default(omit) }}"
+    modification_time: "{{ directory.modification_time | default(omit) }}"
+    modification_time_format: "{{ directory.modification_time_format | default(omit) }}"
+    owner: "{{ directory.owner | default(omit) }}"
+    recurse: "{{ directory.recurse | default(omit) }}"
+    selevel: "{{ directory.selevel | default(omit) }}"
+    serole: "{{ directory.serole | default(omit) }}"
+    setype: "{{ directory.setype | default(omit) }}"
+    unsafe_writes: "{{ directory.unsafe_writes | default(omit) }}"
+  when:
+    - directory.create | default(true)
+    - directory
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_directories
+    - os_common_directory
+    - os_common_directory_check
+
+...

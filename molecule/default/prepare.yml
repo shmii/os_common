@@ -1,0 +1,43 @@
+--- 
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: True
+  vars:
+    rhel_account_user: "{{ lookup('env', 'RHEL_ACCOUNT_USER') }}"
+    rhel_account_password: "{{ lookup('env', 'RHEL_ACCOUNT_PASSWORD') }}"
+  tasks:
+    - name: "Molecule(os_common): prepare.yml - Display Distribution informations"
+      ansible.builtin.debug:
+        msg:
+          - "ansible_os_family: {{ ansible_os_family }}"
+          - "ansible_distribution: {{ ansible_distribution }}"
+          - "ansible_distribution_release: {{ ansible_distribution_release }}"
+          - "ansible_distribution_version: {{ ansible_distribution_version }}"
+          - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
+
+    - name: 'Molecule(os_common): prepare.yml - Ubuntu Familly - Pré-requists packages - Force install of python-apt'
+      when:
+          - (ansible_os_family == 'Debian')
+          - (ansible_distribution_major_version != '11' and 
+            ansible_distribution_major_version != '12')
+      block:
+        - name: 'Molecule(os_common): prepare.yml - Ubuntu Familly - Pré-requists packages - Force update'
+          ansible.builtin.command: 'apt-get update'
+          ignore_errors: yes
+
+        - name: 'Molecule(os_common): prepare.yml - Ubuntu Familly - Pré-requists packages - Install'
+          ansible.builtin.command: 'apt-get update'
+          ignore_errors: yes
+
+    - name: "Molecule(os_common): prepare.yml - Redhat Familly - RHEL - Register Subscriptions"
+      community.general.redhat_subscription:
+        state: present
+        username: "{{ rhel_account_user }}"
+        password: "{{ rhel_account_password }}"
+        auto_attach: true
+      when:
+        - ansible_os_family == 'RedHat'
+        - ansible_distribution == 'RedHat'
+
+...

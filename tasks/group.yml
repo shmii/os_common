@@ -1,0 +1,32 @@
+---
+- name: "OS Common - Group - Debug Informations : {{ group.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - group: "{{ group | default('') }}"
+  when:
+    - os_common_role_debug | default(false)
+    - group.create | default(true)
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_groups
+    - os_common_group
+    - os_common_group_debug
+
+- name: "OS Common - Group - Check : {{ group.name | default('') }}"
+  ansible.builtin.group:
+    name: "{{ group.name }}"
+    force: "{{ group.force | default(omit) }}"
+    gid: "{{ group.gid | default(omit) }}"
+    local: "{{ group.local | default(omit) }}"
+    non_unique: "{{ group.non_unique | default(omit) }}"
+    state: "{{ group.state | default(omit) }}"
+    system: "{{ group.system | default(omit) }}"
+  when:
+    - group.create | default(true)
+  tags:
+    - os_common
+    - os_common_groups
+    - os_common_group
+    - os_common_group_check
+...
