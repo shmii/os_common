@@ -2,7 +2,7 @@
 - name: Prepare
   hosts: all
   become: true
-  gather_facts: True
+  gather_facts: true
   vars:
     rhel_account_user: "{{ lookup('env', 'RHEL_ACCOUNT_USER') }}"
     rhel_account_password: "{{ lookup('env', 'RHEL_ACCOUNT_PASSWORD') }}"
