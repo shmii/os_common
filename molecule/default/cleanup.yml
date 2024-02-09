@@ -3,7 +3,9 @@
   hosts: all
   become: true
   gather_facts: true
-  # vars:
+  vars:
+    rhel_account_user: "{{ lookup('env', 'RHEL_ACCOUNT_USER') }}"
+    rhel_account_password: "{{ lookup('env', 'RHEL_ACCOUNT_PASSWORD') }}"
   tasks:
     - name: "Molecule(os_common): cleanup.yml - Redhat Familly - RHEL - Display Distribution informations"
       ansible.builtin.debug:
