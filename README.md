@@ -4,10 +4,13 @@ Ansible role to configure Linux OS (Security, prerequisite packages and tools, e
 
 This role :
 
-- Install and configures Essentiels Extra Repositories (epel, powertools)
-- Install useful packages or sysadmin tools
-- Create base environement for systeme and infra administrators (users, directories, etc ...)
-- Create base environement for applications and servicies
+- Manage Essentiels Extra Repositories (epel, powertools)
+- Manage useful Packages and sysadmin tools (through the default `__os_common_tools_packages` dictionary)
+- Manage base operating system (OS) configuration (groups, users, directories, LVM, etc ...)
+  - Manage operating system groups (through the `os_common.groups` dictionary)
+  - Manage operating system users (through the `os_common.users` dictionary)
+  - Manage operating system directories (through the `os_common.directories` dictionary)
+  - Manage whole operating system LVM (disks, pv, vg, lv, and partitions) (through the `os_common.vgs`, and `os_common.disks` dictionaries)
 
 ## Test and run environement
 
@@ -38,41 +41,86 @@ molecule 6.0.3 using python 3.10
 - Python >= Python2.7 or >= Python3.16
 - Python-apt (depended of your python version)
 
-## Role Variables
+## The role variables
 
-Role Variables are listed below, along with default values (see `defaults/main.yml`):
+Role Variables are listed below, along with default values (see `defaults/main.yml`).
 
-### os_common
-
-All roles variables are regrouped on the `os_common` dictionary.
+### `os_common`
+*<span style="color: #7f00ff">dictionary</span>*
+Most of roles variables are regrouped on the `os_common` dictionary.
+*The `os_common` dictionary is not mendatory.*
 By default role provide an empty `os_common` dictionary.
 
-### os_app_directories
+#### `os_common.groups_create`
+*<span style="color: #7f00ff">boolean</span>*
+Use the `os_common.groups_create` variable to choose if you want to manage all groups.
+**Choices:**
+**<span style="color: #FF0000">- true ← (default) </span>**
+<span style="color: #0000FF">- false </span>
 
-Use `os_common.directories` dictionary to define applications direcories.
+#### `os_common.groups`
+*<span style="color: #7f00ff">list of `group` dictionaries</span>*
+Use `os_common.groups` dictionary to manage groups.
+It provide a list of `group` dictionary with it **`name`** and these defined parameters.
+(With usage defined on the `ansible.builtin.group` module documentation page)
+
+**Dictionary `group` Parameters :**
+| Parameters      |    Comments    |
+|:----------------|:---------------|
+| **name** <br><span style="color: #7f00ff">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the group to manage.|
+| **force** <br><span style="color: #7f00ff">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **gid** <br><span style="color: #7f00ff">integer</span> |  Optional GID to set for the group.|
+| **local** <br><span style="color: #7f00ff">boolean</span> |  Forces the use of “local” command alternatives on platforms that implement it.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **non_unique** <br><span style="color: #7f00ff">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **state** <br><span style="color: #7f00ff">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
+| **system** <br><span style="color: #7f00ff">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **create** <br><span style="color: #7f00ff">boolean</span> |  Used to manage or ignore this specifique group.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
+
+Example :
 
 ```yaml
 os_common:
-
   ...
-
-  directories:
-    - path: /app
-      owner: "root"
-      group: "root"
-      mode: 755
-    - path: /app/infra
-      owner: "root"
-      group: "root"
-      mode: 755
-    - path: /app/test
-      owner: "root"
-      group: "root"
-      mode: 755
-
+  groups:
+    - name: group_one
+      gid: '1042'
+    - name: group_two
+    - name: 'group_three'
+      system: true
+    - name: group_four
+      state: absent
+      force: true
+    - name: group_five
+      create: true
+    - name: group_six
+      create: false
   ...
-
 ```
+
+#### `os_common.users_create`
+*<span style="color: #7f00ff">boolean</span>*
+Use the `os_common.users_create` variable to choose if you want to manage all users.
+**Choices:**
+**<span style="color: #FF0000">- true ← (default) </span>**
+<span style="color: #0000FF">- false </span>
+
+#### `os_common.groups`
+*<span style="color: #7f00ff">list of `group` dictionaries</span>*
+Use `os_common.groups` dictionary to manage groups.
+It provide a list of `group` dictionary with it **`name`** and these defined parameters.
+(With usage defined on the `ansible.builtin.group` module documentation page)
+
+**Dictionary `group` Parameters :**
+| Parameters      |    Comments    |
+|:----------------|:---------------|
+| **name** <br><span style="color: #7f00ff">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the group to manage.|
+| **force** <br><span style="color: #7f00ff">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **gid** <br><span style="color: #7f00ff">integer</span> |  Optional GID to set for the group.|
+| **local** <br><span style="color: #7f00ff">boolean</span> |  Forces the use of “local” command alternatives on platforms that implement it.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **non_unique** <br><span style="color: #7f00ff">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **state** <br><span style="color: #7f00ff">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
+| **system** <br><span style="color: #7f00ff">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **create** <br><span style="color: #7f00ff">boolean</span> |  Used to manage or ignore this specifique group.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
 
 ## Dependencies
 

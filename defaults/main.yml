@@ -1,3 +1,5 @@
 ---
 __os_common_repositories_retry: 5
-__os_common_repositories_delay: 10
+__os_common_repositories_delay: 1
+
+...
