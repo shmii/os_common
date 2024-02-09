@@ -45,6 +45,14 @@ galaxy_info:
         - "7"
         - "8"
         - "9"
+    - name: AlmaLinux
+      versions:
+        - "8"
+        - "9"
+    - name: Rocky
+      versions:
+        - "8"
+        - "9"
     - name: Fedora
       versions:
         - "29"
@@ -70,7 +78,7 @@ galaxy_info:
         - jammy     # Ubuntu 22.04 LTS
     - name: Amazon
       versions:
-        - all
+        - "2"
 
   galaxy_tags:
     - linux
