@@ -46,35 +46,36 @@ molecule 6.0.3 using python 3.10
 Role Variables are listed below, along with default values (see `defaults/main.yml`).
 
 ### `os_common`
-*<span style="color: #7f00ff">dictionary</span>*
+*<span style="color: #7F00FF">dictionary</span>*
 Most of roles variables are regrouped on the `os_common` dictionary.
 *The `os_common` dictionary is not mendatory.*
 By default role provide an empty `os_common` dictionary.
 
 #### `os_common.groups_create`
-*<span style="color: #7f00ff">boolean</span>*
+*<span style="color: #7F00FF">boolean</span>*
 Use the `os_common.groups_create` variable to choose if you want to manage all groups.
 **Choices:**
 **<span style="color: #FF0000">- true ← (default) </span>**
 <span style="color: #0000FF">- false </span>
 
 #### `os_common.groups`
-*<span style="color: #7f00ff">list of `group` dictionaries</span>*
+*<span style="color: #7F00FF">list of `group` dictionaries</span>*
 Use `os_common.groups` dictionary to manage groups.
 It provide a list of `group` dictionary with it **`name`** and these defined parameters.
-(With usage defined on the `ansible.builtin.group` module documentation page)
+> **Warning !** Not all available variables are specified below. Refer to the [ansible.builtin.group](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/group_module.html) module documentation page to see all available variables and their uses.
 
-**Dictionary `group` Parameters :**
+**Dictionary `group` parameters :**
 | Parameters      |    Comments    |
 |:----------------|:---------------|
-| **name** <br><span style="color: #7f00ff">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the group to manage.|
-| **force** <br><span style="color: #7f00ff">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **gid** <br><span style="color: #7f00ff">integer</span> |  Optional GID to set for the group.|
-| **local** <br><span style="color: #7f00ff">boolean</span> |  Forces the use of “local” command alternatives on platforms that implement it.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **non_unique** <br><span style="color: #7f00ff">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **state** <br><span style="color: #7f00ff">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
-| **system** <br><span style="color: #7f00ff">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **create** <br><span style="color: #7f00ff">boolean</span> |  Used to manage or ignore this specifique group.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
+| **create** (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `group`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
+| **name** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the group to manage (create, remove or modify).|
+| **force** <br><span style="color: #7F00FF">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **gid** <br><span style="color: #7F00FF">integer</span> |  Optional GID to set for the group.|
+| **local** <br><span style="color: #7F00FF">boolean</span> |  Forces the use of “local” command alternatives on platforms that implement it.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **non_unique** <br><span style="color: #7F00FF">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **state** <br><span style="color: #7F00FF">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
+| **system** <br><span style="color: #7F00FF">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **create** <br><span style="color: #7F00FF">boolean</span> |  Used to manage or ignore this specifique group.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
 
 Example :
 
@@ -98,29 +99,66 @@ os_common:
 ```
 
 #### `os_common.users_create`
-*<span style="color: #7f00ff">boolean</span>*
+*<span style="color: #7F00FF">boolean</span>*
 Use the `os_common.users_create` variable to choose if you want to manage all users.
 **Choices:**
 **<span style="color: #FF0000">- true ← (default) </span>**
 <span style="color: #0000FF">- false </span>
 
-#### `os_common.groups`
-*<span style="color: #7f00ff">list of `group` dictionaries</span>*
-Use `os_common.groups` dictionary to manage groups.
-It provide a list of `group` dictionary with it **`name`** and these defined parameters.
-(With usage defined on the `ansible.builtin.group` module documentation page)
+#### `os_common.users`
+*<span style="color: #7F00FF">list of `user` dictionaries</span>*
+Use `os_common.users` dictionary to manage users.
+It provide a list of `user` dictionary with it **`name`** and these defined parameters.
+Avaliables vars and usage are defined on the [ansible.builtin.user module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html) module documentation page
 
-**Dictionary `group` Parameters :**
+> **Warning !** Not all available variables are specified below. Refer to the [ansible.builtin.user](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html) module documentation page to see all available variables and their uses.
+
+
+**mains Dictionary `user` parameters :**
 | Parameters      |    Comments    |
 |:----------------|:---------------|
-| **name** <br><span style="color: #7f00ff">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the group to manage.|
-| **force** <br><span style="color: #7f00ff">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **gid** <br><span style="color: #7f00ff">integer</span> |  Optional GID to set for the group.|
-| **local** <br><span style="color: #7f00ff">boolean</span> |  Forces the use of “local” command alternatives on platforms that implement it.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **non_unique** <br><span style="color: #7f00ff">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **state** <br><span style="color: #7f00ff">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
-| **system** <br><span style="color: #7f00ff">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **create** <br><span style="color: #7f00ff">boolean</span> |  Used to manage or ignore this specifique group.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
+| **create** (`user`) <br><span style="color: #7F00FF">boolean</span> |  **<span style="color: #008800">Role Specific Variable</span>** <br>Used to manage or ignore this specifique `user`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
+| **name** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the user to manage (create, remove or modify). |
+| ... | ...|
+| **state** <br><span style="color: #7F00FF">string</span> |  Whether the account should exist or not, taking action if the state is different from what is stated. <br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>** <br> <span style="color: #FF0000"> - "absent" </span>|
+| ... | ...|
+| **authorized_keys** <br> <span style="color: #7F00FF"> list of dictionary (`ssh keys`) </span> | **<span style="color: #008800">Role Specific Variable</span>** <br> Show `authorized_keys` variables information for more usage details|
+| ... | ...|
+| **system** <br><span style="color: #7F00FF">boolean</span> |  When creating an account `state=present`, setting this to `true` makes the user a system account. <br> This setting cannot be changed on existing users.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+
+Example :
+
+```yaml
+os_common:
+  ...
+  users:
+    - name: 'tchalmel'
+     comment: 'Thomas CHALMEL'
+      authorized_keys_create: true
+      authorized_keys:
+        - authorized_key: 'https://raw.githubusercontent.com/shmii/public_key/main/id_ecdsa.pub'
+          manage_dir: true
+          state: present
+        - authorized_key: 'https://raw.githubusercontent.com/shmii/public_key/main/id_rsa.pub'
+          manage_dir: true
+          state: present
+    - name: 'user_one'
+    - name: 'user_two'
+      state: present
+      group: 'group_two'
+    - name: 'user_three'
+      append: true
+      groups: 'group_one, group_two'
+    - name: 'user_four'
+      append: true
+      groups:
+        - group_one
+        - group_two
+    - name: 'user_five'
+      state: absent
+      remove: true
+  ...
+```
 
 ## Dependencies
 
