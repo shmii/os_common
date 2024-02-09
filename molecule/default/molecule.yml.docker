@@ -138,13 +138,7 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
-  - name: instance-geerlingguy-ubuntu1604
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu1604}-ansible:latest"
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    pre_build_image: true
+
   - name: instance-geerlingguy-ubuntu1804
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu1804}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
@@ -166,7 +160,16 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
+
 provisioner:
   name: ansible
-  playbooks:
-    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+  log: true
+  lint:
+    name: ansible-lint
+  env:
+    RHEL_ACCOUNT_USER: ${RHEL_ACCOUNT_USER:-"xxx"}
+    RHEL_ACCOUNT_PASSWORD: ${RHEL_ACCOUNT_PASSWORD:-"xxx"}
+  scenario:
+    name: default
+verifier:
+  name: ansible
