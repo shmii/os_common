@@ -6,7 +6,7 @@
   roles:
     - role: os_common
   vars:
-    - os_common_role_debug: true
+    - os_common_debug_level: 1
     - os_common:
         groups_create: true
         groups:
