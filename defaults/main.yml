@@ -1,3 +1,5 @@
 ---
+os_common_debug_level: 1
+
 __os_common_repositories_retry: 5
 __os_common_repositories_delay: 10

@@ -4,8 +4,7 @@
     msg:
       - os_common.users: "{{ os_common.users | default('') }}"
       - os_common.users_create: "{{ os_common.users_create | default('') }}"
-  when:
-    - os_common_role_debug | default(false)
+    verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
     - os_common_users

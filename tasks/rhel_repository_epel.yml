@@ -5,8 +5,7 @@
       - ansible_pkg_mgr: "{{ ansible_pkg_mgr | default('') }}"
       - __os_common_epel_repo_path: "{{ __os_common_epel_repo_path | default('') }}"
       - __os_common_epel_repo_key: "{{ __os_common_epel_repo_key | default('') }}"
-  when:
-    - os_common_role_debug | default(false)
+    verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
     - os_common_repositories
