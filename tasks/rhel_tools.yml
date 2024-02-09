@@ -2,16 +2,17 @@
 - name: "OS Common - Redhat Familly - DSI tools - Debug Informations"
   ansible.builtin.debug:
     msg:
-      - "ansible_os_family: {{ ansible_os_family }}"
-      - "ansible_distribution: {{ ansible_distribution }}"
-      - "ansible_distribution_release: {{ ansible_distribution_release }}"
-      - "ansible_distribution_version: {{ ansible_distribution_version }}"
-      - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
+      - "ansible_os_family: {{ ansible_os_family | default('') }}"
+      - "ansible_distribution: {{ ansible_distribution | default('') }}"
+      - "ansible_distribution_release: {{ ansible_distribution_release | default('') }}"
+      - "ansible_distribution_major_version: {{ ansible_distribution_major_version | default('') }}"
+      - "ansible_distribution_version: {{ ansible_distribution_version | default('') }}"
       - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
       - "__os_common_package_manager_backend: {{ __os_common_package_manager_backend | default('') }}"
       - "__os_common_tools_packages: {{ __os_common_tools_packages | default('') }}"
       - "__os_common_repositories_retry: {{ __os_common_repositories_retry | default('') }}"
       - "__os_common_repositories_delay: {{ __os_common_repositories_delay | default('') }}"
+    verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
     - os_common_tools

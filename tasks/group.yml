@@ -3,9 +3,7 @@
   ansible.builtin.debug:
     msg:
       - group: "{{ group | default('') }}"
-  when:
-    - os_common_role_debug | default(false)
-    - group.create | default(true)
+    verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
     - os_common_debug

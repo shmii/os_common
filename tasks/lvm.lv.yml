@@ -2,12 +2,9 @@
 - name: "Applications Common - LVMs - VGs - VG - LV - Debug Informations : {{ lv.name | default('') }}"
   ansible.builtin.debug:
     msg:
-      - vg: "{{ vg }}"
-      - lv: "{{ lv }}"
-  when:
-    - os_common_role_debug | default(false)
-    - vg
-    - lv
+      - vg: "{{ vg | default('') }}"
+      - lv: "{{ lv | default('') }}"
+    verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
     - os_common_debug
@@ -32,12 +29,10 @@
     snapshot: "{{ lv.snapshot | default(omit) }}"
     state: "{{ lv.state | default(omit) }}"
     thinpool: "{{ lv.thinpool | default(omit) }}"
-
   when:
     - lv.create | default( true )
     - vg.name
     - lv.name
-
   tags:
     - os_common
     - os_common_lvm
