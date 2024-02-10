@@ -21,7 +21,7 @@
     state: "{{ group.state | default(omit) }}"
     system: "{{ group.system | default(omit) }}"
   when:
-    - group.create | default(true)
+    - group.manage | default(true)
   tags:
     - os_common
     - os_common_groups

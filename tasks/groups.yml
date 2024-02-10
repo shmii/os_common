@@ -3,7 +3,7 @@
   ansible.builtin.debug:
     msg:
       - os_common.groups: "{{ os_common.groups | default('') }}"
-      - os_common.groups_create: "{{ os_common.groups_create | default('') }}"
+      - os_common.groups_manage: "{{ os_common.groups_manage | default('') }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
@@ -17,10 +17,11 @@
   loop_control:
     loop_var: group
   when:
-    - os_common.groups_create | default(false)
+    - os_common.groups_manage | default(false)
     - os_common.groups
   tags:
     - os_common
     - os_common_groups
     - os_common_groups_check
+
 ...

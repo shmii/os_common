@@ -2,7 +2,7 @@
 - name: "OS Common - LVM - VGs - Debug Informations"
   ansible.builtin.debug:
     msg:
-      - os_common.vgs_create: "{{ os_common.vgs_create | default('') }}"
+      - os_common.vgs_manage: "{{ os_common.vgs_manage | default('') }}"
       - os_common.vgs: "{{ os_common.vgs | default('') }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
@@ -18,7 +18,7 @@
   loop_control:
     loop_var: vg
   when:
-    - os_common.vgs_create | default(true)
+    - os_common.vgs_manage | default(true)
     - os_common.vgs
   tags:
     - os_common

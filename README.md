@@ -57,33 +57,39 @@ molecule 6.0.3 using python 3.10
 
 Role Variables are listed below, along with default values (see `defaults/main.yml`).
 
-### `os_common`
+### The role dictionary : *`os_common`*
 
+**`os_common`**
 *<span style="color: #7F00FF">dictionary</span>*
 
-:::info
 Most of roles variables are regrouped on the `os_common` dictionary.
 *The `os_common` dictionary is not mendatory.*
 By default role provide an empty `os_common` dictionary.
-:::
 
-#### `os_common.groups_create`
+#### Enable the groups management : `os_common.groups_manage`
+
+**`os_common.groups_manage`**
 *<span style="color: #7F00FF">boolean</span>*
-Use the `os_common.groups_create` variable to choose if you want to manage all groups.
+
+Use the `os_common.groups_manage` variable to globally Enable/Disable groups management.
 **Choices:**
 **<span style="color: #FF0000">- true ← (default) </span>**
 <span style="color: #0000FF">- false </span>
 
-#### `os_common.groups`
-*<span style="color: #7F00FF">list of `group` dictionaries</span>*
-Use `os_common.groups` dictionary to manage groups.
-It provide a list of `group` dictionary with it **`name`** and these defined parameters.
-> **Warning !** Not all available variables are specified below. Refer to the [ansible.builtin.group](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/group_module.html) module documentation page to see all available variables and their uses.
+#### The groups management : `os_common.groups`
 
-**Dictionary `group` parameters :**
+`os_common.groups`
+*<span style="color: #7F00FF">list of dictionaries</span>*
+
+Use `os_common.groups` list of dictionary to manage groups.
+It provide a list of `group` dictionary with it **`name`** and it defined parameters. All `ansible.builtin.group` variables can be used.
+:warning: Not all available variables are specified below.  Refer to the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module documentation page to see all available variables and their uses.
+
+**The Dictionary `group` parameters :**
+
 | Parameters      |    Comments    |
 |:----------------|:---------------|
-| **create** (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `group`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
+| **manage** (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `group`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
 | **name** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the group to manage (create, remove or modify).|
 | **force** <br><span style="color: #7F00FF">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
 | **gid** <br><span style="color: #7F00FF">integer</span> |  Optional GID to set for the group.|
@@ -91,7 +97,6 @@ It provide a list of `group` dictionary with it **`name`** and these defined par
 | **non_unique** <br><span style="color: #7F00FF">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
 | **state** <br><span style="color: #7F00FF">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
 | **system** <br><span style="color: #7F00FF">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **create** <br><span style="color: #7F00FF">boolean</span> |  Used to manage or ignore this specifique group.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
 
 Example :
 
@@ -108,15 +113,16 @@ os_common:
       state: absent
       force: true
     - name: group_five
-      create: true
+      manage: true
     - name: group_six
-      create: false
+      manage: false
   ...
 ```
 
-#### `os_common.users_create`
+#### `os_common.users_manage`
+
 *<span style="color: #7F00FF">boolean</span>*
-Use the `os_common.users_create` variable to choose if you want to manage all users.
+Use the `os_common.users_manage` variable to choose if you want to manage all users.
 **Choices:**
 **<span style="color: #FF0000">- true ← (default) </span>**
 <span style="color: #0000FF">- false </span>
@@ -133,12 +139,13 @@ Avaliables vars and usage are defined on the [ansible.builtin.user module](https
 **mains Dictionary `user` parameters :**
 | Parameters      |    Comments    |
 |:----------------|:---------------|
-| **create** (`user`) <br><span style="color: #7F00FF">boolean</span> |  **<span style="color: #008800">Role Specific Variable</span>** <br>Used to manage or ignore this specifique `user`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
+| **manage** (`user`) <br><span style="color: #7F00FF">boolean</span> |  **<span style="color: #008800">Role Specific Variable</span>** <br>Used to manage or ignore this `user`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
 | **name** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the user to manage (create, remove or modify). |
 | ... | ...|
 | **state** <br><span style="color: #7F00FF">string</span> |  Whether the account should exist or not, taking action if the state is different from what is stated. <br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>** <br> <span style="color: #FF0000"> - "absent" </span>|
 | ... | ...|
 | **authorized_keys** <br> <span style="color: #7F00FF"> list of dictionary (`ssh keys`) </span> | **<span style="color: #008800">Role Specific Variable</span>** <br> Show `authorized_keys` variables information for more usage details|
+| **authorized_keys_manage** <br> <span style="color: #7F00FF"> list of dictionary (`ssh keys`) </span> | **<span style="color: #008800">Role Specific Variable</span>** <br> Used to manage or ignore Keys for this `user`|
 | ... | ...|
 | **system** <br><span style="color: #7F00FF">boolean</span> |  When creating an account `state=present`, setting this to `true` makes the user a system account. <br> This setting cannot be changed on existing users.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
 
@@ -150,7 +157,7 @@ os_common:
   users:
     - name: 'tchalmel'
      comment: 'Thomas CHALMEL'
-      authorized_keys_create: true
+      authorized_keys_manage: true
       authorized_keys:
         - authorized_key: 'https://raw.githubusercontent.com/shmii/public_key/main/id_ecdsa.pub'
           manage_dir: true

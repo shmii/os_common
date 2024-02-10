@@ -8,7 +8,7 @@
   vars:
     - os_common_debug_level: 1
     - os_common:
-        groups_create: true
+        groups_manage: true
         groups:
           - name: group_one
             gid: '1042'
@@ -19,13 +19,13 @@
             state: absent
             force: true
           - name: group_five
-            create: true
+            manage: true
           - name: group_six
-            create: false
-        users_create: true
+            manage: false
+        users_manage: true
         users:
           - name: 'tchalmel'
-            authorized_keys_create: true
+            authorized_keys_manage: true
             authorized_keys:
               - authorized_key: 'https://raw.githubusercontent.com/shmii/public_key/main/id_ecdsa.pub'
                 manage_dir: true
@@ -48,7 +48,7 @@
           - name: 'user_five'
             state: absent
             remove: true
-        directories_create: true
+        directories_manage: true
         directories:
           - path: '/mnt'
           - path: '/mnt/mount_point_one'
@@ -84,27 +84,27 @@
             owner: "root"
             group: "root"
             mode: '755'
-        lvm_create: true
-        pvs_create: true
-        lvs_create: true
-        vgs_create: true
+        lvm_manage: true
+        pvs_manage: true
+        lvs_manage: true
+        vgs_manage: true
         vgs:
           - name: "vg_one"
             tag: 'VGONE'
-            create: true
-            lvs_create: true
+            manage: true
+            lvs_manage: true
             lvs:
               - name: "lv_one"
                 size: '500m'
-                create: true
+                manage: true
                 fs:
                   fstype: 'ext2'
                   resizefs: true
-                  create: true
+                  manage: true
                 mount_point:
                   path: /mnt/mount_point_one
                   mode: '755'
-                  create: true
+                  manage: true
               - name: "lv_two"
                 size: '500m'
                 fs:
@@ -123,8 +123,8 @@
                   mode: '755'
           - name: "vg_two"
             tag: 'VGTWO'
-            create: true
-            lvs_create: true
+            manage: true
+            lvs_manage: true
             lvs:
               - name: "lv_four"
                 size: '500m'
@@ -133,7 +133,7 @@
                 mount_point:
                   path: /mnt/mount_point_four
                   mode: '755'
-                  create: true
+                  manage: true
               - name: "lv_five"
                 size: '500m'
                 fs:

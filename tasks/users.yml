@@ -3,7 +3,7 @@
   ansible.builtin.debug:
     msg:
       - os_common.users: "{{ os_common.users | default('') }}"
-      - os_common.users_create: "{{ os_common.users_create | default('') }}"
+      - os_common.users_manage: "{{ os_common.users_manage | default('') }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
@@ -16,7 +16,7 @@
   loop_control:
     loop_var: user
   when:
-    - os_common.users_create  | default(true)
+    - os_common.users_manage  | default(true)
     - os_common.users
   tags:
     - os_common

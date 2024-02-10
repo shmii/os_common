@@ -31,7 +31,7 @@
     setype: "{{ directory.setype | default(omit) }}"
     unsafe_writes: "{{ directory.unsafe_writes | default(omit) }}"
   when:
-    - directory.create | default(true)
+    - directory.manage | default(true)
     - directory
   tags:
     - os_common

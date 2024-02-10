@@ -3,7 +3,7 @@
   ansible.builtin.debug:
     msg:
       - os_common.directories: "{{ os_common.directories | default('') }}"
-      - os_common.directories_create: "{{ os_common.directories_create | default('') }}"
+      - os_common.directories_manage: "{{ os_common.directories_manage | default('') }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
@@ -17,7 +17,7 @@
   loop_control:
     loop_var: directory
   when:
-    - os_common.directories_create | default(false)
+    - os_common.directories_manage | default(false)
     - os_common.directories
   tags:
     - os_common
