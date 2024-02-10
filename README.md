@@ -265,7 +265,6 @@ Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 
 ### Bibliography & Documentation
 
-
 | Sources                                           | Tutorials                                          |
 | ------------------------------------------------- |:-------------------------------------------------- |
 | Ansible - Module : `ansible.builtin.group`        | [:link:][Ansible-Module-ansible.builtin.group]     |
