@@ -263,19 +263,17 @@ Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 - Stephane ROBERT ( <https://www.linkedin.com/in/stephanerobert1>  ---  <https://blog.stephane-robert.info>)
 - Robert de BOCK ( <https://github.com/robertdebock>)
 
-### Bibliography
+### Bibliography & Documentation
 
 
-| Sources                                         | Tutorials                                          |
-| ----------------------------------------------- |:-------------------------------------------------- |
-| Ansible - Module : `ansible.builtin.group`        | [:link:][Ansible-Module-ansible.builtin.group]   |
-| Browser Extension                     | [:link:][HackMD-it]     |
-| Book Mode                             | [:link:][Book-mode]     |
-| Slide Mode                            | [:link:][Slide-mode]    | 
-| Share & Publish                       | [:link:][Share-Publish] |
+| Sources                                           | Tutorials                                          |
+| ------------------------------------------------- |:-------------------------------------------------- |
+| Ansible - Module : `ansible.builtin.group`        | [:link:][Ansible-Module-ansible.builtin.group]     |
+| Ansible - Module : `ansible.builtin.user`         | [:link:][Ansible-Module-ansible.builtin.user]      |
+| Ansible - Module : `ansible.posix.authorized_key` | [:link:][Ansible-Module-ansible.builtin.group]     |
 
-[Ansible-Module-ansible.builtin.group]: https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
-[Ansible-Module-ansible.builtin.user]: https://docs.ansible.com/ansible/9/collections/ansible/builtin/user_module.html
+[Ansible-Module-ansible.builtin.group]:        https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
+[Ansible-Module-ansible.builtin.user]:         https://docs.ansible.com/ansible/9/collections/ansible/builtin/user_module.html
 [Ansible-Module-ansible.posix.authorized_key]: https://docs.ansible.com/ansible/9/collections/ansible/posix/authorized_key_module.html
 
 ---
