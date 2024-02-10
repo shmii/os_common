@@ -30,7 +30,7 @@
     state: "{{ lv.state | default(omit) }}"
     thinpool: "{{ lv.thinpool | default(omit) }}"
   when:
-    - lv.create | default( true )
+    - lv.manage | default( true )
     - vg.name
     - lv.name
   tags:
@@ -52,8 +52,8 @@
     state: "{{ lv.fs.state | default(omit) }}"
     uuid: "{{ lv.fs.uuid | default(omit) }}"
   when:
-    - lv.create | default( true )
-    - lv.fs.create | default( true )
+    - lv.manage | default( true )
+    - lv.fs.manage | default( true )
     - vg.name
     - lv.name
     - lv.fs
@@ -74,9 +74,9 @@
     follow: false
     mode: "{{ lv.mount_point.mode | default(omit) }}"
   when:
-    - lv.create | default( true )
-    - lv.fs.create | default( true )
-    - lv.mount_point.create | default( true )
+    - lv.manage | default( true )
+    - lv.fs.manage | default( true )
+    - lv.mount_point.manage | default( true )
     - vg.name
     - lv.name
     - lv.fs

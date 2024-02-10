@@ -2,8 +2,8 @@
 - name: "OS Common - LVM - Debug Informations"
   ansible.builtin.debug:
     msg:
-      - os_common.lvm_create: "{{ os_common.lvm_create | default('') }}"
-      - os_common.vgs_create: "{{ os_common.vgs_create | default('') }}"
+      - os_common.lvm_manage: "{{ os_common.lvm_manage | default('') }}"
+      - os_common.vgs_manage: "{{ os_common.vgs_manage | default('') }}"
       - os_common.vgs: "{{ os_common.vgs | default('') }}"
       - os_common.disks: "{{ os_common.disks | default('') }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
@@ -15,7 +15,7 @@
 - name: "OS Common - LVM - VGs"
   ansible.builtin.import_tasks: lvm.vgs.yml
   when:
-    - os_common.lvm_create | default(true)
+    - os_common.lvm_manage | default(true)
   tags:
     - os_common
     - os_common_lvm

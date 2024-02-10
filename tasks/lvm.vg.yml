@@ -23,7 +23,7 @@
     - os_common_vg
     - os_common_pvs
     - os_common_pvs_list
-    - os_common_pvs_list_create
+    - os_common_pvs_list_manage
 
 - name: "OS Common - LVMs - VGs - VG - Physical Volumes (pvs) - Fill Pvs list with disks: {{ vg.name | default('') }}"
   ansible.builtin.set_fact:
@@ -69,8 +69,8 @@
     vg: "{{ vg.name }}"
     pvs: "{{ pvs }}"
   when:
-    - vgs_create | default(true)
-    - vg.create | default(true)
+    - vgs_manage | default(true)
+    - vg.manage | default(true)
     - vg.name
     - pvs
   tags:
@@ -86,7 +86,7 @@
   loop_control:
     loop_var: lv
   when:
-    - os_common.lvs_create | default(true)
+    - os_common.lvs_manage | default(true)
   tags:
     - os_common
     - os_common_lvm
