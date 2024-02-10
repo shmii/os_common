@@ -1,4 +1,8 @@
-# Ansible Role: os-common
+# Ansible Role: `os_common`
+
+---
+
+## The `os_common` Role
 
 Ansible role to configure Linux OS (Security, prerequisite packages and tools, etc ...)
 
@@ -12,7 +16,7 @@ This role :
   - Manage operating system directories (through the `os_common.directories` dictionary)
   - Manage whole operating system LVM (disks, pv, vg, lv, and partitions) (through the `os_common.vgs`, and `os_common.disks` dictionaries)
 
-
+---
 
 ## Requirements
 
@@ -66,17 +70,19 @@ Most of roles variables are regrouped on the `os_common` dictionary.
 *The `os_common` dictionary is not mendatory.*
 By default role provide an empty `os_common` dictionary.
 
-#### Enable the groups management : `os_common.groups_manage`
+#### Manage `groups`
+
+##### Enable the groups management : `os_common.groups_manage`
 
 **`os_common.groups_manage`**
 *<span style="color: #7F00FF">boolean</span>*
 
-Use the `os_common.groups_manage` variable to globally Enable/Disable groups management.
+Use the `os_common.groups_manage` variable to chose if you want to manage groups.
 **Choices:**
 **<span style="color: #FF0000">- true ← (default) </span>**
 <span style="color: #0000FF">- false </span>
 
-#### The groups management : `os_common.groups`
+##### The groups management : `os_common.groups`
 
 `os_common.groups`
 *<span style="color: #7F00FF">list of dictionaries</span>*
@@ -98,7 +104,8 @@ It provide a list of `group` dictionary with it **`name`** and it defined parame
 | **state** <br><span style="color: #7F00FF">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
 | **system** <br><span style="color: #7F00FF">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
 
-Example :
+
+**Example :**
 
 ```yaml
 os_common:
@@ -119,28 +126,34 @@ os_common:
   ...
 ```
 
-#### `os_common.users_manage`
+#### Manage `users`
 
+##### Enable the users management : `os_common.users_manage`
+
+`os_common.users_manage`
 *<span style="color: #7F00FF">boolean</span>*
+
 Use the `os_common.users_manage` variable to choose if you want to manage all users.
 **Choices:**
 **<span style="color: #FF0000">- true ← (default) </span>**
 <span style="color: #0000FF">- false </span>
 
-#### `os_common.users`
+##### The users management :  `os_common.users`
+
+`os_common.users`
 *<span style="color: #7F00FF">list of `user` dictionaries</span>*
+
 Use `os_common.users` dictionary to manage users.
 It provide a list of `user` dictionary with it **`name`** and these defined parameters.
-Avaliables vars and usage are defined on the [ansible.builtin.user module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html) module documentation page
 
-> **Warning !** Not all available variables are specified below. Refer to the [ansible.builtin.user](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html) module documentation page to see all available variables and their uses.
+:warning: Not all available variables are specified below. Refer to the `ansible.builtin.user`  [:link:][Ansible-Module-ansible.builtin.user] module documentation page to see all available variables and their uses.
 
+**Mains dictionary `user` parameters :**
 
-**mains Dictionary `user` parameters :**
 | Parameters      |    Comments    |
 |:----------------|:---------------|
 | **manage** (`user`) <br><span style="color: #7F00FF">boolean</span> |  **<span style="color: #008800">Role Specific Variable</span>** <br>Used to manage or ignore this `user`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
-| **name** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the user to manage (create, remove or modify). |
+| **name** <br><span style="color: #7F00FF">string</span> / **<span style="color: #FF0000">required</span>**|  Name of the user to manage (create, remove or modify). |
 | ... | ...|
 | **state** <br><span style="color: #7F00FF">string</span> |  Whether the account should exist or not, taking action if the state is different from what is stated. <br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>** <br> <span style="color: #FF0000"> - "absent" </span>|
 | ... | ...|
@@ -148,6 +161,37 @@ Avaliables vars and usage are defined on the [ansible.builtin.user module](https
 | **authorized_keys_manage** <br> <span style="color: #7F00FF"> list of dictionary (`ssh keys`) </span> | **<span style="color: #008800">Role Specific Variable</span>** <br> Used to manage or ignore Keys for this `user`|
 | ... | ...|
 | **system** <br><span style="color: #7F00FF">boolean</span> |  When creating an account `state=present`, setting this to `true` makes the user a system account. <br> This setting cannot be changed on existing users.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+
+
+##### Enable the users ssh keys management : `os_common.users[n].authorized_keys_manage`
+
+`os_common.users[n].authorized_keys_manage`
+*<span style="color: #7F00FF">boolean</span>*
+
+Use the `os_common.users[n].authorized_keys_manage` variable to choose if you want to manage all users ssh keys.
+**Choices:**
+**<span style="color: #FF0000">- true ← (default) </span>**
+<span style="color: #0000FF">- false </span>
+
+##### The users ssh keys management :  `os_common.users[n].authorized_keys`
+
+`os_common.users[n].authorized_keys`
+*<span style="color: #7F00FF">list of `authorized_keys` dictionaries</span>*
+
+Use `os_common.users[n].authorized_keys` dictionary to manage users ssh keys.
+It provide a list of `authorized_keys` dictionaries with the `key` and these defined parameters.
+
+:warning: Not all available variables are specified below.  Refer to the `ansible.posix.authorized_key`  [:link:][Ansible-Module-ansible.posix.authorized_key] module documentation page to see all available variables and their uses.
+
+**mains Dictionary `authorized_keys` parameters :**
+
+| Parameters      |    Comments    |
+|:----------------|:---------------|
+| **key** <br><span style="color: #7F00FF">string</span> / **<span style="color: #FF0000">required</span>**|  The SSH public key(s), as a string or url (https://github.com/username.keys). |
+| ... | ...|
+| **state** <br><span style="color: #7F00FF">string</span> |  Whether the given key (with the given key_options) should or should not be in the file. <br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>** <br> <span style="color: #FF0000"> - "absent" </span>|
+| ... | ...|
+| **manage_dir** <br><span style="color: #7F00FF">string</span> |  Whether this module should manage the directory of the authorized key file. <br> If set to `true`, the module will create the directory, as well as set the owner and permissions of an existing directory. <br> Be sure to set `manage_dir=false` if you are using an alternate directory for authorized_keys, as set with path, since you could lock yourself out of SSH access. <br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>** <br> <span style="color: #FF0000"> - "absent" </span> |
 
 Example :
 
@@ -231,8 +275,8 @@ Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 | Share & Publish                       | [:link:][Share-Publish] |
 
 [Ansible-Module-ansible.builtin.group]: https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
-[Ansible-Module-ansible.builtin.group]: https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
-[Ansible-Module-ansible.builtin.group]: https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
+[Ansible-Module-ansible.builtin.user]: https://docs.ansible.com/ansible/9/collections/ansible/builtin/user_module.html
+[Ansible-Module-ansible.posix.authorized_key]: https://docs.ansible.com/ansible/9/collections/ansible/posix/authorized_key_module.html
 
 ---
 
