@@ -12,7 +12,29 @@ This role :
   - Manage operating system directories (through the `os_common.directories` dictionary)
   - Manage whole operating system LVM (disks, pv, vg, lv, and partitions) (through the `os_common.vgs`, and `os_common.disks` dictionaries)
 
-## Test and run environement
+
+
+## Requirements
+
+### Requirements on runner
+
+```bash
+$ ansible --version
+ansible [core 2.16.3]
+  ...
+  python version = 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0] (/usr/bin/python3)
+  jinja version = 3.1.2
+  libyaml = True
+```
+
+### Requirements on targets
+
+```bash
+ - Python >= Python2.7 or >= Python3.16
+ - Python-apt (depended of your python version)
+```
+
+### Requirements on Test and run environement
 
 ```bash
 $ molecule --version
@@ -29,27 +51,21 @@ molecule 6.0.3 using python 3.10
     vagrant:23.5.0 from molecule_plugins
 ```
 
-## Requirements
-
-### Requirements on runner
-
-- ansible >= 2.16
-- python >= 3.10
-
-### Requirements on targets
-
-- Python >= Python2.7 or >= Python3.16
-- Python-apt (depended of your python version)
+---
 
 ## The role variables
 
 Role Variables are listed below, along with default values (see `defaults/main.yml`).
 
 ### `os_common`
+
 *<span style="color: #7F00FF">dictionary</span>*
+
+:::info
 Most of roles variables are regrouped on the `os_common` dictionary.
 *The `os_common` dictionary is not mendatory.*
 By default role provide an empty `os_common` dictionary.
+:::
 
 #### `os_common.groups_create`
 *<span style="color: #7F00FF">boolean</span>*
@@ -160,9 +176,13 @@ os_common:
   ...
 ```
 
+---
+
 ## Dependencies
 
 None.
+
+---
 
 ## Example Playbook
 
@@ -172,6 +192,8 @@ None.
         - { role: shmii.os-common }
 ```
 
+---
+
 ## Warning / known bugs
 
 /!\ To validate this role with "molecule" from Ubuntu @ WSL/WSL2 it is necessary to create the folder  `/sys/fs/cgroup/systemd` on the host linux subsystem.
@@ -180,17 +202,38 @@ None.
 
 This directory is necessary for some os (RHEL9, Rocky9, etc...) and not existing on local Ubuntu WSL sub Systeme.
 
+---
+
 ## Sources and Bibliography
 
 Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 
 - Jeff GEERLING ( <https://www.linkedin.com/in/jeff-geerling>  --- <https://github.com/geerlingguy>)
 - Stephane ROBERT ( <https://www.linkedin.com/in/stephanerobert1>  ---  <https://blog.stephane-robert.info>)
-- Robert de BOCK ( <https://github.com/robertdebock>  --- <https://github.com/geerlingguy>)
+- Robert de BOCK ( <https://github.com/robertdebock>)
+
+### Bibliography
+
+
+| Sources                                         | Tutorials                                          |
+| ----------------------------------------------- |:-------------------------------------------------- |
+| Ansible - Module : `ansible.builtin.group`        | [:link:][Ansible-Module-ansible.builtin.group]   |
+| Browser Extension                     | [:link:][HackMD-it]     |
+| Book Mode                             | [:link:][Book-mode]     |
+| Slide Mode                            | [:link:][Slide-mode]    | 
+| Share & Publish                       | [:link:][Share-Publish] |
+
+[Ansible-Module-ansible.builtin.group]: https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
+[Ansible-Module-ansible.builtin.group]: https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
+[Ansible-Module-ansible.builtin.group]: https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
+
+---
 
 ## License
 
 GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+
+---
 
 ## Author Information
 
