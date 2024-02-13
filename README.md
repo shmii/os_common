@@ -1,20 +1,52 @@
 # Ansible Role: `os_common`
 
----
-
 ## The `os_common` Role
 
-Ansible role to configure Linux OS (Security, prerequisite packages and tools, etc ...)
-
+Ansible role to manage Linux OS base configuration (Security, prerequisite packages and tools, etc ...)
 This role :
 
-- Manage Essentiels Extra Repositories (epel, powertools)
+- Manage Extra Packages Repositories (epel, powertools, etc ... )
 - Manage useful Packages and sysadmin tools (through the default `__os_common_tools_packages` dictionary)
 - Manage base operating system (OS) configuration (groups, users, directories, LVM, etc ...)
   - Manage operating system groups (through the `os_common.groups` dictionary)
   - Manage operating system users (through the `os_common.users` dictionary)
   - Manage operating system directories (through the `os_common.directories` dictionary)
   - Manage whole operating system LVM (disks, pv, vg, lv, and partitions) (through the `os_common.vgs`, and `os_common.disks` dictionaries)
+
+---
+
+- [Ansible Role: `os_common`](#ansible-role-os_common)
+  - [The `os_common` Role](#the-os_common-role)
+  - [Requirements](#requirements)
+    - [Requirements on runner](#requirements-on-runner)
+    - [Requirements on targets](#requirements-on-targets)
+    - [Requirements on Test and run environement](#requirements-on-test-and-run-environement)
+  - [Role variables](#role-variables)
+    - [1) The role dictionary : *`os_common`*](#1-the-role-dictionary--os_common)
+      - [1.a) Manage `groups` Variables](#1a-manage-groups-variables)
+        - [1.a.1) Enable groups management : `os_common.groups_manage`](#1a1-enable-groups-management--os_commongroups_manage)
+        - [1.a.2) Groups management : `os_common.groups`](#1a2-groups-management--os_commongroups)
+        - [1.a.3) The 'group' Dictionary : `os_common.groups[n]`](#1a3-the-group-dictionary--os_commongroupsn)
+      - [1.b) Manage `users` Variables](#1b-manage-users-variables)
+        - [1.b.1) Enable users management : `os_common.users_manage`](#1b1-enable-users-management--os_commonusers_manage)
+        - [1.b.2) Users management :  `os_common.users`](#1b2-users-management---os_commonusers)
+        - [1.b.3) The 'User' Dictionary : `os_common.users[n]`](#1b3-the-user-dictionary--os_commonusersn)
+        - [1.b.4) Enable user ssh keys management : `os_common.users[n].authorized_keys_manage`](#1b4-enable-user-ssh-keys-management--os_commonusersnauthorized_keys_manage)
+        - [1.b.5) User ssh keys management :  `os_common.users[n].authorized_keys`](#1b5-user-ssh-keys-management---os_commonusersnauthorized_keys)
+        - [1.b.6) The User 'authorized\_key' Dictionary :  `os_common.users[n].authorized_keys`](#1b6-the-user-authorized_key-dictionary---os_commonusersnauthorized_keys)
+      - [1.c) Manage `directories` Variables](#1c-manage-directories-variables)
+        - [1.c.1) Enable directories management : `os_common.directories_manage`](#1c1-enable-directories-management--os_commondirectories_manage)
+        - [1.c.2) Directories management : `os_common.directories`](#1c2-directories-management--os_commondirectories)
+        - [1.c.3) The 'group' Dictionary : `os_common.groups[n]`](#1c3-the-group-dictionary--os_commongroupsn)
+  - [Dependencies](#dependencies)
+  - [Example Playbook](#example-playbook)
+  - [Warning / known bugs](#warning--known-bugs)
+  - [Sources and Bibliography](#sources-and-bibliography)
+    - [Sources](#sources)
+    - [Bibliography \& Documentation](#bibliography--documentation)
+      - [Ansible Modules](#ansible-modules)
+  - [License](#license)
+  - [Author Information](#author-information)
 
 ---
 
@@ -57,11 +89,11 @@ molecule 6.0.3 using python 3.10
 
 ---
 
-## The role variables
+## Role variables
 
 Role Variables are listed below, along with default values (see `defaults/main.yml`).
 
-### The role dictionary : *`os_common`*
+### 1) The role dictionary : *`os_common`*
 
 **`os_common`**
 *<span style="color: #7F00FF">dictionary</span>*
@@ -70,11 +102,12 @@ Most of roles variables are regrouped on the `os_common` dictionary.
 *The `os_common` dictionary is not mendatory.*
 By default role provide an empty `os_common` dictionary.
 
-#### Manage `groups`
+#### 1.a) Manage `groups` Variables
 
-##### Enable the groups management : `os_common.groups_manage`
+##### 1.a.1) Enable groups management : `os_common.groups_manage`
 
 **`os_common.groups_manage`**
+*<span style="color: #008800">Role Specific Variable</span>*
 *<span style="color: #7F00FF">boolean</span>*
 
 Use the `os_common.groups_manage` variable to chose if you want to manage groups.
@@ -82,7 +115,7 @@ Use the `os_common.groups_manage` variable to chose if you want to manage groups
 **<span style="color: #FF0000">- true ← (default) </span>**
 <span style="color: #0000FF">- false </span>
 
-##### The groups management : `os_common.groups`
+##### 1.a.2) Groups management : `os_common.groups`
 
 `os_common.groups`
 *<span style="color: #7F00FF">list of dictionaries</span>*
@@ -91,6 +124,7 @@ Use `os_common.groups` list of dictionary to manage groups.
 It provide a list of `group` dictionary with it **`name`** and it defined parameters. All `ansible.builtin.group` variables can be used.
 :warning: Not all available variables are specified below.  Refer to the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module documentation page to see all available variables and their uses.
 
+##### 1.a.3) The 'group' Dictionary : `os_common.groups[n]`
 **The Dictionary `group` parameters :**
 
 | Parameters      |    Comments    |
@@ -103,7 +137,6 @@ It provide a list of `group` dictionary with it **`name`** and it defined parame
 | **non_unique** <br><span style="color: #7F00FF">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
 | **state** <br><span style="color: #7F00FF">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
 | **system** <br><span style="color: #7F00FF">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-
 
 **Example :**
 
@@ -126,11 +159,12 @@ os_common:
   ...
 ```
 
-#### Manage `users`
+#### 1.b) Manage `users` Variables
 
-##### Enable the users management : `os_common.users_manage`
+##### 1.b.1) Enable users management : `os_common.users_manage`
 
 `os_common.users_manage`
+*<span style="color: #008800">Role Specific Variable</span>*
 *<span style="color: #7F00FF">boolean</span>*
 
 Use the `os_common.users_manage` variable to choose if you want to manage all users.
@@ -138,7 +172,7 @@ Use the `os_common.users_manage` variable to choose if you want to manage all us
 **<span style="color: #FF0000">- true ← (default) </span>**
 <span style="color: #0000FF">- false </span>
 
-##### The users management :  `os_common.users`
+##### 1.b.2) Users management :  `os_common.users`
 
 `os_common.users`
 *<span style="color: #7F00FF">list of `user` dictionaries</span>*
@@ -147,6 +181,8 @@ Use `os_common.users` dictionary to manage users.
 It provide a list of `user` dictionary with it **`name`** and these defined parameters.
 
 :warning: Not all available variables are specified below. Refer to the `ansible.builtin.user`  [:link:][Ansible-Module-ansible.builtin.user] module documentation page to see all available variables and their uses.
+
+##### 1.b.3) The 'User' Dictionary : `os_common.users[n]`
 
 **Mains dictionary `user` parameters :**
 
@@ -162,10 +198,10 @@ It provide a list of `user` dictionary with it **`name`** and these defined para
 | ... | ...|
 | **system** <br><span style="color: #7F00FF">boolean</span> |  When creating an account `state=present`, setting this to `true` makes the user a system account. <br> This setting cannot be changed on existing users.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
 
-
-##### Enable the users ssh keys management : `os_common.users[n].authorized_keys_manage`
+##### 1.b.4) Enable user ssh keys management : `os_common.users[n].authorized_keys_manage`
 
 `os_common.users[n].authorized_keys_manage`
+*<span style="color: #008800">Role Specific Variable</span>*
 *<span style="color: #7F00FF">boolean</span>*
 
 Use the `os_common.users[n].authorized_keys_manage` variable to choose if you want to manage all users ssh keys.
@@ -173,7 +209,7 @@ Use the `os_common.users[n].authorized_keys_manage` variable to choose if you wa
 **<span style="color: #FF0000">- true ← (default) </span>**
 <span style="color: #0000FF">- false </span>
 
-##### The users ssh keys management :  `os_common.users[n].authorized_keys`
+##### 1.b.5) User ssh keys management :  `os_common.users[n].authorized_keys`
 
 `os_common.users[n].authorized_keys`
 *<span style="color: #7F00FF">list of `authorized_keys` dictionaries</span>*
@@ -182,6 +218,8 @@ Use `os_common.users[n].authorized_keys` dictionary to manage users ssh keys.
 It provide a list of `authorized_keys` dictionaries with the `key` and these defined parameters.
 
 :warning: Not all available variables are specified below.  Refer to the `ansible.posix.authorized_key`  [:link:][Ansible-Module-ansible.posix.authorized_key] module documentation page to see all available variables and their uses.
+
+##### 1.b.6) The User 'authorized_key' Dictionary :  `os_common.users[n].authorized_keys`
 
 **mains Dictionary `authorized_keys` parameters :**
 
@@ -227,6 +265,63 @@ os_common:
   ...
 ```
 
+#### 1.c) Manage `directories` Variables
+
+##### 1.c.1) Enable directories management : `os_common.directories_manage`
+
+**`os_common.directories_manage`**
+*<span style="color: #008800">Role Specific Variable</span>*
+*<span style="color: #7F00FF">boolean</span>*
+
+Use the `os_common.directories_manage` variable to chose if you want to manage directories.
+**Choices:**
+**<span style="color: #FF0000">- true ← (default) </span>**
+<span style="color: #0000FF">- false </span>
+
+##### 1.c.2) Directories management : `os_common.directories`
+
+`os_common.directories`
+*<span style="color: #7F00FF">list of dictionaries</span>*
+
+Use `os_common.directories` list of dictionary to manage directories.
+It provide a list of `directories` dictionary with it **`name`** and it defined parameters. All `ansible.builtin.directorie` variables can be used.
+:warning: Not all available variables are specified below.  Refer to the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module documentation page to see all available variables and their uses.
+
+##### 1.c.3) The 'group' Dictionary : `os_common.groups[n]`
+**The Dictionary `group` parameters :**
+
+| Parameters      |    Comments    |
+|:----------------|:---------------|
+| **manage** (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `group`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
+| **name** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the group to manage (create, remove or modify).|
+| **force** <br><span style="color: #7F00FF">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **gid** <br><span style="color: #7F00FF">integer</span> |  Optional GID to set for the group.|
+| **local** <br><span style="color: #7F00FF">boolean</span> |  Forces the use of “local” command alternatives on platforms that implement it.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **non_unique** <br><span style="color: #7F00FF">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **state** <br><span style="color: #7F00FF">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
+| **system** <br><span style="color: #7F00FF">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+
+**Example :**
+
+```yaml
+os_common:
+  ...
+  groups:
+    - name: group_one
+      gid: '1042'
+    - name: group_two
+    - name: 'group_three'
+      system: true
+    - name: group_four
+      state: absent
+      force: true
+    - name: group_five
+      manage: true
+    - name: group_six
+      manage: false
+  ...
+```
+
 ---
 
 ## Dependencies
@@ -257,6 +352,8 @@ This directory is necessary for some os (RHEL9, Rocky9, etc...) and not existing
 
 ## Sources and Bibliography
 
+### Sources
+
 Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 
 - Jeff GEERLING ( <https://www.linkedin.com/in/jeff-geerling>  --- <https://github.com/geerlingguy>)
@@ -265,6 +362,7 @@ Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 
 ### Bibliography & Documentation
 
+#### Ansible Modules
 
 | Sources                                           | Tutorials                                          |
 | ------------------------------------------------- |:-------------------------------------------------- |
