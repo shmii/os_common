@@ -37,7 +37,7 @@ This role :
       - [1.c) Manage `directories` Variables](#1c-manage-directories-variables)
         - [1.c.1) Enable directories management : `os_common.directories_manage`](#1c1-enable-directories-management--os_commondirectories_manage)
         - [1.c.2) Directories management : `os_common.directories`](#1c2-directories-management--os_commondirectories)
-        - [1.c.3) The 'group' Dictionary : `os_common.groups[n]`](#1c3-the-group-dictionary--os_commongroupsn)
+        - [1.c.3) The 'directory' Dictionary : `os_common.directories[n]`](#1c3-the-directory-dictionary--os_commondirectoriesn)
   - [Dependencies](#dependencies)
   - [Example Playbook](#example-playbook)
   - [Warning / known bugs](#warning--known-bugs)
@@ -121,8 +121,11 @@ Use the `os_common.groups_manage` variable to chose if you want to manage groups
 *<span style="color: #7F00FF">list of dictionaries</span>*
 
 Use `os_common.groups` list of dictionary to manage groups.
-It provide a list of `group` dictionary with it **`name`** and it defined parameters. All `ansible.builtin.group` variables can be used.
-:warning: Not all available variables are specified below.  Refer to the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module documentation page to see all available variables and their uses.
+It provide a list of `group` dictionary with it **`name`** and it defined parameters.
+To managed groups, this role is based on the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module.
+All module variables are implemented and can be used on the `group` dictionary.
+:warning: Not all available variables are specified below.
+Refer to the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module documentation page to see all available variables and their uses.
 
 ##### 1.a.3) The 'group' Dictionary : `os_common.groups[n]`
 **The Dictionary `group` parameters :**
@@ -177,10 +180,12 @@ Use the `os_common.users_manage` variable to choose if you want to manage all us
 `os_common.users`
 *<span style="color: #7F00FF">list of `user` dictionaries</span>*
 
-Use `os_common.users` dictionary to manage users.
-It provide a list of `user` dictionary with it **`name`** and these defined parameters.
-
-:warning: Not all available variables are specified below. Refer to the `ansible.builtin.user`  [:link:][Ansible-Module-ansible.builtin.user] module documentation page to see all available variables and their uses.
+Use `os_common.users` list of dictionary to manage users.
+It provide a list of `user` dictionary with it **`name`** and it defined parameters.
+To managed users, this role is based on the `ansible.builtin.user`[:link:][Ansible-Module-ansible.builtin.user] module.
+All module variables are implemented and can be used on the `user` dictionary.
+:warning: Not all available variables are specified below.
+Refer to the  `ansible.builtin.user`[:link:][Ansible-Module-ansible.builtin.user] module documentation page to see all available variables and their uses.
 
 ##### 1.b.3) The 'User' Dictionary : `os_common.users[n]`
 
@@ -214,10 +219,12 @@ Use the `os_common.users[n].authorized_keys_manage` variable to choose if you wa
 `os_common.users[n].authorized_keys`
 *<span style="color: #7F00FF">list of `authorized_keys` dictionaries</span>*
 
-Use `os_common.users[n].authorized_keys` dictionary to manage users ssh keys.
-It provide a list of `authorized_keys` dictionaries with the `key` and these defined parameters.
-
-:warning: Not all available variables are specified below.  Refer to the `ansible.posix.authorized_key`  [:link:][Ansible-Module-ansible.posix.authorized_key] module documentation page to see all available variables and their uses.
+Use `os_common.users[n].authorized_keys` list of dictionary to manage users ssh keys.
+It provide a list of `authorized_keys` dictionary with the **`key`** and it defined parameters.
+To managed ssh keys, this role is based on the `ansible.posix.authorized_key`[:link:][Ansible-Module-ansible.posix.authorized_key] module.
+All module variables are implemented and can be used on the `authorized_keys` dictionary.
+:warning: Not all available variables are specified below.
+Refer to the `ansible.posix.authorized_key`[:link:][Ansible-Module-ansible.posix.authorized_key] module documentation page to see all available variables and their uses.
 
 ##### 1.b.6) The User 'authorized_key' Dictionary :  `os_common.users[n].authorized_keys`
 
@@ -283,41 +290,52 @@ Use the `os_common.directories_manage` variable to chose if you want to manage d
 `os_common.directories`
 *<span style="color: #7F00FF">list of dictionaries</span>*
 
-Use `os_common.directories` list of dictionary to manage directories.
-It provide a list of `directories` dictionary with it **`name`** and it defined parameters. All `ansible.builtin.directorie` variables can be used.
-:warning: Not all available variables are specified below.  Refer to the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module documentation page to see all available variables and their uses.
+Use `os_common.directories` list of dictionary to manage groups.
+It provide a list of `directory` dictionary with it **`path`** and it defined parameters.
+To managed directories, this role is based on the `ansible.builtin.file`[:link:][Ansible-Module-ansible.builtin.file] module. (The `state` module variable of the module is forced to `directory` and couldn't be changed)
+All module variables are implemented and can be used on the `group` dictionary.
+:warning: Not all available variables are specified below.
+Refer to the `ansible.builtin.file`[:link:][Ansible-Module-ansible.builtin.file] module documentation page to see all available variables and their uses.
 
-##### 1.c.3) The 'group' Dictionary : `os_common.groups[n]`
-**The Dictionary `group` parameters :**
+##### 1.c.3) The 'directory' Dictionary : `os_common.directories[n]`
+
+**The Dictionary `directory` parameters :**
 
 | Parameters      |    Comments    |
 |:----------------|:---------------|
 | **manage** (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `group`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
-| **name** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the group to manage (create, remove or modify).|
-| **force** <br><span style="color: #7F00FF">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **gid** <br><span style="color: #7F00FF">integer</span> |  Optional GID to set for the group.|
-| **local** <br><span style="color: #7F00FF">boolean</span> |  Forces the use of “local” command alternatives on platforms that implement it.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **non_unique** <br><span style="color: #7F00FF">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **state** <br><span style="color: #7F00FF">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
-| **system** <br><span style="color: #7F00FF">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| **path** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Path to the directory being managed.|
+| **group** <br><span style="color: #7F00FF">string</span> |  Name of the group that should own the directory, as would be fed to `chown`. <br> When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership.|
+| **owner** <br><span style="color: #7F00FF">string</span> |  Name of the user that should own the directory, as would be fed to `chown`. <br> When left unspecified, it uses the current user unless you are `root`, in which case it can preserve the previous ownership.<br> Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion.|
+||
+| **mode** <br><span style="color: #7F00FF">any</span> |  The permissions the resulting filesystem object should have.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
+||
+| **selevel** <br><span style="color: #7F00FF">string</span> | The level part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
+| **serole** <br><span style="color: #7F00FF">string</span> | The role part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
+| **setype** <br><span style="color: #7F00FF">string</span> | The type part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
+| **seuser** <br><span style="color: #7F00FF">string</span> | The user part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
 
 **Example :**
 
 ```yaml
 os_common:
   ...
-  groups:
-    - name: group_one
-      gid: '1042'
-    - name: group_two
-    - name: 'group_three'
-      system: true
-    - name: group_four
-      state: absent
-      force: true
-    - name: group_five
-      manage: true
-    - name: group_six
+  directories_manage: true
+  directories:
+    - path: '/mnt'
+    - path: '/mnt/mount_point_one'
+      owner: 'user_one'
+    - path: '/mnt/mount_point_two'
+      owner: 'user_two'
+      group: 'group_two'
+    - path: '/mnt/mount_point_three'
+      owner: 'user_three'
+      group: 'group_three'
+      mode: '755'
+    - path: '/mnt/mount_point_four'
+      owner: 'user_three'
+      group: 'group_three'
+      mode: '755'
       manage: false
   ...
 ```
@@ -364,15 +382,17 @@ Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 
 #### Ansible Modules
 
-| Sources                                           | Tutorials                                          |
-| ------------------------------------------------- |:-------------------------------------------------- |
-| Ansible - Module : `ansible.builtin.group`        | [:link:][Ansible-Module-ansible.builtin.group]     |
-| Ansible - Module : `ansible.builtin.user`         | [:link:][Ansible-Module-ansible.builtin.user]      |
-| Ansible - Module : `ansible.posix.authorized_key` | [:link:][Ansible-Module-ansible.builtin.group]     |
+| Sources                                           | Tutorials                                                 |
+| ------------------------------------------------- |:--------------------------------------------------------- |
+| Ansible - Module : `ansible.builtin.group`        | [:link:][Ansible-Module-ansible.builtin.group]            |
+| Ansible - Module : `ansible.builtin.user`         | [:link:][Ansible-Module-ansible.builtin.user]             |
+| Ansible - Module : `ansible.posix.authorized_key` | [:link:][Ansible-Module-ansible.posix.authorized_key]     |
+| Ansible - Module : `ansible.builtin.file`         | [:link:][Ansible-Module-ansible.builtin.file]      |
 
 [Ansible-Module-ansible.builtin.group]:        https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
 [Ansible-Module-ansible.builtin.user]:         https://docs.ansible.com/ansible/9/collections/ansible/builtin/user_module.html
 [Ansible-Module-ansible.posix.authorized_key]: https://docs.ansible.com/ansible/9/collections/ansible/posix/authorized_key_module.html
+[Ansible-Module-ansible.builtin.file]:  https://docs.ansible.com/ansible/9/collections/ansible/builtin/file_module.html
 
 ---
 
