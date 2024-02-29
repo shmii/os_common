@@ -4,7 +4,6 @@ galaxy_info:
   company: CLMA CONSULTING
   role_name: os_common
   namespace: shmii
-  version: 3.0
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
   # issue_tracker_url: http://example.com/issue/tracker
