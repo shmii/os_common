@@ -398,10 +398,10 @@ Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 
 ## License
 
-GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+MIT - Copyright 2024 - Thomas CHALMEL (Shmii)
 
 ---
 
 ## Author Information
 
-This role was created in 2022 by [Thomas CHALMEL] (<https://www.thomas.chalmel.org/>).
+This role was created in 2022 by **Thomas CHALMEL** ([My GitHub](https://github.com/shmii) / [My e-mail](thomas@chalmel.org))
