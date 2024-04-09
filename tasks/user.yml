@@ -28,7 +28,7 @@
     login_class: "{{ user.login_class | default(omit) }}"
     move_home: "{{ user.login_class | default(omit) }}"
     non_unique: "{{ user.non_unique | default(omit) }}"
-    password: "{{ user.move_home | default(omit) }}"
+    password: "{{ user.password | password_hash('sha512') | default(omit) }}"
     password_expire_max: "{{ user.password_expire_max | default(omit) }}"
     password_expire_min: "{{ user.password_expire_min | default(omit) }}"
     password_expire_warn: "{{ user.password_expire_warn | default(omit) }}"
