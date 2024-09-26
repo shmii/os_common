@@ -29,7 +29,7 @@
     - os_common_group
     - os_common_group_check
 
-- name: "OS Common - Groups - group - Sudoer - Ensure the group has sudo rights : {{ group.name | default('') }}"
+- name: "OS Common - Groups - Group - Sudoer - Ensure the group has sudo rights : {{ group.name | default('') }}"
   ansible.builtin.lineinfile:
     path: "/etc/sudoers.d/g_{{ group.name }}"
     state: present
@@ -40,14 +40,14 @@
     mode: '0440'
     validate: "visudo -cf %s"  # Valide le fichier sudoers pour éviter les erreurs de syntaxe
   when:
-    - user
-    - user.name is defined
-    - user.manage | default(true)
-    - user.sudoer | default(false)
+    - group
+    - group.name is defined
+    - group.manage | default(true)
+    - group.sudoer | default(false)
   tags:
     - os_common
-    - os_common_users
-    - os_common_user
-    - os_common_user_sudoer
+    - os_common_groups
+    - os_common_group
+    - os_common_group_sudoer
 
 ...
