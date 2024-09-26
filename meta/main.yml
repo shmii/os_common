@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: Thomas CHALMEL
   description: Ansible role to configure Linux OS (Security, prerequisite packages and tools, etc ...)
@@ -93,5 +94,7 @@ galaxy_info:
     #       Maximum 20 tags per role.
 
 dependencies: []
-  # List your role dependencies here, one per line. Be sure to remove the '[]' above,
-  # if you add dependencies to this list.
+# List your role dependencies here, one per line. Be sure to remove the '[]' above,
+# if you add dependencies to this list.
+
+...

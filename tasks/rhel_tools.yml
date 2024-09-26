@@ -25,7 +25,7 @@
   ansible.builtin.meta: flush_handlers
 
 - name: "OS Common - Redhat Familly - DSI tools - Yum - (Without PowerTools)"
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ __os_common_tools_packages }}"
     state: present
     enablerepo: "epel"

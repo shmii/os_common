@@ -41,7 +41,7 @@
     - os_common_rhel_repository_epel_check_gpg_key
 
 - name: "OS Common - Redhat Familly - Repositories - EPEL Repository - Check Repository."
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ __os_common_epel_repo_path }}"
     state: present
     update_cache: false

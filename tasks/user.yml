@@ -2,13 +2,15 @@
 - name: "OS Common - Users - User - Debug Informations : {{ user.name | default('') }}"
   ansible.builtin.debug:
     msg:
-      - user: "{{ user | default('') }}"
+      - user: "{{ user | default({}) }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
-    - os_common_users
-    - os_common_user
     - os_common_debug
+    - os_common_users
+    - os_common_users_debug
+    - os_common_user
+    - os_common_user_debug
 
 - name: "OS Common - Users - User - Check : {{ user.name | default('') }}"
   ansible.builtin.user:
@@ -28,7 +30,7 @@
     login_class: "{{ user.login_class | default(omit) }}"
     move_home: "{{ user.login_class | default(omit) }}"
     non_unique: "{{ user.non_unique | default(omit) }}"
-    password: "{{ user.password | password_hash('sha512', 'FIXEDSALT') if (user.password is defined) else omit }}"
+    password: "{{ user.password | default(omit) }}"
     password_expire_max: "{{ user.password_expire_max | default(omit) }}"
     password_expire_min: "{{ user.password_expire_min | default(omit) }}"
     password_expire_warn: "{{ user.password_expire_warn | default(omit) }}"
@@ -83,5 +85,27 @@
     - os_common_users
     - os_common_user
     - os_common_user_authorized_keys_check
+
+
+- name: "OS Common - Users - User - Sudoer - Ensure the user has sudo rights : {{ user.name | default('') }}"
+  ansible.builtin.lineinfile:
+    path: "/etc/sudoers.d/u_{{ user.name }}"
+    state: present
+    create: true
+    line: "{{ user.name }} ALL=(ALL) NOPASSWD:ALL"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: "visudo -cf %s"  # Valide le fichier sudoers pour éviter les erreurs de syntaxe
+  when:
+    - user
+    - user.name is defined
+    - user.manage | default(true)
+    - user.sudoer | default(false)
+  tags:
+    - os_common
+    - os_common_users
+    - os_common_user
+    - os_common_user_sudoer
 
 ...

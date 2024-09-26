@@ -60,7 +60,7 @@ platforms:
   #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
   #   groups:
   #     - molecule_vm
-  
+
   - name: instance-vagrant-rhel9
     box: generic/rhel9
     interfaces:
@@ -75,7 +75,7 @@ platforms:
       - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
     groups:
       - molecule_vm
-  
+
   # - name: instance-vagrant-alma8
   #   box: generic/alma8
   #   interfaces:
@@ -90,7 +90,7 @@ platforms:
   #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
   #   groups:
   #     - molecule_vm
-  
+
   # - name: instance-vagrant-alma9
   #   box: generic/alma9
   #   interfaces:
@@ -105,7 +105,7 @@ platforms:
   #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
   #   groups:
   #     - molecule_vm
-  
+
   # - name: instance-vagrant-rockylinux8
   #   box: generic/rocky8
   #   interfaces:
@@ -120,7 +120,7 @@ platforms:
   #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
   #   groups:
   #     - molecule_vm
-  
+
   # - name: instance-vagrant-rockylinux9
   #   box: generic/rocky9
   #   interfaces:
@@ -135,7 +135,7 @@ platforms:
   #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
   #   groups:
   #     - molecule_vm
-  
+
   # - name: instance-vagrant-amazonlinux2
   #   box: jaredeh/amazonlinux2
   #   interfaces:
@@ -425,7 +425,7 @@ platforms:
 provisioner:
   name: ansible
   log: true
-  lint:  |
+  lint: |
     set -e
     yamllint .
     ansible-lint

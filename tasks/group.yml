@@ -1,5 +1,5 @@
 ---
-- name: "OS Common - Group - Debug Informations : {{ group.name | default('') }}"
+- name: "OS Common - Groups - Group - Debug Informations : {{ group.name | default('') }}"
   ansible.builtin.debug:
     msg:
       - group: "{{ group | default('') }}"
@@ -8,10 +8,11 @@
     - os_common
     - os_common_debug
     - os_common_groups
+    - os_common_groups_debug
     - os_common_group
     - os_common_group_debug
 
-- name: "OS Common - Group - Check : {{ group.name | default('') }}"
+- name: "OS Common - Groups - Group - Check : {{ group.name | default('') }}"
   ansible.builtin.group:
     name: "{{ group.name }}"
     force: "{{ group.force | default(omit) }}"
@@ -27,4 +28,26 @@
     - os_common_groups
     - os_common_group
     - os_common_group_check
+
+- name: "OS Common - Groups - Group - Sudoer - Ensure the group has sudo rights : {{ group.name | default('') }}"
+  ansible.builtin.lineinfile:
+    path: "/etc/sudoers.d/g_{{ group.name }}"
+    state: present
+    create: true
+    line: "{{ group.name }} ALL=(ALL) NOPASSWD:ALL"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: "visudo -cf %s"  # Valide le fichier sudoers pour éviter les erreurs de syntaxe
+  when:
+    - group
+    - group.name is defined
+    - group.manage | default(true)
+    - group.sudoer | default(false)
+  tags:
+    - os_common
+    - os_common_groups
+    - os_common_group
+    - os_common_group_sudoer
+
 ...
