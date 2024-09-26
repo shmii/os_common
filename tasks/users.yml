@@ -7,8 +7,9 @@
     verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
-    - os_common_users
     - os_common_debug
+    - os_common_users
+    - os_common_users_debug
 
 - name: "OS Common - Users - Check"
   ansible.builtin.include_tasks: user.yml
@@ -21,6 +22,6 @@
   tags:
     - os_common
     - os_common_users
-    - os_common_debug
+    - os_common_users_check
 
 ...
