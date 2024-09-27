@@ -23,7 +23,7 @@ This role :
     - [Requirements on Test and run environement](#requirements-on-test-and-run-environement)
   - [Role variables](#role-variables)
     - [1) The role dictionary : *`os_common`*](#1-the-role-dictionary--os_common)
-      - [1.a) Manage `groups` Variables](#1a-manage-groups-variables)
+      - [1.a) Managing Groups](#1a-managing-groups)
         - [1.a.1) Enable groups management : `os_common.groups_manage`](#1a1-enable-groups-management--os_commongroups_manage)
         - [1.a.2) Groups management : `os_common.groups`](#1a2-groups-management--os_commongroups)
         - [1.a.3) The 'group' Dictionary : `os_common.groups[n]`](#1a3-the-group-dictionary--os_commongroupsn)
@@ -38,6 +38,14 @@ This role :
         - [1.c.1) Enable directories management : `os_common.directories_manage`](#1c1-enable-directories-management--os_commondirectories_manage)
         - [1.c.2) Directories management : `os_common.directories`](#1c2-directories-management--os_commondirectories)
         - [1.c.3) The 'directory' Dictionary : `os_common.directories[n]`](#1c3-the-directory-dictionary--os_commondirectoriesn)
+      - [1.d) Logical Volume Management (`vgs`, and `disks`)](#1d-logical-volume-management-vgs-and-disks)
+        - [1.d.1) Enable lvm management : `os_common.lvm_manage`](#1d1-enable-lvm-management--os_commonlvm_manage)
+        - [1.d.2) Enable pvs management : `os_common.pvs_manage`](#1d2-enable-pvs-management--os_commonpvs_manage)
+        - [1.d.3) Enable lvs management : `os_common.lvs_manage`](#1d3-enable-lvs-management--os_commonlvs_manage)
+        - [1.d.4) Enable vgs management : `os_common.vgs_manage`](#1d4-enable-vgs-management--os_commonvgs_manage)
+        - [1.d.5) Vgs management : `os_common.vgs`](#1d5-vgs-management--os_commonvgs)
+        - [1.d.6) The 'vg' Dictionary : `os_common.vgs[n]`](#1d6-the-vg-dictionary--os_commonvgsn)
+        - [1.d.7) The 'lv' Dictionary : `os_common.vgs[n].lv[n]`](#1d7-the-lv-dictionary--os_commonvgsnlvn)
   - [Dependencies](#dependencies)
   - [Example Playbook](#example-playbook)
   - [Warning / known bugs](#warning--known-bugs)
@@ -45,6 +53,7 @@ This role :
     - [Sources](#sources)
     - [Bibliography \& Documentation](#bibliography--documentation)
       - [Ansible Modules](#ansible-modules)
+  - [Ansible-Module-ansible.posix.mount:                    https://docs.ansible.com/ansible/latest/collections/ansible/posix/mount\_module.html](#ansible-module-ansibleposixmount--------------------httpsdocsansiblecomansiblelatestcollectionsansibleposixmount_modulehtml)
   - [License](#license)
   - [Author Information](#author-information)
 
@@ -91,28 +100,45 @@ molecule 6.0.3 using python 3.10
 
 ## Role variables
 
+__Role Variables__
 Role Variables are listed below, along with default values (see `defaults/main.yml`).
+Most of roles variables are regrouped on the `os_common` dictionary.
+
+__Technical Role Variables (Internal)__
+Role Technical variables are used for technical usage and shouldn't need to be overwiten in normal time.
+Role Technical variables are prefixed by `__os_common_ ...` and can by find on the `vars` directory.
+This variables are organized and loaded in this order for each hosts from this vars files :
+
+1. - `vars/main.yml`
+2. - `vars/<ansible_os_family>.yml`
+3. - `vars/<ansible_distribution>.yml`
+4. - `vars/<ansible_distribution>-<ansible_distribution_major_version>.yml`
 
 ### 1) The role dictionary : *`os_common`*
 
-**`os_common`**
+__`os_common`__
 *<span style="color: #7F00FF">dictionary</span>*
 
 Most of roles variables are regrouped on the `os_common` dictionary.
-*The `os_common` dictionary is not mendatory.*
 By default role provide an empty `os_common` dictionary.
+*The `os_common` dictionary is not mendatory. (Only role defaults actions are applied)*
 
-#### 1.a) Manage `groups` Variables
+#### 1.a) Managing Groups
+
+Groups management is made throw this vars:
+
+- `os_common.groups_manage`  (*<span style="color: #7F00FF">boolean</span>*)
+- `os_common.groups`  (*<span style="color: #7F00FF">list of dictionaries</span>*)
 
 ##### 1.a.1) Enable groups management : `os_common.groups_manage`
 
-**`os_common.groups_manage`**
+__`os_common.groups_manage`__
 *<span style="color: #008800">Role Specific Variable</span>*
 *<span style="color: #7F00FF">boolean</span>*
 
 Use the `os_common.groups_manage` variable to chose if you want to manage groups.
-**Choices:**
-**<span style="color: #FF0000">- true ← (default) </span>**
+__Choices:__
+__<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
 ##### 1.a.2) Groups management : `os_common.groups`
@@ -121,27 +147,28 @@ Use the `os_common.groups_manage` variable to chose if you want to manage groups
 *<span style="color: #7F00FF">list of dictionaries</span>*
 
 Use `os_common.groups` list of dictionary to manage groups.
-It provide a list of `group` dictionary with it **`name`** and it defined parameters.
-To managed groups, this role is based on the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module.
+It provide a list of `group` dictionary with it __`name`__ and it defined parameters.
+To managed group, this role is based on the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module.
 All module variables are implemented and can be used on the `group` dictionary.
-:warning: Not all available variables are specified below.
-Refer to the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module documentation page to see all available variables and their uses.
+:warning: Not all available variables are specified below. Refer to the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module documentation page to see all available variables and their uses.
 
 ##### 1.a.3) The 'group' Dictionary : `os_common.groups[n]`
-**The Dictionary `group` parameters :**
+
+__The Dictionary `group` parameters :__
 
 | Parameters      |    Comments    |
 |:----------------|:---------------|
-| **manage** (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `group`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
-| **name** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Name of the group to manage (create, remove or modify).|
-| **force** <br><span style="color: #7F00FF">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **gid** <br><span style="color: #7F00FF">integer</span> |  Optional GID to set for the group.|
-| **local** <br><span style="color: #7F00FF">boolean</span> |  Forces the use of “local” command alternatives on platforms that implement it.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **non_unique** <br><span style="color: #7F00FF">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
-| **state** <br><span style="color: #7F00FF">string</span> |  Whether the group should be present or not on the remote host.<br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>**<br><span style="color: #FF0000"> - "absent" </span>|
-| **system** <br><span style="color: #7F00FF">boolean</span> |  If `true`, indicates that the group created is a system group.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| __manage__ (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `group`.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default) </span>__ <br><span style="color: #0000FF">- false </span>|
+| __name__ <br><span style="color: #7F00FF">boolean</span> / __<span style="color: #FF0000">required</span>__|  Name of the group to manage (create, remove or modify).|
+| __force__ <br><span style="color: #7F00FF">boolean</span> |  Whether to delete a group even if it is the primary group of a user.<br>Only applicable on platforms which implement a –force flag on the group deletion command.<br> __Choices:__ <br>__<span style="color: #0000FF">- false ← (default)</span>__<br><span style="color: #FF0000">- true </span>|
+| __gid__ <br><span style="color: #7F00FF">integer</span> |  Optional GID to set for the group.|
+| __local__ <br><span style="color: #7F00FF">boolean</span> |  Forces the use of “local” command alternatives on platforms that implement it.<br> __Choices:__ <br>__<span style="color: #0000FF">- false ← (default)</span>__<br><span style="color: #FF0000">- true </span>|
+| __non_unique__ <br><span style="color: #7F00FF">boolean</span> |  This option allows to change the group ID to a non-unique value. Requires `gid`.<br> __Choices:__ <br>__<span style="color: #0000FF">- false ← (default)</span>__<br><span style="color: #FF0000">- true </span>|
+| __state__ <br><span style="color: #7F00FF">string</span> |  Whether the group should be present or not on the remote host.<br> __Choices:__ <br>__<span style="color: #0000FF">- "present" ← (default)</span>__<br><span style="color: #FF0000"> - "absent" </span>|
+| __system__ <br><span style="color: #7F00FF">boolean</span> |  If `true`, indicates that the group created is a system group.<br> __Choices:__ <br>__<span style="color: #0000FF">- false ← (default)</span>__<br><span style="color: #FF0000">- true </span>|
+| __sudoer__ (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to add `sudo` with `NOPASSW` right to this `group`.<br>it's creating a `/etc/sudoers.d/g_{{ group.name }}"` file.<br> With `ALL=(ALL) NOPASSWD:ALL` rights <br>__Choices:__<br>__<span style="color: #0000FF">- false ← (default)</span>__<br><span style="color: #FF0000">- true</span> |
 
-**Example :**
+__Example :__
 
 ```yaml
 os_common:
@@ -171,8 +198,8 @@ os_common:
 *<span style="color: #7F00FF">boolean</span>*
 
 Use the `os_common.users_manage` variable to choose if you want to manage all users.
-**Choices:**
-**<span style="color: #FF0000">- true ← (default) </span>**
+__Choices:__
+__<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
 ##### 1.b.2) Users management :  `os_common.users`
@@ -181,7 +208,7 @@ Use the `os_common.users_manage` variable to choose if you want to manage all us
 *<span style="color: #7F00FF">list of `user` dictionaries</span>*
 
 Use `os_common.users` list of dictionary to manage users.
-It provide a list of `user` dictionary with it **`name`** and it defined parameters.
+It provide a list of `user` dictionary with it __`name`__ and it defined parameters.
 To managed users, this role is based on the `ansible.builtin.user`[:link:][Ansible-Module-ansible.builtin.user] module.
 All module variables are implemented and can be used on the `user` dictionary.
 :warning: Not all available variables are specified below.
@@ -189,19 +216,19 @@ Refer to the  `ansible.builtin.user`[:link:][Ansible-Module-ansible.builtin.user
 
 ##### 1.b.3) The 'User' Dictionary : `os_common.users[n]`
 
-**Mains dictionary `user` parameters :**
+__Mains dictionary `user` parameters :__
 
 | Parameters      |    Comments    |
 |:----------------|:---------------|
-| **manage** (`user`) <br><span style="color: #7F00FF">boolean</span> |  **<span style="color: #008800">Role Specific Variable</span>** <br>Used to manage or ignore this `user`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
-| **name** <br><span style="color: #7F00FF">string</span> / **<span style="color: #FF0000">required</span>**|  Name of the user to manage (create, remove or modify). |
+| __manage__ (`user`) <br><span style="color: #7F00FF">boolean</span> |  __<span style="color: #008800">Role Specific Variable</span>__ <br>Used to manage or ignore this `user`.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default) </span>__ <br><span style="color: #0000FF">- false </span>|
+| __name__ <br><span style="color: #7F00FF">string</span> / __<span style="color: #FF0000">required</span>__|  Name of the user to manage (create, remove or modify). |
 | ... | ...|
-| **state** <br><span style="color: #7F00FF">string</span> |  Whether the account should exist or not, taking action if the state is different from what is stated. <br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>** <br> <span style="color: #FF0000"> - "absent" </span>|
+| __state__ <br><span style="color: #7F00FF">string</span> |  Whether the account should exist or not, taking action if the state is different from what is stated. <br> __Choices:__ <br>__<span style="color: #0000FF">- "present" ← (default)</span>__ <br> <span style="color: #FF0000"> - "absent" </span>|
 | ... | ...|
-| **authorized_keys** <br> <span style="color: #7F00FF"> list of dictionary (`ssh keys`) </span> | **<span style="color: #008800">Role Specific Variable</span>** <br> Show `authorized_keys` variables information for more usage details|
-| **authorized_keys_manage** <br> <span style="color: #7F00FF"> list of dictionary (`ssh keys`) </span> | **<span style="color: #008800">Role Specific Variable</span>** <br> Used to manage or ignore Keys for this `user`|
+| __authorized_keys__ <br> <span style="color: #7F00FF"> list of dictionary (`ssh keys`) </span> | __<span style="color: #008800">Role Specific Variable</span>__ <br> Show `authorized_keys` variables information for more usage details|
+| __authorized_keys_manage__ <br> <span style="color: #7F00FF"> list of dictionary (`ssh keys`) </span> | __<span style="color: #008800">Role Specific Variable</span>__ <br> Used to manage or ignore Keys for this `user`|
 | ... | ...|
-| **system** <br><span style="color: #7F00FF">boolean</span> |  When creating an account `state=present`, setting this to `true` makes the user a system account. <br> This setting cannot be changed on existing users.<br> **Choices:** <br>**<span style="color: #0000FF">- false ← (default)</span>**<br><span style="color: #FF0000">- true </span>|
+| __system__ <br><span style="color: #7F00FF">boolean</span> |  When creating an account `state=present`, setting this to `true` makes the user a system account. <br> This setting cannot be changed on existing users.<br> __Choices:__ <br>__<span style="color: #0000FF">- false ← (default)</span>__<br><span style="color: #FF0000">- true </span>|
 
 ##### 1.b.4) Enable user ssh keys management : `os_common.users[n].authorized_keys_manage`
 
@@ -210,8 +237,8 @@ Refer to the  `ansible.builtin.user`[:link:][Ansible-Module-ansible.builtin.user
 *<span style="color: #7F00FF">boolean</span>*
 
 Use the `os_common.users[n].authorized_keys_manage` variable to choose if you want to manage all users ssh keys.
-**Choices:**
-**<span style="color: #FF0000">- true ← (default) </span>**
+__Choices:__
+__<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
 ##### 1.b.5) User ssh keys management :  `os_common.users[n].authorized_keys`
@@ -220,7 +247,7 @@ Use the `os_common.users[n].authorized_keys_manage` variable to choose if you wa
 *<span style="color: #7F00FF">list of `authorized_keys` dictionaries</span>*
 
 Use `os_common.users[n].authorized_keys` list of dictionary to manage users ssh keys.
-It provide a list of `authorized_keys` dictionary with the **`key`** and it defined parameters.
+It provide a list of `authorized_keys` dictionary with the __`key`__ and it defined parameters.
 To managed ssh keys, this role is based on the `ansible.posix.authorized_key`[:link:][Ansible-Module-ansible.posix.authorized_key] module.
 All module variables are implemented and can be used on the `authorized_keys` dictionary.
 :warning: Not all available variables are specified below.
@@ -228,15 +255,15 @@ Refer to the `ansible.posix.authorized_key`[:link:][Ansible-Module-ansible.posix
 
 ##### 1.b.6) The User 'authorized_key' Dictionary :  `os_common.users[n].authorized_keys`
 
-**mains Dictionary `authorized_keys` parameters :**
+__mains Dictionary `authorized_keys` parameters :__
 
 | Parameters      |    Comments    |
 |:----------------|:---------------|
-| **key** <br><span style="color: #7F00FF">string</span> / **<span style="color: #FF0000">required</span>**|  The SSH public key(s), as a string or url (https://github.com/username.keys). |
+| __key__ <br><span style="color: #7F00FF">string</span> / __<span style="color: #FF0000">required</span>__|  The SSH public key(s), as a string or url (https://github.com/username.keys). |
 | ... | ...|
-| **state** <br><span style="color: #7F00FF">string</span> |  Whether the given key (with the given key_options) should or should not be in the file. <br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>** <br> <span style="color: #FF0000"> - "absent" </span>|
+| __state__ <br><span style="color: #7F00FF">string</span> |  Whether the given key (with the given key_options) should or should not be in the file. <br> __Choices:__ <br>__<span style="color: #0000FF">- "present" ← (default)</span>__ <br> <span style="color: #FF0000"> - "absent" </span>|
 | ... | ...|
-| **manage_dir** <br><span style="color: #7F00FF">string</span> |  Whether this module should manage the directory of the authorized key file. <br> If set to `true`, the module will create the directory, as well as set the owner and permissions of an existing directory. <br> Be sure to set `manage_dir=false` if you are using an alternate directory for authorized_keys, as set with path, since you could lock yourself out of SSH access. <br> **Choices:** <br>**<span style="color: #0000FF">- "present" ← (default)</span>** <br> <span style="color: #FF0000"> - "absent" </span> |
+| __manage_dir__ <br><span style="color: #7F00FF">string</span> |  Whether this module should manage the directory of the authorized key file. <br> If set to `true`, the module will create the directory, as well as set the owner and permissions of an existing directory. <br> Be sure to set `manage_dir=false` if you are using an alternate directory for authorized_keys, as set with path, since you could lock yourself out of SSH access. <br> __Choices:__ <br>__<span style="color: #0000FF">- "present" ← (default)</span>__ <br> <span style="color: #FF0000"> - "absent" </span> |
 
 Example :
 
@@ -276,13 +303,13 @@ os_common:
 
 ##### 1.c.1) Enable directories management : `os_common.directories_manage`
 
-**`os_common.directories_manage`**
+__`os_common.directories_manage`__
 *<span style="color: #008800">Role Specific Variable</span>*
 *<span style="color: #7F00FF">boolean</span>*
 
 Use the `os_common.directories_manage` variable to chose if you want to manage directories.
-**Choices:**
-**<span style="color: #FF0000">- true ← (default) </span>**
+__Choices:__
+__<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
 ##### 1.c.2) Directories management : `os_common.directories`
@@ -291,7 +318,7 @@ Use the `os_common.directories_manage` variable to chose if you want to manage d
 *<span style="color: #7F00FF">list of dictionaries</span>*
 
 Use `os_common.directories` list of dictionary to manage groups.
-It provide a list of `directory` dictionary with it **`path`** and it defined parameters.
+It provide a list of `directory` dictionary with it __`path`__ and it defined parameters.
 To managed directories, this role is based on the `ansible.builtin.file`[:link:][Ansible-Module-ansible.builtin.file] module. (The `state` module variable of the module is forced to `directory` and couldn't be changed)
 All module variables are implemented and can be used on the `group` dictionary.
 :warning: Not all available variables are specified below.
@@ -299,23 +326,23 @@ Refer to the `ansible.builtin.file`[:link:][Ansible-Module-ansible.builtin.file]
 
 ##### 1.c.3) The 'directory' Dictionary : `os_common.directories[n]`
 
-**The Dictionary `directory` parameters :**
+__The Dictionary `directory` parameters :__
 
 | Parameters      |    Comments    |
 |:----------------|:---------------|
-| **manage** (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `group`.<br>**Choices:**<br>**<span style="color: #FF0000">- true ← (default) </span>** <br><span style="color: #0000FF">- false </span>|
-| **path** <br><span style="color: #7F00FF">boolean</span> / **<span style="color: #FF0000">required</span>**|  Path to the directory being managed.|
-| **group** <br><span style="color: #7F00FF">string</span> |  Name of the group that should own the directory, as would be fed to `chown`. <br> When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership.|
-| **owner** <br><span style="color: #7F00FF">string</span> |  Name of the user that should own the directory, as would be fed to `chown`. <br> When left unspecified, it uses the current user unless you are `root`, in which case it can preserve the previous ownership.<br> Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion.|
+| __manage__ (`group`) <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `group`.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default) </span>__ <br><span style="color: #0000FF">- false </span>|
+| __path__ <br><span style="color: #7F00FF">boolean</span> / __<span style="color: #FF0000">required</span>__|  Path to the directory being managed.|
+| __group__ <br><span style="color: #7F00FF">string</span> |  Name of the group that should own the directory, as would be fed to `chown`. <br> When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership.|
+| __owner__ <br><span style="color: #7F00FF">string</span> |  Name of the user that should own the directory, as would be fed to `chown`. <br> When left unspecified, it uses the current user unless you are `root`, in which case it can preserve the previous ownership.<br> Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion.|
 ||
-| **mode** <br><span style="color: #7F00FF">any</span> |  The permissions the resulting filesystem object should have.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
+| __mode__ <br><span style="color: #7F00FF">any</span> |  The permissions the resulting filesystem object should have.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
 ||
-| **selevel** <br><span style="color: #7F00FF">string</span> | The level part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
-| **serole** <br><span style="color: #7F00FF">string</span> | The role part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
-| **setype** <br><span style="color: #7F00FF">string</span> | The type part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
-| **seuser** <br><span style="color: #7F00FF">string</span> | The user part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
+| __selevel__ <br><span style="color: #7F00FF">string</span> | The level part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
+| __serole__ <br><span style="color: #7F00FF">string</span> | The role part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
+| __setype__ <br><span style="color: #7F00FF">string</span> | The type part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
+| __seuser__ <br><span style="color: #7F00FF">string</span> | The user part of the SELinux filesystem object context.<br> *Refer to the ansible.builtin.file🔗 module page for more documentation !*|
 
-**Example :**
+__Example :__
 
 ```yaml
 os_common:
@@ -337,6 +364,232 @@ os_common:
       group: 'group_three'
       mode: '755'
       manage: false
+  ...
+```
+
+#### 1.d) Logical Volume Management (`vgs`, and `disks`)
+
+Logical Volume Management is made throw this vars:
+
+- `os_common.lvm_manage` (*<span style="color: #7F00FF">boolean</span>*): To manage Logical Volume Management (LVM) *(default __true__)*
+- `os_common.pvs_manage` (*<span style="color: #7F00FF">boolean</span>*): To manage Physical volumes (PVs) *(default __true__)*
+- `os_common.lvs_manage` (*<span style="color: #7F00FF">boolean</span>*): To manage Logical volumes (LVs) *(default __true__)*
+- `os_common.vgs_manage` (*<span style="color: #7F00FF">boolean</span>*): To manage Volume group (VGs) *(default __true__)*
+
+- `os_common.vgs`  (*<span style="color: #7F00FF">list of dictionaries</span>*): To Manage Volumes Groups (VGs)
+- `vgs[n].lvs`  (*<span style="color: #7F00FF">list of dictionaries</span>*): To Manage Logical volumes (LVs) and Partitions
+- `os_common.disks`  (*<span style="color: #7F00FF">list of dictionaries</span>*): To Manage Disks
+
+__Example :__
+
+```yaml
+os_common:
+  ...
+  lvm_manage: true
+  pvs_manage: true
+  lvs_manage: true
+  vgs_manage: true
+  vgs:
+    - name: "vg_one"
+      tag: 'VGONE'
+      manage: true
+      lvs_manage: true
+      lvs:
+        - name: "lv_one"
+          size: '500m'
+          manage: true
+          fs:
+            fstype: 'ext2'
+            resizefs: true
+            manage: true
+          mount_point:
+            path: /mnt/mount_point_one
+            mode: '755'
+            manage: true
+    ...
+  disks:
+    - path: '/dev/vdb'
+      tag: 'VGONE'
+    - path: '/dev/vdc'
+      tag: 'VGONE'
+    - path: '/dev/vdd'
+      tag: 'VGTWO'
+    - path: '/dev/vde'
+      tag: 'VGTWO'
+  ...
+```
+
+##### 1.d.1) Enable lvm management : `os_common.lvm_manage`
+
+__`os_common.lvm_manage`__
+*<span style="color: #008800">Role Specific Variable</span>*
+*<span style="color: #7F00FF">boolean</span>*
+
+Use the `os_common.lvm_manage` variable to chose if you want to manage Logical Volume Management (LVM) configuration.
+__Choices:__
+__<span style="color: #FF0000">- true ← (default) </span>__
+<span style="color: #0000FF">- false </span>
+
+##### 1.d.2) Enable pvs management : `os_common.pvs_manage`
+
+__`os_common.pvs_manage`__
+*<span style="color: #008800">Role Specific Variable</span>*
+*<span style="color: #7F00FF">boolean</span>*
+
+Use the `os_common.pvs_manage` variable to chose if you want to manage Physical volumes (PVs) configuration.
+__Choices:__
+__<span style="color: #FF0000">- true ← (default) </span>__
+<span style="color: #0000FF">- false </span>
+
+##### 1.d.3) Enable lvs management : `os_common.lvs_manage`
+
+__`os_common.lvs_manage`__
+*<span style="color: #008800">Role Specific Variable</span>*
+*<span style="color: #7F00FF">boolean</span>*
+
+Use the `os_common.lvs_manage` variable to chose if you want to manage Logical volumes (LVs) configuration.
+__Choices:__
+__<span style="color: #FF0000">- true ← (default) </span>__
+<span style="color: #0000FF">- false </span>
+
+##### 1.d.4) Enable vgs management : `os_common.vgs_manage`
+
+__`os_common.vgs_manage`__
+*<span style="color: #008800">Role Specific Variable</span>*
+*<span style="color: #7F00FF">boolean</span>*
+
+Use the `os_common.vgs_manage` variable to chose if you want to manage Volume group (VGs) configuration.
+__Choices:__
+__<span style="color: #FF0000">- true ← (default) </span>__
+<span style="color: #0000FF">- false </span>
+      vgs_manage: true
+
+##### 1.d.5) Vgs management : `os_common.vgs`
+
+`os_common.vgs`
+*<span style="color: #7F00FF">list of dictionaries</span>*
+
+Use `os_common.vgs` list of dictionaries to manage Volume group (VGs).
+
+To manage Volume group (VGs) `os_common.vgs`, this role is based on the `community.general.lvg`[:link:][Ansible-Module-community.general.lvg] module.
+To manage Logical volumes (LVs) `os_common.vgs[n].lvs`, this role is based on the `community.general.lvol`[:link:][Ansible-Module-community.general.lvol] module.
+To manage Files systemes `os_common.vgs[n].lvs[n].fs`, this role is based on on the `community.general.filesystem`[:link:][Ansible-Module-community.community.general.filesystem] module.
+To manage Mount Point `os_common.vgs[n].lvs[n].mount_point`, this role is based on on the `ansible.posix.mount`[:link:][Ansible-Module-ansible.posix.mount] module.
+
+All modules variables are implemented and can be used on there respectives dictionaries.
+
+:warning: Not all available variables are specified below.
+Refer to the appropriate module documentation page to see all available variables and their usages.
+
+##### 1.d.6) The 'vg' Dictionary : `os_common.vgs[n]`
+
+__The `vg` Dictionary parameters :__
+
+| Parameters      |    Comments    |
+|:----------------|:---------------|
+| __name__ <br><span style="color: #7F00FF">string</span> / __<span style="color: #FF0000">required</span>__ |  The name of the volume group. `vg`. |
+| __manage__ <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `vg`.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default) </span>__ <br><span style="color: #0000FF">- false </span>|
+| __tag__ <br><span style="color: #7F00FF">String</span> |   *<span style="color: #008800">Role Specific Variable</span>* <br> Tag to link Physical volumes with the appropriate disk. `os_common.disks` |
+| __lvs_manage__ <br><span style="color: #7F00FF">boolean</span> </span>  |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore Logical volumes (LVs) `lvs` for this `vg`.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default) </span>__ <br><span style="color: #0000FF">- false </span>|
+| __lvs__ <br> <span style="color: #7F00FF"> list of dictionary (`lvs`) </span> |  *<span style="color: #008800">Role Specific Variable</span>* <br> list of Logical volumes (LVs) informations for this `vg` <br> Show `os_common.vgs[n].lvms` variables information for more usage details |
+
+__Example :__
+
+```yaml
+os_common:
+  ...
+  vgs:
+    - name: "vg_one"
+      tag: 'VGONE'
+      manage: true
+      lvs_manage: true
+      lvs:
+        - name: "lv_one"
+          size: '500m'
+          manage: true
+          fs:
+            fstype: 'ext2'
+            resizefs: true
+            manage: true
+          mount_point:
+            path: /mnt/mount_point_one
+            mode: '755'
+            manage: true
+        - name: "lv_two"
+          size: '500m'
+          fs:
+            fstype: 'ext3'
+            resizefs: true
+          mount_point:
+            path: /mnt/mount_point_two
+            mode: '755'
+    - name: "vg_two"
+      tag: 'VGTWO'
+      manage: true
+      lvs_manage: true
+      lvs:
+        - name: "lv_four"
+          size: '500m'
+          fs:
+            fstype: 'xfs'
+          mount_point:
+            path: /mnt/mount_point_four
+            mode: '755'
+            manage: true
+  ...
+```
+
+##### 1.d.7) The 'lv' Dictionary : `os_common.vgs[n].lv[n]`
+
+__The `lv` Dictionary parameters :__
+
+To manage Logical volumes (LVs), this role is based on the `community.general.lvol`[:link:][Ansible-Module-community.general.lvol] module.
+You can used all of this modules variables on this dictonary.
+All modules variables are implemented and can be used on the dictionaries.
+
+| Parameters      |    Comments    |
+|:----------------|:---------------|
+| __name__ <br><span style="color: #7F00FF">string</span> / __<span style="color: #FF0000">required</span>__ |  The name of the logical volume. `lv`. |
+| __manage__ <br><span style="color: #7F00FF">boolean</span> |  *<span style="color: #008800">Role Specific Variable</span>* <br>Used to manage or ignore this specifique `lv`.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default) </span>__ <br><span style="color: #0000FF">- false </span>|
+| __fs__ <br> <span style="color: #7F00FF"> dictionary (`fs`) </span> |  *<span style="color: #008800">Role Specific Variable</span>* <br> File Systeme (FS) information for this `lv` <br> Show `os_common.vgs[n].lvms[].fs` variables information for more usage details |
+| __mount_point__ <br> <span style="color: #7F00FF"> dictionary (`mount_point`) </span> |  *<span style="color: #008800">Role Specific Variable</span>* <br> Mountpoint information for this `file systeme` <br> Show `os_common.vgs[n].lvms[].mount_point` variables information for more usage details |
+| __active__ <br><span style="color: #7F00FF">String</span> | Whether the volume is active and visible to the host.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default) </span>__ <br><span style="color: #0000FF">- false </span>|
+| __force__ <br><span style="color: #7F00FF">String</span> | Shrink or remove operations of volumes requires this switch. Ensures that that filesystems get never corrupted/destroyed by mistake.<br>__Choices:__<br>__<span style="color: #FF0000">- false ← (default) </span>__ <br><span style="color: #0000FF">- true </span>|
+|  ...  | ... |
+| __shrink__ <br><span style="color: #7F00FF">string</span>  | Shrink if current size is higher than size requested.<br>__Choices:__<br><span style="color: #FF0000">- false</span><br>__<span style="color: #0000FF">- true  ← (default)</span>__|
+| __size__ <br><span style="color: #7F00FF">string</span>  | Used to manage or ignore Logical volumes (LVs) `lvs` for this `vg`.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default) </span>__ <br><span style="color: #0000FF">- false </span>|
+|  ...  | ... |
+| __state__ <br><span style="color: #7F00FF">string</span>  | Control if the logical volume exists. If `present` and the volume does not already exist then the `size` option is required.<br>__Choices:__<br><span style="color: #0000FF">- "absent" </span><br>__<span style="color: #FF0000">- "present" ← (default) </span>__ |
+|  ...  | ... |
+
+__Example :__
+
+```yaml
+os_common:
+  ...
+  vgs:
+    - name: "vg_one"
+      ...
+      lvs:
+        - name: "lv_one"
+          size: '500m'
+          manage: true
+          fs:
+            fstype: 'ext2'
+            resizefs: true
+            manage: true
+          mount_point:
+            path: /mnt/mount_point_one
+            mode: '755'
+            manage: true
+        - name: "lv_two"
+          size: '500m'
+          fs:
+            fstype: 'ext3'
+            resizefs: true
+          mount_point:
+            path: /mnt/mount_point_two
+            mode: '755'
   ...
 ```
 
@@ -382,18 +635,25 @@ Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 
 #### Ansible Modules
 
-| Sources                                           | Tutorials                                                 |
-| ------------------------------------------------- |:--------------------------------------------------------- |
-| Ansible - Module : `ansible.builtin.group`        | [:link:][Ansible-Module-ansible.builtin.group]            |
-| Ansible - Module : `ansible.builtin.user`         | [:link:][Ansible-Module-ansible.builtin.user]             |
-| Ansible - Module : `ansible.posix.authorized_key` | [:link:][Ansible-Module-ansible.posix.authorized_key]     |
-| Ansible - Module : `ansible.builtin.file`         | [:link:][Ansible-Module-ansible.builtin.file]      |
+| Sources                                           | Tutorials                                                        |
+| ------------------------------------------------- |:---------------------------------------------------------------- |
+| Ansible - Module : `ansible.builtin.group`        | [:link:][Ansible-Module-ansible.builtin.group]                   |
+| Ansible - Module : `ansible.builtin.user`         | [:link:][Ansible-Module-ansible.builtin.user]                    |
+| Ansible - Module : `ansible.posix.authorized_key` | [:link:][Ansible-Module-ansible.posix.authorized_key]            |
+| Ansible - Module : `ansible.builtin.file`         | [:link:][Ansible-Module-ansible.builtin.file]                    |
+| Ansible - Module : `community.general.lvg`        | [:link:][Ansible-Module-community.general.lvg]                   |
+| Ansible - Module : `community.general.lvol`       | [:link:][Ansible-Module-community.general.lvol]                  |
+| Ansible - Module : `community.general.filesystem` | [:link:][Ansible-Module-community.community.general.filesystem]  |
+| Ansible - Module : `ansible.posix.mount`          | [:link:][Ansible-Module-ansible.posix.mount]                     |
 
-[Ansible-Module-ansible.builtin.group]:        https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
-[Ansible-Module-ansible.builtin.user]:         https://docs.ansible.com/ansible/9/collections/ansible/builtin/user_module.html
-[Ansible-Module-ansible.posix.authorized_key]: https://docs.ansible.com/ansible/9/collections/ansible/posix/authorized_key_module.html
-[Ansible-Module-ansible.builtin.file]:  https://docs.ansible.com/ansible/9/collections/ansible/builtin/file_module.html
-
+[Ansible-Module-ansible.builtin.group]:                  https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
+[Ansible-Module-ansible.builtin.user]:                   https://docs.ansible.com/ansible/9/collections/ansible/builtin/user_module.html
+[Ansible-Module-ansible.posix.authorized_key]:           https://docs.ansible.com/ansible/9/collections/ansible/posix/authorized_key_module.html
+[Ansible-Module-ansible.builtin.file]:                   https://docs.ansible.com/ansible/9/collections/ansible/builtin/file_module.html
+[Ansible-Module-community.general.lvg]:                  https://docs.ansible.com/ansible/latest/collections/community/general/lvg_module.html
+[Ansible-Module-community.general.lvol]:                 https://docs.ansible.com/ansible/latest/collections/community/general/lvol_module.html
+[Ansible-Module-community.community.general.filesystem]: https://docs.ansible.com/ansible/latest/collections/community/general/filesystem_module.html
+[Ansible-Module-ansible.posix.mount]:                    https://docs.ansible.com/ansible/latest/collections/ansible/posix/mount_module.html
 ---
 
 ## License
@@ -404,4 +664,4 @@ MIT - Copyright 2024 - Thomas CHALMEL (Shmii)
 
 ## Author Information
 
-This role was created in 2022 by **Thomas CHALMEL** ([My GitHub](https://github.com/shmii) / [My e-mail](thomas@chalmel.org))
+This role was created in 2022 by __Thomas CHALMEL__ ([My GitHub](https://github.com/shmii) / [My e-mail](thomas@chalmel.org))
