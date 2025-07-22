@@ -3,14 +3,21 @@
 - name: Include OS Family specific variables.
   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
   tags:
-    - os_all_family_variables
+    - os_common
+    - os_common_vars
+    - os_common_vars_load
+    - os_common_vars_load_os_family
 
 # Variable OS distribution version specific.
 - name: Include OS Debian Family distributions version specific Variables.
   ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
   when: ansible_os_family == 'Debian'
   tags:
-    - os_debian_family_variables
+    - os_common
+    - os_common_vars
+    - os_common_vars_load
+    - os_common_vars_load_distribution
+    - os_common_vars_load_distribution_debian
 
 - name: Include OS RHEL Family distributions version specific Variables.
   ansible.builtin.include_vars: "{{ ansible_os_family }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
@@ -21,26 +28,42 @@
     - ansible_distribution != 'Rocky'
     - ansible_distribution != 'AlmaLinux'
   tags:
-    - os_rhel_distribution_variables
+    - os_common
+    - os_common_vars
+    - os_common_vars_load
+    - os_common_vars_load_distribution
+    - os_common_vars_load_distribution_redhat
 
 - name: Include OS Rocky Distributions version specific Variables.
   ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
   when:
     - ansible_distribution == 'Rocky'
   tags:
-    - os_rocky_distribution_variables
+    - os_common
+    - os_common_vars
+    - os_common_vars_load
+    - os_common_vars_load_distribution
+    - os_common_vars_load_distribution_rocky
 
 - name: Include OS AlmaLinux Distributions version specific Variables.
   ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
   when:
     - ansible_distribution == 'AlmaLinux'
   tags:
-    - os_almalinux_distribution_variables
+    - os_common
+    - os_common_vars
+    - os_common_vars_load
+    - os_common_vars_load_distribution
+    - os_common_vars_load_distribution_almalinux
 
 - name: Include OS Amazon Distributions version specific Variables.
   ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
   when: ansible_distribution == 'Amazon'
   tags:
-    - os_amazon_distribution_variables
+    - os_common
+    - os_common_vars
+    - os_common_vars_load
+    - os_common_vars_load_distribution
+    - os_common_vars_load_distribution_amazon
 
 ...
