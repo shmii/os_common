@@ -6,3 +6,4 @@
 *.pyc
 .cache
 defaults/secret.yml
+./ansible.cfg
