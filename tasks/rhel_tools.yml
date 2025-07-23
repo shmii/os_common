@@ -1,5 +1,5 @@
 ---
-- name: "OS Common - Redhat Familly - DSI tools - Debug Informations"
+- name: "OS Common - Redhat Family - DSI tools - Debug Informations"
   ansible.builtin.debug:
     msg:
       - "ansible_os_family: {{ ansible_os_family | default('') }}"
@@ -21,10 +21,10 @@
     - os_common_rhel_tools
     - os_common_rhel_tools_debug
 
-- name: "OS Common - Redhat Familly - DSI tools - flush_handlers"
+- name: "OS Common - Redhat Family - DSI tools - flush_handlers"
   ansible.builtin.meta: flush_handlers
 
-- name: "OS Common - Redhat Familly - DSI tools - Yum - (Without PowerTools)"
+- name: "OS Common - Redhat Family - DSI tools - Yum - (Without PowerTools)"
   ansible.builtin.dnf:
     name: "{{ __os_common_tools_packages }}"
     state: present
@@ -46,7 +46,7 @@
     - os_common_rhel_tools
     - os_common_rhel_tools_check_yum
 
-- name: "OS Common - Redhat Familly - DSI tools - dnf - (With PowerTools)"
+- name: "OS Common - Redhat Family - DSI tools - dnf - (With PowerTools)"
   ansible.builtin.dnf:
     name: "{{ __os_common_tools_packages }}"
     state: present

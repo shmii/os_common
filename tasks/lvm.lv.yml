@@ -103,6 +103,7 @@
     fstab: "{{ lv.mount_point.fstab | default(omit) }}"
     opts: "{{ lv.mount_point.opts | default('defaults') }}"
     passno: "{{ lv.mount_point.passno | default(omit) }}"
+  notify: "OS Common - Directories - Check"
   tags:
     - os_common
     - os_common_lvm

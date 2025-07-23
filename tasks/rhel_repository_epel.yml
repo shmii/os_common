@@ -1,10 +1,10 @@
 ---
-- name: "OS Common - Redhat Familly - Repositories - EPEL Repository - Debug Informations"
+- name: "OS Common - Redhat Family - Repositories - EPEL Repository - Debug Informations"
   ansible.builtin.debug:
     msg:
-      - ansible_pkg_mgr: "{{ ansible_pkg_mgr | default('') }}"
-      - __os_common_epel_repo_path: "{{ __os_common_epel_repo_path | default('') }}"
-      - __os_common_epel_repo_key: "{{ __os_common_epel_repo_key | default('') }}"
+      - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
+      - "__os_common_epel_repo_path: {{ __os_common_epel_repo_path | default('') }}"
+      - "__os_common_epel_repo_key: {{ __os_common_epel_repo_key | default('') }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
@@ -16,10 +16,11 @@
     - os_common_rhel_repository_epel
     - os_common_rhel_repository_epel_debug
 
-- name: "OS Common - Redhat Familly - Repositories - EPEL Repository - Check repofile."
+- name: "OS Common - Redhat Family - Repositories - EPEL Repository - Check repofile."
   ansible.builtin.stat:
     path: "{{ __os_common_epel_repo_path }}"
-  register: epel_repofile_result
+  register: epel_file_check
+  ignore_errors: true
   tags:
     - os_common
     - os_common_repositories
@@ -28,10 +29,29 @@
     - os_common_rhel_repository_epel
     - os_common_rhel_repository_epel_check_repofile
 
-- name: "OS Common - Redhat Familly - Repositories - EPEL Repository - Check GPG Key."
+- name: "OS Common - Redhat Family - Repositories - EPEL Repository - Check uri."
+  ansible.builtin.uri:
+    url: "{{ __os_common_epel_repo_path }}"
+    method: HEAD
+    return_content: false
+    follow_redirects: all
+  register: epel_uri_check
+  ignore_errors: true
+  failed_when: epel_uri_check.status not in [200, 302]
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repository_epel
+    - os_common_rhel_repository_epel_check_uri
+
+- name: "OS Common - Redhat Family - Repositories - EPEL Repository - Check GPG Key."
   ansible.builtin.rpm_key:
     state: present
     key: "{{ __os_common_epel_repo_key }}"
+  register: epel_key_check
+  ignore_errors: true
   tags:
     - os_common
     - os_common_repositories
@@ -40,7 +60,43 @@
     - os_common_rhel_repository_epel
     - os_common_rhel_repository_epel_check_gpg_key
 
-- name: "OS Common - Redhat Familly - Repositories - EPEL Repository - Check Repository."
+- name: "OS Common - Redhat Family - Repositories - EPEL Repository - file and key informations"
+  ansible.builtin.debug:
+    msg:
+      - "__os_common_epel_repo_path: {{ __os_common_epel_repo_path | default('') }}"
+      - "__os_common_epel_repo_key: {{ __os_common_epel_repo_key | default('') }}"
+      - epel_file_check: "{{ epel_file_check | default('') }}"
+      - epel_uri_check: "{{ epel_uri_check | default('') }}"
+      - peel_key_check: "{{ epel_key_check | default('') }}"
+    verbosity: "{{ os_common_debug_level | default(1) }}"
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_repositories_debug
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repositories_debug
+    - os_common_rhel_repository_epel
+    - os_common_rhel_repository_epel_debug
+
+- name: "OS Common - Redhat Family - Repositories - EPEL Repository - EPEL package availability"
+  ansible.builtin.fail:
+    msg:
+      - "L'un des prérequis pour l'installation du dépôt EPEL a échoué :"
+      - epel_file_check.stat.exists: "{{ epel_file_check.stat.exists | default(false) }}"
+      - epel_uri_check.failed: "{{ epel_uri_check.failed | default(false) }}"
+  when: >
+    not (epel_file_check.stat.exists | default(false)) and
+    (epel_uri_check.failed | default(true)) or
+    (epel_key_check.failed | default(true))
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_rhel
+    - os_common_rhel_repository_epel
+    - os_common_rhel_repository_epel_validate
+
+- name: "OS Common - Redhat Family - Repositories - EPEL Repository - EPEL package must be install"
   ansible.builtin.dnf:
     name: "{{ __os_common_epel_repo_path }}"
     state: present
@@ -49,7 +105,10 @@
   until: result is succeeded
   retries: "{{ __os_common_repositories_retry | default('5') }}"
   delay: "{{ __os_common_repositories_delay | default('10') }}"
-  when: not epel_repofile_result.stat.exists
+  when: 
+    - (epel_file_check.stat.exists | default(false)) or (not epel_uri_check.failed | default(true))
+  notify:
+    - Update dnf cache
   tags:
     - os_common
     - os_common_repositories

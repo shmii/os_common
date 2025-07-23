@@ -1,5 +1,5 @@
 ---
-- name: "OS Common - Debian Familly - Tools - Debug Informations"
+- name: "OS Common - Debian Family - Tools - Debug Informations"
   ansible.builtin.debug:
     msg:
       - "ansible_os_family: {{ ansible_os_family | default('') }}"
@@ -21,10 +21,10 @@
     - os_common_debian_tools
     - os_common_debian_tools_debug
 
-- name: "Ubuntu Familly - Install DSI tools - flush_handlers"
+- name: "Ubuntu Family - Install DSI tools - flush_handlers"
   ansible.builtin.meta: flush_handlers
 
-- name: "OS Common - Debian Familly - Tools - Check (Allow Unauthenticated Repo)"
+- name: "OS Common - Debian Family - Tools - Check (Allow Unauthenticated Repo)"
   ansible.builtin.apt:
     name: "{{ __os_common_tools_packages }}"
     state: present
@@ -47,7 +47,7 @@
     - os_common_debian_tools_check
     - os_common_debian_tools_check_unauthenticated
 
-- name: "OS Common - Debian Familly - Tools - Check"
+- name: "OS Common - Debian Family - Tools - Check"
   ansible.builtin.apt:
     name: "{{ __os_common_tools_packages }}"
     state: present

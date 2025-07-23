@@ -2,8 +2,8 @@
 - name: "OS Common - Directories - Debug Informations"
   ansible.builtin.debug:
     msg:
-      - os_common.directories: "{{ os_common.directories | default('') }}"
-      - os_common.directories_manage: "{{ os_common.directories_manage | default('') }}"
+      - "os_common.directories: {{ os_common.directories | default('') }}"
+      - "os_common.directories_manage: {{ os_common.directories_manage | default('') }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common

@@ -1,5 +1,5 @@
 ---
-- name: "OS Common - Debian Familly - Repository - Debug Informations"
+- name: "OS Common - Debian Family - Repository - Debug Informations"
   ansible.builtin.debug:
     msg:
       - "ansible_os_family: {{ ansible_os_family | default('') }}"
@@ -15,7 +15,7 @@
     - os_common_debian_repositories
     - os_common_debian_repositories
 
-- name: "OS Common - Debian Familly - Repo APT - Check"
+- name: "OS Common - Debian Family - Repo APT - Check"
   ansible.builtin.apt_repository:
     repo: "{{ repository.repo }}"
     state: "{{ repository.state | default(omit) }}"

@@ -1,12 +1,25 @@
 ---
-- name: Yum update cache
+- name: "Update yum cache"
   ansible.builtin.dnf:
     update_cache: true
   retries: "{{ __os_common_repositories_retry | default('5') }}"
   delay: "{{ __os_common_repositories_delay | default('10') }}"
 
-- name: Dnf update cache
+- name: "Update dnf cache"
   ansible.builtin.dnf:
     update_cache: true
   retries: "{{ __os_common_repositories_retry | default('5') }}"
   delay: "{{ __os_common_repositories_delay | default('10') }}"
+
+- name: "OS Common - Directories - Check"
+  ansible.builtin.include_tasks: directory.yml
+  loop: "{{ os_common.directories | default([], true) }}"
+  loop_control:
+    loop_var: directory
+  when:
+    - os_common.directories_manage | default(false)
+    - os_common.directories
+  tags:
+    - os_common
+    - os_common_directories
+    - os_common_directories_check

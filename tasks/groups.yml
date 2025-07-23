@@ -2,8 +2,8 @@
 - name: "OS Common - Groups - Debug Informations"
   ansible.builtin.debug:
     msg:
-      - os_common.groups: "{{ os_common.groups | default('') }}"
-      - os_common.groups_manage: "{{ os_common.groups_manage | default('') }}"
+      - "os_common.groups: {{ os_common.groups | default('') }}"
+      - "os_common.groups_manage: {{ os_common.groups_manage | default('') }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
   tags:
     - os_common
