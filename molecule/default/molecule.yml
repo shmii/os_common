@@ -16,6 +16,38 @@ platforms:
   # # default user : vagrant
   # # password : vagrant
 
+  # === Install Python3.8 on RHEL7
+  # sudo subscription-manager register
+  # sudo yum update
+  # sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
+  # sudo yum install -y rh-python38
+  # sudo ln -sf /opt/rh/rh-python38/root/usr/bin/python3 /usr/bin/python3
+
+  # === Install Python3.8 on RHEL8
+  # sudo subscription-manager register
+  # sudo sudo dnf install -y python38
+  # sudo ln -sf /usr/bin/pip3.8 /usr/bin/pip3
+  # sudo ln -sf /usr/bin/python3.8 /usr/bin/python3
+  #
+
+  # === generic/centos7
+  # sudo sed -i \
+  # -e 's|^mirrorlist=|#mirrorlist=|' \
+  # -e 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|' \
+  # /etc/yum.repos.d/CentOS-Base.repo
+  # sudo yum clean all
+  # sudo yum makecache
+  # sudo yum repolist
+  # sudo yum install -y gcc openssl-devel bzip2-devel libffi-devel wget make
+  # cd /usr/src
+  #    sudo wget https://www.python.org/ftp/python/3.8.18/Python-3.8.18.tgz
+  #    sudo tar xzf Python-3.8.18.tgz
+  #    cd Python-3.8.18
+  #       sudo ./configure --enable-optimizations
+  #       sudo make altinstall
+  #       sudo ln -sf /usr/local/bin/python3.8 /usr/bin/python3
+  #       sudo ln -sf /usr/local/bin/pip3.8 /usr/bin/pip3
+
   # - name: instance-vagrant-centos7
   #   box: generic/centos7
   #   interfaces:
@@ -212,20 +244,20 @@ platforms:
   #   groups:
   #     - molecule_vm
 
-  - name: instance-vagrant-debian12
-    box: generic/debian12
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.24
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
+  # - name: instance-vagrant-debian12
+  #   box: generic/debian12
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.24
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
 
   # - name: instance-vagrant-fedora29
   #   box: generic/fedora29
@@ -392,20 +424,20 @@ platforms:
   #   groups:
   #     - molecule_vm
 
-  - name: instance-vagrant-ubuntu2004
-    box: generic/ubuntu2004
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.43
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
+  # - name: instance-vagrant-ubuntu2004
+  #   box: generic/ubuntu2004
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.43
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
 
   # - name: instance-vagrant-ubuntu2204
   #   box: generic/ubuntu2204
@@ -424,17 +456,28 @@ platforms:
 
 provisioner:
   name: ansible
+  inventory:
+    host_vars:
+      instance-vagrant-centos7:
+        ansible_python_interpreter: /usr/bin/python3
+      instance-vagrant-rhel7:
+        ansible_python_interpreter: /usr/bin/python3
+      instance-vagrant-rhel8:
+        ansible_python_interpreter: /usr/bin/python3
   log: true
-  lint: |
-    set -e
-    yamllint .
-    ansible-lint
+
   env:
     RHEL_ACCOUNT_USER: ${RHEL_ACCOUNT_USER:-"xxx"}
     RHEL_ACCOUNT_PASSWORD: ${RHEL_ACCOUNT_PASSWORD:-"xxx"}
   scenario:
     name: default
+
 verifier:
   name: ansible
+
+lint: |
+    set -e
+    yamllint .
+    ansible-lint
 
 ...
