@@ -18,3 +18,4 @@ __os_common_tools_packages:
   - python3-pexpect
   - telnet
   - cifs-utils
+  - insights-client 
