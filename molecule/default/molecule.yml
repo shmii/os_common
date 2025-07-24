@@ -2,11 +2,13 @@
 role_name_check: 1
 dependency:
   name: galaxy
+
 driver:
   name: vagrant
+  provision: true
   provider:
     name: libvirt
-    type: libvirt
+    #type: libvirt
     options:
       memory: 256
       cpus: 2
@@ -36,7 +38,7 @@ platforms:
   # -e 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|' \
   # /etc/yum.repos.d/CentOS-Base.repo
   # sudo yum clean all
-  # sudo yum makecache
+  #  sudo yum makecache
   # sudo yum repolist
   # sudo yum install -y gcc openssl-devel bzip2-devel libffi-devel wget make
   # cd /usr/src
@@ -48,20 +50,25 @@ platforms:
   #       sudo ln -sf /usr/local/bin/python3.8 /usr/bin/python3
   #       sudo ln -sf /usr/local/bin/pip3.8 /usr/bin/pip3
 
-  # - name: instance-vagrant-centos7
-  #   box: generic/centos7
-  #   interfaces:
-  #     - auto_config: true
-  #       network_name: private_network
-  #       type: static
-  #       ip: 192.168.10.9
-  #   provider_raw_config_args:
-  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-  #   groups:
-  #     - molecule_vm
+  - name: instance-vagrant-centos7
+    box: generic/centos7
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: static
+        ip: 192.168.10.9
+    instance_raw_config_args:
+      - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
+      - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
+      - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/cento-7.sh", destination: "/tmp/cento-7.sh"'
+      - 'vm.provision :shell, inline: "chmod +x /tmp/cento-7.sh && /tmp/cento-7.sh"'
+    provider_raw_config_args:
+      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+    groups:
+      - molecule_vm
 
   # - name: instance-vagrant-rhel7
   #   box: generic/rhel7
@@ -100,6 +107,11 @@ platforms:
         network_name: private_network
         type: static
         ip: 192.168.10.12
+    instance_raw_config_args:
+      # - 'vm.synced_folder ".", "/vagrant", type: "rsync"'
+      # - 'vm.provision :shell, inline: "/vagrant/molecule/default/bootstrap.sh"'
+      - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
+      - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
     provider_raw_config_args:
       - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
       - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
