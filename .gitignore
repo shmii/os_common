@@ -9,3 +9,4 @@ defaults/secret.yml
 ansible.cfg
 
 .ansible/
+.python-version
