@@ -7,3 +7,5 @@
 .cache
 defaults/secret.yml
 ansible.cfg
+
+.ansible
