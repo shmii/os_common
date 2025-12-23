@@ -16,3 +16,6 @@ unset RHEL_ACCOUNT_PASSWORD
 sudo dnf module enable -y python39
 sudo dnf install -y python39 
 sudo dnf install -y python3-dnf
+
+#dnf install -y insights-client 
+#insights-client --register

@@ -1,0 +1,18 @@
+# python3.12 -m venv ~/.venv/ansible11_env
+# source ~/.venv/ansible11_env/bin/activate
+# pip install --upgrade pip
+# pip install -r requirements_ansible11.txt
+
+
+ansible==11.3.0
+molecule==25.1.0
+molecule-plugins==23.7.0
+molecule-plugins[vagrant]
+
+bashlint
+yamllint
+ansible-lint
+setuptools
+please-cli
+rich
+testinfra

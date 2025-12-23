@@ -3,6 +3,7 @@
   ansible.builtin.debug:
     msg:
       - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
+      - "__os_common_package_manager_backend: {{ __os_common_package_manager_backend | default('') }}"
       - "__os_common_epel_repo_path: {{ __os_common_epel_repo_path | default('') }}"
       - "__os_common_epel_repo_key: {{ __os_common_epel_repo_key | default('') }}"
     verbosity: "{{ os_common_debug_level | default(1) }}"
@@ -99,6 +100,7 @@
 - name: "OS Common - Redhat Family - Repositories - EPEL Repository - EPEL package must be install"
   ansible.builtin.dnf:
     name: "{{ __os_common_epel_repo_path }}"
+    use_backend: "{{ __os_common_package_manager_backend | default('auto') }}"
     state: present
     update_cache: false
   register: result

@@ -19,6 +19,7 @@
 - name: "OS Common - Redhat Family - Repositories - PowerTools Repository - Enable powertools (dnf plugins core)"
   ansible.builtin.dnf:
     name: "dnf-plugins-core"
+    use_backend: "{{ __os_common_package_manager_backend | default('auto') }}"
     state: present
     enablerepo: "epel"
   notify:

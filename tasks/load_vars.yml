@@ -66,4 +66,14 @@
     - os_common_vars_load_distribution
     - os_common_vars_load_distribution_amazon
 
+- name: Include OS CentOS Distributions version specific Variables.
+  ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+  when: ansible_distribution == 'CentOS'
+  tags:
+    - os_common
+    - os_common_vars
+    - os_common_vars_load
+    - os_common_vars_load_distribution
+    - os_common_vars_load_distribution_amazon
+
 ...

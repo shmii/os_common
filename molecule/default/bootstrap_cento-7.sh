@@ -21,3 +21,5 @@ sudo ./configure --enable-optimizations
 sudo make altinstall
 sudo ln -sf /usr/local/bin/python3.9 /usr/bin/python3
 sudo ln -sf /usr/local/bin/pip3.9 /usr/bin/pip3
+
+sudo yum install -y python-dnf
