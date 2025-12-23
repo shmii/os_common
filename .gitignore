@@ -8,4 +8,4 @@
 defaults/secret.yml
 ansible.cfg
 
-.ansible
+.ansible/
