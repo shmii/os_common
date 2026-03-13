@@ -3,6 +3,33 @@ __os_common_epel_repo_path: "https://archives.fedoraproject.org/pub/archive/epel
 __os_common_epel_repo_key: "https://archives.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7"
 
 __os_common_package_manager_backend: "dnf4"
+__os_common_repositories_manage: true
+__os_common_repositories:
+  - file : CentOS-Vault-managed
+    repositories:
+      - name: base
+        description: "CentOS-7 - Base (Vault)"
+        baseurl: "http://vault.centos.org/7.9.2009/os/$basearch/"
+      - name: updates
+        description: "CentOS-7 - Updates (Vault)"
+        baseurl: "http://vault.centos.org/7.9.2009/updates/$basearch/"
+      - name: extras
+        description: "CentOS-7 - Extras (Vault)"
+        baseurl: "http://vault.centos.org/7.9.2009/extras/$basearch/"
+      - name: centosplus
+        description: "CentOS-7 - Plus (Vault) [disabled]"
+        baseurl: "http://vault.centos.org/7.9.2009/centosplus/$basearch/"
+        enabled: false
+  - file : CentOS-Base
+    repositories:
+      - name: base
+        enabled: false
+      - name: updates
+        enabled: false
+      - name: extras
+        enabled: false
+      - name: centosplus
+        enabled: false
 
 __os_common_tools_packages:
   - redhat-lsb-core

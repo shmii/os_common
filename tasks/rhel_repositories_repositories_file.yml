@@ -1,0 +1,38 @@
+---
+- name: "OS Common - Redhat Family - Repositories - Managed Repositories Files - Repositories Files - File - Debug Informations : {{ repositories_file.file | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
+      - "__os_common_package_manager_backend: {{ __os_common_package_manager_backend | default('') }}"
+      - "__os_common_repositories_manage: {{ __os_common_repositories_manage | default(false) }}"
+      - "repositories_file: {{ repositories_file | default([]) }}"
+    verbosity: "{{ os_common_debug_level | default(1) }}"
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_repositories_debug
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repositories_debug
+    - os_common_rhel_repositories_repositories_files
+    - os_common_rhel_repositories_repositories_files_repositories_file
+    - os_common_rhel_repositories_repositories_files_repositories_file_debug
+
+- name: "OS Common - Redhat Family - Repositories - Managed Repositories Files - Repositories Files - Files : {{ repositories_file.file | default('') }}"
+  ansible.builtin.include_tasks: rhel_repositories_repositories_file_repository.yml
+  loop: "{{ repositories_file.repositories | default([], true) }}"
+  loop_control:
+    loop_var: repository
+  when:
+    - __os_common_repositories_manage | default(false)
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_repositories_debug
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repositories_debug
+    - os_common_rhel_repositories_repositories_files
+    - os_common_rhel_repositories_repositories_files_repositories_file
+    - os_common_rhel_repositories_repositories_files_repositories_file_repositories
+...

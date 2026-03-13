@@ -1,8 +1,6 @@
 ---
-__os_common_epel_repo_path: "https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm"
+__os_common_epel_repo_path: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
 __os_common_epel_repo_key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7"
-
-__os_common_package_manager_backend: "yum"
 __os_common_tools_packages:
   - redhat-lsb-core
   - bash-completion
@@ -13,5 +11,6 @@ __os_common_tools_packages:
   - screen
   - telnet
   - cifs-utils
+  - tree
 
 ...

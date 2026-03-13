@@ -48,7 +48,7 @@
     - os_common_rhel_repository_epel_check_uri
 
 - name: "OS Common - Redhat Family - Repositories - EPEL Repository - Check GPG Key."
-  ansible.builtin.rpm_key:
+  rpm_key:
     state: present
     key: "{{ __os_common_epel_repo_key }}"
   register: epel_key_check
@@ -97,7 +97,31 @@
     - os_common_rhel_repository_epel
     - os_common_rhel_repository_epel_validate
 
-- name: "OS Common - Redhat Family - Repositories - EPEL Repository - EPEL package must be install"
+- name: "OS Common - Redhat Family - Repositories - EPEL Repository - EPEL package must be install (RHEL7-/yum)"
+  ansible.builtin.yum:
+    name: "{{ __os_common_epel_repo_path }}"
+    state: present
+    update_cache: false
+  register: result
+  until: result is succeeded
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  when: 
+    - (epel_file_check.stat.exists | default(false)) or (not epel_uri_check.failed | default(true))
+    - (ansible_distribution_major_version | int < 8)
+    - not (ansible_distribution == "Amazon" and ansible_distribution_version is match("^2023"))
+  notify:
+    - Update dnf cache
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_rhel
+    - os_common_rhel_repositories
+    - os_common_rhel_repository_epel
+    - os_common_rhel_repository_epel_check_repository
+    - os_common_rhel_repository_epel_check_repository_yum
+
+- name: "OS Common - Redhat Family - Repositories - EPEL Repository - EPEL package must be install (RHEL8+/dnf)"
   ansible.builtin.dnf:
     name: "{{ __os_common_epel_repo_path }}"
     use_backend: "{{ __os_common_package_manager_backend | default('auto') }}"
@@ -109,6 +133,7 @@
   delay: "{{ __os_common_repositories_delay | default('10') }}"
   when: 
     - (epel_file_check.stat.exists | default(false)) or (not epel_uri_check.failed | default(true))
+    - (ansible_distribution_major_version | int >= 8) or (ansible_distribution == "Amazon" and ansible_distribution_version is match("^2023"))
   notify:
     - Update dnf cache
   tags:
@@ -118,5 +143,5 @@
     - os_common_rhel_repositories
     - os_common_rhel_repository_epel
     - os_common_rhel_repository_epel_check_repository
-
+    - os_common_rhel_repository_epel_check_repository_dnf
 ...

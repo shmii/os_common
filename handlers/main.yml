@@ -1,6 +1,6 @@
 ---
 - name: "Update yum cache"
-  ansible.builtin.dnf:
+  ansible.builtin.yum:
     update_cache: true
   retries: "{{ __os_common_repositories_retry | default('5') }}"
   delay: "{{ __os_common_repositories_delay | default('10') }}"

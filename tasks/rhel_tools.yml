@@ -25,11 +25,11 @@
   ansible.builtin.meta: flush_handlers
 
 - name: "OS Common - Redhat Family - DSI tools - Yum - (Without PowerTools)"
-  ansible.builtin.dnf:
+  ansible.builtin.yum:
     name: "{{ __os_common_tools_packages }}"
     state: present
     enablerepo: "epel"
-    use_backend: "{{ __os_common_package_manager_backend | default('auto') }}"
+    #use_backend: "{{ __os_common_package_manager_backend | default('auto') }}"
   register: yum_res
   retries: "{{ __os_common_repositories_retry | default('5') }}"
   delay: "{{ __os_common_repositories_delay | default('10') }}"

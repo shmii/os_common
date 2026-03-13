@@ -1,0 +1,286 @@
+
+PLAY [Converge] ****************************************************************
+
+TASK [Gathering Facts] *********************************************************
+[32mok: [instance-vagrant-centos7][0m
+[32mok: [instance-vagrant-rhel7][0m
+
+TASK [os_common : Include OS Family specific variables.] ***********************
+[32mok: [instance-vagrant-centos7][0m
+[32mok: [instance-vagrant-rhel7][0m
+
+TASK [os_common : Include OS Debian Family distributions version specific Variables.] ***
+[36mskipping: [instance-vagrant-centos7][0m
+[36mskipping: [instance-vagrant-rhel7][0m
+
+TASK [os_common : Include OS RHEL Family distributions version specific Variables.] ***
+[32mok: [instance-vagrant-centos7][0m
+[32mok: [instance-vagrant-rhel7][0m
+
+TASK [os_common : Include OS Rocky Distributions version specific Variables.] ***
+[36mskipping: [instance-vagrant-centos7][0m
+[36mskipping: [instance-vagrant-rhel7][0m
+
+TASK [os_common : Include OS AlmaLinux Distributions version specific Variables.] ***
+[36mskipping: [instance-vagrant-centos7][0m
+[36mskipping: [instance-vagrant-rhel7][0m
+
+TASK [os_common : Include OS Amazon Distributions version specific Variables.] ***
+[36mskipping: [instance-vagrant-centos7][0m
+[36mskipping: [instance-vagrant-rhel7][0m
+
+TASK [os_common : Include OS CentOS Distributions version specific Variables.] ***
+[32mok: [instance-vagrant-centos7][0m
+[36mskipping: [instance-vagrant-rhel7][0m
+
+TASK [os_common : OS Common - Vars - Print Informations] ***********************
+[32mok: [instance-vagrant-centos7] => {[0m
+[32m    "msg": [[0m
+[32m        "+----------------------------------------------------------------------------------+",[0m
+[32m        "ansible_os_family: RedHat",[0m
+[32m        "ansible_distribution: CentOS",[0m
+[32m        "ansible_distribution_release: Core",[0m
+[32m        "ansible_distribution_major_version: 7",[0m
+[32m        "ansible_distribution_version: 7.9",[0m
+[32m        "+----------------------------------------------------------------------------------+",[0m
+[32m        "os_common : {'groups_manage': True, 'groups': [{'name': 'group_one', 'gid': '1042'}, {'name': 'group_two'}, {'name': 'group_three', 'system': True}, {'name': 'group_four', 'state': 'absent', 'force': True}, {'name': 'group_five', 'manage': True}, {'name': 'group_six', 'manage': False}], 'users_manage': True, 'users': [{'name': 'tchalmel', 'authorized_keys_manage': True, 'authorized_keys': [{'authorized_key': 'https://raw.githubusercontent.com/shmii/public_key/main/id_ecdsa.pub', 'manage_dir': True, 'state': 'present'}, {'authorized_key': 'https://raw.githubusercontent.com/shmii/public_key/main/id_rsa.pub', 'manage_dir': True, 'state': 'present'}]}, {'name': 'user_one'}, {'name': 'user_two', 'state': 'present', 'group': 'group_two'}, {'name': 'user_three', 'append': True, 'groups': 'group_one, group_two'}, {'name': 'user_four', 'append': True, 'groups': ['group_one', 'group_two']}, {'name': 'user_five', 'state': 'absent', 'remove': True}], 'directories_manage': True, 'directories': [{'path': '/mnt'}, {'path': '/mnt/mount_point_one', 'owner': 'user_one'}, {'path': '/mnt/mount_point_two', 'owner': 'user_two', 'group': 'group_two'}, {'path': '/mnt/mount_point_three', 'owner': 'user_three', 'group': 'group_three', 'mode': '755'}, {'path': '/mnt/mount_point_four', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/mnt/mount_point_five', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/mnt/mount_point_six', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/app', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/app/infra', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/app/test', 'owner': 'root', 'group': 'root', 'mode': '755'}], 'lvm_manage': True, 'pvs_manage': True, 'lvs_manage': True, 'vgs_manage': True, 'vgs': [{'name': 'vg_one', 'tag': 'VGONE', 'manage': True, 'lvs_manage': True, 'lvs': [{'name': 'lv_one', 'size': '500m', 'manage': True, 'fs': {'fstype': 'ext2', 'resizefs': True, 'manage': True}, 'mount_point': {'path': '/mnt/mount_point_one', 'mode': '755', 'manage': True}}, {'name': 'lv_two', 'size': '500m', 'fs': {'fstype': 'ext3', 'resizefs': True}, 'mount_point': {'path': '/mnt/mount_point_two', 'mode': '755'}}, {'name': 'lv_three', 'size': '500m', 'fs': {'fstype': 'ext4', 'resizefs': True}, 'mount_point': {'path': '/mnt/mount_point_three', 'mode': '755'}}]}, {'name': 'vg_two', 'tag': 'VGTWO', 'manage': True, 'lvs_manage': True, 'lvs': [{'name': 'lv_four', 'size': '500m', 'fs': {'fstype': 'xfs'}, 'mount_point': {'path': '/mnt/mount_point_four', 'mode': '755', 'manage': True}}, {'name': 'lv_five', 'size': '500m', 'fs': {'fstype': 'xfs'}, 'mount_point': {'path': '/mnt/mount_point_five', 'mode': '755'}}, {'name': 'lv_six', 'size': '500m', 'fs': {'fstype': 'xfs'}, 'mount_point': {'path': '/mnt/mount_point_six', 'mode': '755'}}]}], 'disks': [{'path': '/dev/vdb', 'tag': 'VGONE'}, {'path': '/dev/vdc', 'tag': 'VGONE'}, {'path': '/dev/vdd', 'tag': 'VGTWO'}, {'path': '/dev/vde', 'tag': 'VGTWO'}]}",[0m
+[32m        "+----------------------------------------------------------------------------------+"[0m
+[32m    ][0m
+[32m}[0m
+[32mok: [instance-vagrant-rhel7] => {[0m
+[32m    "msg": [[0m
+[32m        "+----------------------------------------------------------------------------------+",[0m
+[32m        "ansible_os_family: RedHat",[0m
+[32m        "ansible_distribution: RedHat",[0m
+[32m        "ansible_distribution_release: Maipo",[0m
+[32m        "ansible_distribution_major_version: 7",[0m
+[32m        "ansible_distribution_version: 7.9",[0m
+[32m        "+----------------------------------------------------------------------------------+",[0m
+[32m        "os_common : {'groups_manage': True, 'groups': [{'name': 'group_one', 'gid': '1042'}, {'name': 'group_two'}, {'name': 'group_three', 'system': True}, {'name': 'group_four', 'state': 'absent', 'force': True}, {'name': 'group_five', 'manage': True}, {'name': 'group_six', 'manage': False}], 'users_manage': True, 'users': [{'name': 'tchalmel', 'authorized_keys_manage': True, 'authorized_keys': [{'authorized_key': 'https://raw.githubusercontent.com/shmii/public_key/main/id_ecdsa.pub', 'manage_dir': True, 'state': 'present'}, {'authorized_key': 'https://raw.githubusercontent.com/shmii/public_key/main/id_rsa.pub', 'manage_dir': True, 'state': 'present'}]}, {'name': 'user_one'}, {'name': 'user_two', 'state': 'present', 'group': 'group_two'}, {'name': 'user_three', 'append': True, 'groups': 'group_one, group_two'}, {'name': 'user_four', 'append': True, 'groups': ['group_one', 'group_two']}, {'name': 'user_five', 'state': 'absent', 'remove': True}], 'directories_manage': True, 'directories': [{'path': '/mnt'}, {'path': '/mnt/mount_point_one', 'owner': 'user_one'}, {'path': '/mnt/mount_point_two', 'owner': 'user_two', 'group': 'group_two'}, {'path': '/mnt/mount_point_three', 'owner': 'user_three', 'group': 'group_three', 'mode': '755'}, {'path': '/mnt/mount_point_four', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/mnt/mount_point_five', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/mnt/mount_point_six', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/app', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/app/infra', 'owner': 'root', 'group': 'root', 'mode': '755'}, {'path': '/app/test', 'owner': 'root', 'group': 'root', 'mode': '755'}], 'lvm_manage': True, 'pvs_manage': True, 'lvs_manage': True, 'vgs_manage': True, 'vgs': [{'name': 'vg_one', 'tag': 'VGONE', 'manage': True, 'lvs_manage': True, 'lvs': [{'name': 'lv_one', 'size': '500m', 'manage': True, 'fs': {'fstype': 'ext2', 'resizefs': True, 'manage': True}, 'mount_point': {'path': '/mnt/mount_point_one', 'mode': '755', 'manage': True}}, {'name': 'lv_two', 'size': '500m', 'fs': {'fstype': 'ext3', 'resizefs': True}, 'mount_point': {'path': '/mnt/mount_point_two', 'mode': '755'}}, {'name': 'lv_three', 'size': '500m', 'fs': {'fstype': 'ext4', 'resizefs': True}, 'mount_point': {'path': '/mnt/mount_point_three', 'mode': '755'}}]}, {'name': 'vg_two', 'tag': 'VGTWO', 'manage': True, 'lvs_manage': True, 'lvs': [{'name': 'lv_four', 'size': '500m', 'fs': {'fstype': 'xfs'}, 'mount_point': {'path': '/mnt/mount_point_four', 'mode': '755', 'manage': True}}, {'name': 'lv_five', 'size': '500m', 'fs': {'fstype': 'xfs'}, 'mount_point': {'path': '/mnt/mount_point_five', 'mode': '755'}}, {'name': 'lv_six', 'size': '500m', 'fs': {'fstype': 'xfs'}, 'mount_point': {'path': '/mnt/mount_point_six', 'mode': '755'}}]}], 'disks': [{'path': '/dev/vdb', 'tag': 'VGONE'}, {'path': '/dev/vdc', 'tag': 'VGONE'}, {'path': '/dev/vdd', 'tag': 'VGTWO'}, {'path': '/dev/vde', 'tag': 'VGTWO'}]}",[0m
+[32m        "+----------------------------------------------------------------------------------+"[0m
+[32m    ][0m
+[32m}[0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - EPEL Repository] ***
+[36mincluded: /home/thomas/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/tasks/rhel_repository_epel.yml for instance-vagrant-centos7, instance-vagrant-rhel7[0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - EPEL Repository - Debug Informations] ***
+[32mok: [instance-vagrant-centos7] => {[0m
+[32m    "msg": [[0m
+[32m        "ansible_pkg_mgr: yum",[0m
+[32m        "__os_common_package_manager_backend: dnf4",[0m
+[32m        "__os_common_epel_repo_path: https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm",[0m
+[32m        "__os_common_epel_repo_key: https://archives.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7"[0m
+[32m    ][0m
+[32m}[0m
+[32mok: [instance-vagrant-rhel7] => {[0m
+[32m    "msg": [[0m
+[32m        "ansible_pkg_mgr: yum",[0m
+[32m        "__os_common_package_manager_backend: yum",[0m
+[32m        "__os_common_epel_repo_path: https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm",[0m
+[32m        "__os_common_epel_repo_key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7"[0m
+[32m    ][0m
+[32m}[0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - EPEL Repository - Check repofile.] ***
+[32mok: [instance-vagrant-centos7][0m
+[32mok: [instance-vagrant-rhel7][0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - EPEL Repository - Check uri.] ***
+[32mok: [instance-vagrant-rhel7][0m
+[32mok: [instance-vagrant-centos7][0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - EPEL Repository - Check GPG Key.] ***
+[32mok: [instance-vagrant-centos7][0m
+[32mok: [instance-vagrant-rhel7][0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - EPEL Repository - file and key informations] ***
+[32mok: [instance-vagrant-centos7] => {[0m
+[32m    "msg": [[0m
+[32m        "__os_common_epel_repo_path: https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm",[0m
+[32m        "__os_common_epel_repo_key: https://archives.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7",[0m
+[32m        {[0m
+[32m            "epel_file_check": {[0m
+[32m                "changed": false,[0m
+[32m                "failed": false,[0m
+[32m                "stat": {[0m
+[32m                    "exists": false[0m
+[32m                }[0m
+[32m            }[0m
+[32m        },[0m
+[32m        {[0m
+[32m            "epel_uri_check": {[0m
+[32m                "accept_ranges": "bytes",[0m
+[32m                "apptime": "D=5574",[0m
+[32m                "changed": false,[0m
+[32m                "connection": "close",[0m
+[32m                "content_length": "15608",[0m
+[32m                "content_security_policy": "default-src 'none'; img-src 'self'",[0m
+[32m                "content_type": "application/x-rpm",[0m
+[32m                "cookies": {},[0m
+[32m                "cookies_string": "",[0m
+[32m                "date": "Fri, 13 Feb 2026 16:26:17 GMT",[0m
+[32m                "elapsed": 0,[0m
+[32m                "etag": "\"3cf8-5cb2f08ee02ec\"",[0m
+[32m                "failed": false,[0m
+[32m                "failed_when_result": false,[0m
+[32m                "last_modified": "Sat, 04 Sep 2021 17:49:17 GMT",[0m
+[32m                "msg": "OK (15608 bytes)",[0m
+[32m                "redirected": false,[0m
+[32m                "referrer_policy": "same-origin",[0m
+[32m                "server": "Apache",[0m
+[32m                "status": 200,[0m
+[32m                "strict_transport_security": "max-age=31536000; preload",[0m
+[32m                "url": "https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm",[0m
+[32m                "x_content_type_options": "nosniff",[0m
+[32m                "x_fedora_appserver": "dl01.rdu3.fedoraproject.org",[0m
+[32m                "x_frame_options": "DENY",[0m
+[32m                "x_xss_protection": "1; mode=block"[0m
+[32m            }[0m
+[32m        },[0m
+[32m        {[0m
+[32m            "peel_key_check": {[0m
+[32m                "changed": false,[0m
+[32m                "failed": false[0m
+[32m            }[0m
+[32m        }[0m
+[32m    ][0m
+[32m}[0m
+[32mok: [instance-vagrant-rhel7] => {[0m
+[32m    "msg": [[0m
+[32m        "__os_common_epel_repo_path: https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm",[0m
+[32m        "__os_common_epel_repo_key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7",[0m
+[32m        {[0m
+[32m            "epel_file_check": {[0m
+[32m                "changed": false,[0m
+[32m                "failed": false,[0m
+[32m                "stat": {[0m
+[32m                    "exists": false[0m
+[32m                }[0m
+[32m            }[0m
+[32m        },[0m
+[32m        {[0m
+[32m            "epel_uri_check": {[0m
+[32m                "accept_ranges": "bytes",[0m
+[32m                "apptime": "D=4113",[0m
+[32m                "changed": false,[0m
+[32m                "connection": "close",[0m
+[32m                "content_length": "15608",[0m
+[32m                "content_security_policy": "default-src 'none'; img-src 'self'",[0m
+[32m                "content_type": "application/x-rpm",[0m
+[32m                "cookies": {},[0m
+[32m                "cookies_string": "",[0m
+[32m                "date": "Fri, 13 Feb 2026 16:26:17 GMT",[0m
+[32m                "elapsed": 0,[0m
+[32m                "etag": "\"3cf8-5cb2f08ee02ec\"",[0m
+[32m                "failed": false,[0m
+[32m                "failed_when_result": false,[0m
+[32m                "last_modified": "Sat, 04 Sep 2021 17:49:17 GMT",[0m
+[32m                "msg": "OK (15608 bytes)",[0m
+[32m                "redirected": false,[0m
+[32m                "referrer_policy": "same-origin",[0m
+[32m                "server": "Apache",[0m
+[32m                "status": 200,[0m
+[32m                "strict_transport_security": "max-age=31536000; preload",[0m
+[32m                "url": "https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm",[0m
+[32m                "x_content_type_options": "nosniff",[0m
+[32m                "x_fedora_appserver": "dl02.rdu3.fedoraproject.org",[0m
+[32m                "x_frame_options": "DENY",[0m
+[32m                "x_xss_protection": "1; mode=block"[0m
+[32m            }[0m
+[32m        },[0m
+[32m        {[0m
+[32m            "peel_key_check": {[0m
+[32m                "changed": false,[0m
+[32m                "failed": false[0m
+[32m            }[0m
+[32m        }[0m
+[32m    ][0m
+[32m}[0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - EPEL Repository - EPEL package availability] ***
+[36mskipping: [instance-vagrant-centos7][0m
+[36mskipping: [instance-vagrant-rhel7][0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - EPEL Repository - EPEL package must be install (RHEL7-/yum)] ***
+[32mok: [instance-vagrant-centos7][0m
+[32mok: [instance-vagrant-rhel7][0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - EPEL Repository - EPEL package must be install (RHEL8+/dnf)] ***
+[36mskipping: [instance-vagrant-centos7][0m
+[36mskipping: [instance-vagrant-rhel7][0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - PowerTools Repository] ***
+[36mskipping: [instance-vagrant-centos7][0m
+[36mskipping: [instance-vagrant-rhel7][0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - Manage Repositories] ***
+[31mfatal: [instance-vagrant-rhel7]: FAILED! => {"msg": "The conditional check '-__os_common_repositories_manage | default(false)' failed. The error was: error while evaluating conditional (-__os_common_repositories_manage | default(false)): '__os_common_repositories_manage' is undefined. '__os_common_repositories_manage' is undefined\n\nThe error appears to be in '/home/thomas/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/tasks/rhel_repositories.yml': line 32, column 3, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n- name: OS Common - Redhat Family - Repositories - Manage Repositories\n  ^ here\n"}[0m
+[36mincluded: /home/thomas/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/tasks/rhel_repositories_repositories.yml for instance-vagrant-centos7[0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - Manage repositories - Debug Informations] ***
+[32mok: [instance-vagrant-centos7] => {[0m
+[32m    "msg": [[0m
+[32m        "ansible_pkg_mgr: yum",[0m
+[32m        "__os_common_package_manager_backend: dnf4",[0m
+[32m        "__os_common_repositories_manage: True",[0m
+[32m        "__os_common_repositories: [{'file': 'CentOS-Vault-managed', 'repositories': [{'name': 'base', 'description': 'CentOS-7 - Base (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/os/$basearch/'}, {'name': 'updates', 'description': 'CentOS-7 - Updates (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/updates/$basearch/'}, {'name': 'extras', 'description': 'CentOS-7 - Extras (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/extras/$basearch/'}, {'name': 'centosplus', 'description': 'CentOS-7 - Plus (Vault) [disabled]', 'baseurl': 'http://vault.centos.org/7.9.2009/centosplus/$basearch/', 'enabled': False}]}, {'file': 'CentOS-Base', 'repositories': [{'name': 'base', 'enabled': False}, {'name': 'updates', 'enabled': False}, {'name': 'extras', 'enabled': False}, {'name': 'centosplus', 'enabled': False}]}]"[0m
+[32m    ][0m
+[32m}[0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - Manage repositories - Debug Informations] ***
+[36mincluded: /home/thomas/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/tasks/rhel_repositories_repository.yml for instance-vagrant-centos7 => (item={'file': 'CentOS-Vault-managed', 'repositories': [{'name': 'base', 'description': 'CentOS-7 - Base (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/os/$basearch/'}, {'name': 'updates', 'description': 'CentOS-7 - Updates (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/updates/$basearch/'}, {'name': 'extras', 'description': 'CentOS-7 - Extras (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/extras/$basearch/'}, {'name': 'centosplus', 'description': 'CentOS-7 - Plus (Vault) [disabled]', 'baseurl': 'http://vault.centos.org/7.9.2009/centosplus/$basearch/', 'enabled': False}]})[0m
+[36mincluded: /home/thomas/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/tasks/rhel_repositories_repository.yml for instance-vagrant-centos7 => (item={'file': 'CentOS-Base', 'repositories': [{'name': 'base', 'enabled': False}, {'name': 'updates', 'enabled': False}, {'name': 'extras', 'enabled': False}, {'name': 'centosplus', 'enabled': False}]})[0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - Manage Repositories - Repository - Debug Informations - CentOS-Vault-managed] ***
+[32mok: [instance-vagrant-centos7] => {[0m
+[32m    "msg": [[0m
+[32m        "ansible_pkg_mgr: yum",[0m
+[32m        "__os_common_package_manager_backend: dnf4",[0m
+[32m        "__os_common_repositories_manage: True",[0m
+[32m        "__os_common_repositories: [{'file': 'CentOS-Vault-managed', 'repositories': [{'name': 'base', 'description': 'CentOS-7 - Base (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/os/$basearch/'}, {'name': 'updates', 'description': 'CentOS-7 - Updates (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/updates/$basearch/'}, {'name': 'extras', 'description': 'CentOS-7 - Extras (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/extras/$basearch/'}, {'name': 'centosplus', 'description': 'CentOS-7 - Plus (Vault) [disabled]', 'baseurl': 'http://vault.centos.org/7.9.2009/centosplus/$basearch/', 'enabled': False}]}, {'file': 'CentOS-Base', 'repositories': [{'name': 'base', 'enabled': False}, {'name': 'updates', 'enabled': False}, {'name': 'extras', 'enabled': False}, {'name': 'centosplus', 'enabled': False}]}]",[0m
+[32m        "repository: {'file': 'CentOS-Vault-managed', 'repositories': [{'name': 'base', 'description': 'CentOS-7 - Base (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/os/$basearch/'}, {'name': 'updates', 'description': 'CentOS-7 - Updates (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/updates/$basearch/'}, {'name': 'extras', 'description': 'CentOS-7 - Extras (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/extras/$basearch/'}, {'name': 'centosplus', 'description': 'CentOS-7 - Plus (Vault) [disabled]', 'baseurl': 'http://vault.centos.org/7.9.2009/centosplus/$basearch/', 'enabled': False}]}"[0m
+[32m    ][0m
+[32m}[0m
+
+TASK [os_common : OS Common - Redhat Family - Repositories - Manage Repositories - Repository - Debug Informations - CentOS-Base] ***
+[32mok: [instance-vagrant-centos7] => {[0m
+[32m    "msg": [[0m
+[32m        "ansible_pkg_mgr: yum",[0m
+[32m        "__os_common_package_manager_backend: dnf4",[0m
+[32m        "__os_common_repositories_manage: True",[0m
+[32m        "__os_common_repositories: [{'file': 'CentOS-Vault-managed', 'repositories': [{'name': 'base', 'description': 'CentOS-7 - Base (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/os/$basearch/'}, {'name': 'updates', 'description': 'CentOS-7 - Updates (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/updates/$basearch/'}, {'name': 'extras', 'description': 'CentOS-7 - Extras (Vault)', 'baseurl': 'http://vault.centos.org/7.9.2009/extras/$basearch/'}, {'name': 'centosplus', 'description': 'CentOS-7 - Plus (Vault) [disabled]', 'baseurl': 'http://vault.centos.org/7.9.2009/centosplus/$basearch/', 'enabled': False}]}, {'file': 'CentOS-Base', 'repositories': [{'name': 'base', 'enabled': False}, {'name': 'updates', 'enabled': False}, {'name': 'extras', 'enabled': False}, {'name': 'centosplus', 'enabled': False}]}]",[0m
+[32m        "repository: {'file': 'CentOS-Base', 'repositories': [{'name': 'base', 'enabled': False}, {'name': 'updates', 'enabled': False}, {'name': 'extras', 'enabled': False}, {'name': 'centosplus', 'enabled': False}]}"[0m
+[32m    ][0m
+[32m}[0m
+
+TASK [os_common : OS Common - Redhat Family - DSI tools - Debug Informations] ***
+[32mok: [instance-vagrant-centos7] => {[0m
+[32m    "msg": [[0m
+[32m        "ansible_os_family: RedHat",[0m
+[32m        "ansible_distribution: CentOS",[0m
+[32m        "ansible_distribution_release: Core",[0m
+[32m        "ansible_distribution_major_version: 7",[0m
+[32m        "ansible_distribution_version: 7.9",[0m
+[32m        "ansible_pkg_mgr: yum",[0m
+[32m        "__os_common_package_manager_backend: dnf4",[0m
+[32m        "__os_common_tools_packages: ['redhat-lsb-core', 'bash-completion', 'htop', 'vim', 'curl', 'tmux', 'screen', 'telnet', 'cifs-utils']",[0m
+[32m        "__os_common_repositories_retry: 5",[0m
+[32m        "__os_common_repositories_delay: 1"[0m
+[32m    ][0m
+[32m}[0m
+
+TASK [os_common : OS Common - Redhat Family - DSI tools - flush_handlers] ******
+
+TASK [os_common : OS Common - Redhat Family - DSI tools - Yum - (Without PowerTools)] ***
+[31mfatal: [instance-vagrant-centos7]: FAILED! => {"attempts": 5, "changed": false, "msg": "Failure talking to yum: Cannot find a valid baseurl for repo: base/7/x86_64"}[0m
+[1;30mFAILED - RETRYING: [instance-vagrant-centos7]: OS Common - Redhat Family - DSI tools - Yum - (Without PowerTools) (5 retries left).[0m
+[1;30mFAILED - RETRYING: [instance-vagrant-centos7]: OS Common - Redhat Family - DSI tools - Yum - (Without PowerTools) (4 retries left).[0m
+[1;30mFAILED - RETRYING: [instance-vagrant-centos7]: OS Common - Redhat Family - DSI tools - Yum - (Without PowerTools) (3 retries left).[0m
+[1;30mFAILED - RETRYING: [instance-vagrant-centos7]: OS Common - Redhat Family - DSI tools - Yum - (Without PowerTools) (2 retries left).[0m
+[1;30mFAILED - RETRYING: [instance-vagrant-centos7]: OS Common - Redhat Family - DSI tools - Yum - (Without PowerTools) (1 retries left).[0m
+
+PLAY RECAP *********************************************************************
+[31minstance-vagrant-centos7[0m   : [32mok=19  [0m changed=0    unreachable=0    [31mfailed=1   [0m [36mskipped=7   [0m rescued=0    ignored=0
+[31minstance-vagrant-rhel7[0m     : [32mok=11  [0m changed=0    unreachable=0    [31mfailed=1   [0m [36mskipped=8   [0m rescued=0    ignored=0
+

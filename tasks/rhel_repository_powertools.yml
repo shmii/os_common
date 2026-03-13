@@ -22,6 +22,13 @@
     use_backend: "{{ __os_common_package_manager_backend | default('auto') }}"
     state: present
     enablerepo: "epel"
+  register: result
+  until: result is succeeded
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  when: 
+    - (epel_file_check.stat.exists | default(false)) or (not epel_uri_check.failed | default(true))
+    - (ansible_distribution_major_version | int >= 8) or (ansible_distribution == "Amazon" and ansible_distribution_version is match("^2023"))
   notify:
     - Update dnf cache
   tags:
