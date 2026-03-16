@@ -61,7 +61,7 @@
     - os_common_debian_packages_vars_debug
 
 - name: "OS Common - Redhat Family - Packages - Package - Loop"
-  ansible.builtin.include_tasks: rhel_package.yml
+  ansible.builtin.include_tasks: debian_package.yml
   loop: "{{ _packages }}"
   loop_control:
     loop_var: package

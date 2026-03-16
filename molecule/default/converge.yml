@@ -9,10 +9,9 @@
     os_common_debug_level: 0
     os_common:
       packages:
-        - name: 'nano'
+        - name:
+          - 'nano'
           state: present
-        - name: 'ufw'
-          state: absent
       groups_manage: true
       groups:
         - name: group_one

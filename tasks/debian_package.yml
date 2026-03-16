@@ -15,35 +15,6 @@
 - name: "OS Common - Debian Family - Packages- flush_handlers"
   ansible.builtin.meta: flush_handlers
 
-- name: "OS Common - Debian Family - Packages - Vars"
-  ansible.builtin.set_fact:
-    _packages_manage: "{{ os_common.packages_manage | default(true) or __os_common_packages_manage | default(true) }}"
-    _packages: "{{ ((os_common.packages | default([])) + (__os_common_packages | default([]))) | unique }}"
-  tags:
-    - os_common
-    - os_common_packages
-    - os_common_packages_vars
-    - os_common_debian
-    - os_common_debian_packages
-    - os_common_debian_packages_vars
-
-- name: "OS Common - Debian Family - Packages - Vars - Debug Informations"
-  ansible.builtin.debug:
-    msg:
-      - "================= Packages Vars ======================================"
-      - "_packages_manage: {{ _packages_manage | default('') }}"
-      - "_packages: {{ _packages | default([]) }}"
-      - "======================================================================"
-    verbosity: "{{ os_common_debug_level | default(3) }}"
-  tags:
-    - os_common
-    - os_common_packages
-    - os_common_packages_debug
-    - os_common_debian
-    - os_common_debian_packages
-    - os_common_debian_packages_vars
-    - os_common_debian_packages_vars_debug
-
 - name: "OS Common - Debian Family - Packages - Ensure"
   ansible.builtin.apt:
     allow_change_held_packages: "{{ package.allow_change_held_packages | default(omit) }}"
@@ -62,7 +33,7 @@
     force_apt_get: "{{ package.force_apt_get | default(omit) }}"
     install_recommends: "{{ package.install_recommends | default(omit) }}"
     lock_timeout: "{{ package.lock_timeout | default(omit) }}"
-    name: "{{ package.name | default(omit) }}"
+    name: "{{ package.name }}"
     only_upgrade: "{{ package.only_upgrade | default(omit) }}"
     policy_rc_d: "{{ package.policy_rc_d | default(omit) }}"
     purge: "{{ package.purge | default(omit) }}"
@@ -71,16 +42,14 @@
     update_cache_retries: "{{ __os_common_repositories_retry | default(5) }}"
     update_cache_retry_max_delay: "{{ __os_common_repositories_delay | default(10) }}"
     upgrade: "{{ package.upgrade | default(omit) }}"
-  loop: "{{ _packages }}"
-  loop_control:
-    loop_var: package
   register: apt_res
   retries: "{{ __os_common_repositories_retry | default(5) }}"
   delay: "{{ __os_common_repositories_delay | default(10) }}"
   until: apt_res is success
   when:
-    - _packages_manage | default(true)
-    - _packages | default([]) | length > 0 
+    - package.manage | default(true)
+    - package | default([]) | length > 0
+    - package.name | default('') | length > 0 
   tags:
     - os_common
     - os_common_packages
