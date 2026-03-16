@@ -1,19 +1,19 @@
 ---
 - name: "OS Common - Redhat Family - Repositories"
-  ansible.builtin.import_tasks: rhel_repositories.yml
+  ansible.builtin.import_tasks: rhel_manage_repositories.yml
   tags:
     - os_common
     - os_common_repositories
     - os_common_rhel
-    - os_common_rhel_repositories
+    - os_common_rhel_manage_repositories
 
-- name: OS Common - Redhat Family - Install DSI tools
-  ansible.builtin.import_tasks: rhel_tools.yml
+- name: OS Common - Redhat Family - Packages
+  ansible.builtin.import_tasks: rhel_packages.yml
   tags:
     - os_common
-    - os_common_tools
+    - os_common_packages
     - os_common_rhel
-    - os_common_rhel_tools
+    - os_common_rhel_packages
 
 - name: OS Common - Redhat Family - Groups
   ansible.builtin.import_tasks: groups.yml

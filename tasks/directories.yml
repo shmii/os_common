@@ -4,7 +4,7 @@
     msg:
       - "os_common.directories: {{ os_common.directories | default('') }}"
       - "os_common.directories_manage: {{ os_common.directories_manage | default('') }}"
-    verbosity: "{{ os_common_debug_level | default(1) }}"
+    verbosity: "{{ os_common_debug_level | default(2) }}"
   tags:
     - os_common
     - os_common_debug

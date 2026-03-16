@@ -1,43 +1,136 @@
 ---
-
-# The goal of EPEL is to make high quality Fedora packages available for RHEL and compatible derivatives.
-# EPEL Packages a already included on Fedora distribution (ansible_distribution != 'Fedora')
-
-- name: OS Common - Redhat Family - Repositories - EPEL Repository
-  ansible.builtin.include_tasks: rhel_repository_epel.yml
-  when:
-    - ansible_distribution != 'Fedora'
+- name: "OS Common - Redhat Family - Manage Repositories - Repositories - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - "========== Ansible Facts ============================================="
+      - "ansible_os_family: {{ ansible_os_family | default('') }}"
+      - "ansible_distribution: {{ ansible_distribution | default('') }}"
+      - "ansible_distribution_release: {{ ansible_distribution_release | default('') }}"
+      - "ansible_distribution_major_version: {{ ansible_distribution_major_version | default('') }}"
+      - "ansible_distribution_version: {{ ansible_distribution_version | default('') }}"
+      - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
+      - "========== Role Technical Variables (__os_common_*) =================="
+      - "__os_common_repositories_manage: {{ __os_common_repositories_manage | default('') }}"
+      - "__os_common_repositories: {{ __os_common_repositories | default([]) }}"
+      - "__os_common_repositories_retry (Task default 5): {{ __os_common_repositories_retry | default('') }}"
+      - "__os_common_repositories_delay (Task default 10): {{ __os_common_repositories_delay | default('') }}"
+      - "========== Role Variables ( os_common vars) =========================="
+      - "os_common.repositories_manage: {{ os_common.repositories_manage | default('') }}"
+      - "os_common.repositories: {{ os_common.repositories | default([]) }}"
+      - "========== Role Variables ( os_common vars) =========================="
+    verbosity: "{{ os_common_debug_level | default(2) }}"
   tags:
     - os_common
     - os_common_repositories
     - os_common_rhel
+    - os_common_rhel_manage_repositories
     - os_common_rhel_repositories
-    - os_common_rhel_repository_epel
+    - os_common_rhel_repositories_debug
 
-# PowerTools is a repository of software that adds more utilities and resources for programs and development.
-# PowerTools expands the user choice by offering extra packages with tools.
-
-- name: OS Common - Redhat Family - Repositories - PowerTools Repository
-  ansible.builtin.include_tasks: rhel_repository_powertools.yml
-  when:
-    - (ansible_facts['distribution_major_version'] >= "8" and
-       ansible_distribution != 'Fedora' and ansible_distribution != 'RedHat')
+- name: "OS Common - Redhat Family - Manage Repositories - Repositories - Compute Variables"
+  ansible.builtin.set_fact:
+    _repositories_manage: "{{ os_common.repositories_manage | default(true) or __os_common_repositories_manage | default(true) }}"
+    _repositories: "{{ ((os_common.repositories | default([])) + (__os_common_repositories | default([]))) | unique }}"
   tags:
     - os_common
     - os_common_repositories
     - os_common_rhel
+    - os_common_rhel_manage_repositories
     - os_common_rhel_repositories
-    - os_common_rhel_repository_powertools
+    - os_common_rhel_positories_vars
 
-- name: OS Common - Redhat Family - Repositories - Managed Repositories Files
-  ansible.builtin.include_tasks: rhel_repositories_repositories_files.yml
-  when:
-    - ( __os_common_repositories_manage | default(false) ) or
-      ( os_common.repositories_manage | default(false) )
+- name: "OS Common - Redhat Family - Manage Repositories - Repositories - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - "================= Repositories Vars =================================="
+      - "_repositories_manage: {{ _repositories_manage | default('') }}"
+      - "_repositories: {{ _repositories | default([]) }}"
+      - "========== Role Variables ( os_common vars) =========================="
+    verbosity: "{{ os_common_debug_level | default(3) }}"
   tags:
     - os_common
     - os_common_repositories
     - os_common_rhel
+    - os_common_rhel_manage_repositories
     - os_common_rhel_repositories
-    - os_common_rhel_repositories_repositories_files
+    - os_common_rhel_repositories_vars
+
+- name: "OS Common - Redhat Family - Manage Repositories - Repositories - Ensure Repositories"
+  ansible.builtin.yum_repository:
+    name: "{{ repository.name }}"
+    async: "{{ repository.async | default(omit) }}"
+    attributes: "{{ repository.attributes | default(omit) }}"
+    bandwidth: "{{ repository.bandwidth | default(omit) }}"
+    baseurl: "{{ repository.baseurl | default(omit) }}" 
+    cost: "{{ repository.cost | default(omit) }}"
+    countme: "{{ repository.countme | default(omit) }}"
+    deltarpm_metadata_percentage: "{{ repository.deltarpm_metadata_percentage | default(omit) }}"
+    deltarpm_percentage: "{{ repository.deltarpm_percentage | default(omit) }}"
+    description: "{{ repository.description | default(omit) }}"
+    enabled: "{{ repository.enabled | default(omit) }}"
+    enablegroups: "{{ repository.enablegroups | default(omit) }}"
+    exclude: "{{ repository.exclude | default(omit) }}"
+    failovermethod: "{{ repository.failovermethod | default(omit) }}"
+    file: "{{ repository.file | default(omit) }}"
+    gpgcakey: "{{ repository.gpgcakey | default(omit) }}"
+    gpgcheck: "{{ repository.gpgcheck | default(omit) }}"
+    gpgkey: "{{ repository.gpgkey | default(omit) }}"
+    group: "{{ repository.group | default(omit) }}"
+    http_caching: "{{ repository.http_caching | default(omit) }}"
+    include: "{{ repository.include | default(omit) }}"
+    includepkgs: "{{ repository.includepkgs | default(omit) }}"
+    ip_resolve: "{{ repository.ip_resolve | default(omit) }}"
+    keepalive: "{{ repository.keepalive | default(omit) }}"
+    metadata_expire: "{{ repository.metadata_expire | default(omit) }}"
+    metadata_expire_filter: "{{ repository.metadata_expire_filter | default(omit) }}"
+    metalink: "{{ repository.metalink | default(omit) }}"
+    mirrorlist: "{{ repository.mirrorlist | default(omit) }}"
+    mirrorlist_expire: "{{ repository.mirrorlist_expire | default(omit) }}"
+    mode: "{{ repository.mode | default(omit) }}"
+    module_hotfixes: "{{ repository.module_hotfixes | default(omit) }}"
+    owner: "{{ repository.owner | default(omit) }}"
+    password: "{{ repository.password | default(omit) }}"
+    priority: "{{ repository.priority | default(omit) }}"
+    protect: "{{ repository.protect | default(omit) }}"
+    proxy: "{{ repository.proxy | default(omit) }}"
+    proxy_password: "{{ repository.proxy_password | default(omit) }}"
+    proxy_username: "{{ repository.proxy_username | default(omit) }}"
+    repo_gpgcheck: "{{ repository.repo_gpgcheck | default(omit) }}"
+    reposdir: "{{ repository.reposdir | default(omit) }}"
+    retries: "{{ repository.retries | default(omit) }}"
+    s3_enabled: "{{ repository.s3_enabled | default(omit) }}"
+    selevel: "{{ repository.selevel | default(omit) }}" 
+    serole: "{{ repository.serole | default(omit) }}"
+    setype: "{{ repository.setype | default(omit) }}"
+    seuser: "{{ repository.seuser | default(omit) }}"
+    skip_if_unavailable: "{{ repository.skip_if_unavailable | default(omit) }}"
+    ssl_check_cert_permissions: "{{ repository.ssl_check_cert_permissions | default(omit) }}" 
+    sslcacert: "{{ repository.sslcacert | default(omit) }}"
+    sslclientcert: "{{ repository.sslclientcert | default(omit) }}"
+    sslclientkey: "{{ repository.sslclientkey | default(omit) }}"
+    sslverify: "{{ repository.sslverify | default(omit) }}"
+    state: "{{ repository.state | default(omit) }}"
+    throttle: "{{ repository.throttle | default(omit) }}"
+    timeout: "{{ repository.timeout | default(omit) }}"
+    ui_repoid_vars: "{{ repository.ui_repoid_vars | default(omit) }}"
+    unsafe_writes: "{{ repository.unsafe_writes | default(omit) }}"
+    username: "{{ repository.username | default(omit) }}"
+  loop: "{{ _repositories }}"
+  loop_control:
+    loop_var: repository
+  register: repository_check_status
+  retries: "{{ __os_common_repositories_retry | default(5) }}"
+  delay: "{{ __os_common_repositories_delay | default(10) }}"
+  until: repository_check_status is success
+  when:
+    - _repositories_manage
+    - _repositories | length > 0
+  notify:
+    - "Update repository cache"
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_rhel
+    - os_common_rhel_manage_repositories
+    - os_common_rhel_repositories_ensure
 ...

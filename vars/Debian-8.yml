@@ -1,50 +1,69 @@
 ---
-__os_common_base_repo_update: true
-__os_common_base_repo_list:
-  - name: "http_archive.debian.org_debian_jessie"
+__os_common_repositories_manage: true
+__os_common_repositories:
+  - filename: "archive.debian.org"
     repo: "deb http://archive.debian.org/debian-archive/debian/ jessie main"
     validate_certs: false
     state: present
 
-  - name: "http_archive.debian.org_debian-security_jessie/updates"
+  - repository_name: "http_archive.debian.org_debian-security_jessie/updates"
     repo: "deb http://archive.debian.org/debian-security/ jessie/updates main"
     validate_certs: false
     state: present
 
-  - name: "https_archive.debian.org_debian_jessie"
+  - repository_name: "https_archive.debian.org_debian_jessie"
     repo: "deb https://archive.debian.org/debian-archive/debian/ jessie main"
     state: absent
 
-  - name: "https_archive.debian.org_debian-security_jessie/updates"
+  - repository_name: "https_archive.debian.org_debian-security_jessie/updates"
     repo: "deb https://archive.debian.org/debian-security/ jessie/updates main"
     state: absent
 
-  - name: "http_ftp.debian.org_jessie"
+  - repository_name: "http_ftp.debian.org_jessie"
     repo: "deb http://ftp.debian.org/debian/ jessie main"
     state: absent
 
-  - name: "http_ftp.debian.org_jessie_src"
+  - repository_name: "http_ftp.debian.org_jessie_src"
     repo: "deb-src http://ftp.debian.org/debian/ jessie main"
     state: absent
 
-  - name: "http_ftp.us.debian.org_jessie"
+  - repository_name: "http_ftp.us.debian.org_jessie"
     repo: "deb http://ftp.us.debian.org/debian/ jessie main"
     state: absent
 
-  - name: "http_ftp.us.debian.org_jessie_src"
+  - repository_name: "http_ftp.us.debian.org_jessie_src"
     repo: "deb-src http://ftp.us.debian.org/debian/ jessie main"
     state: absent
 
-  - name: "http_security.debian.org_jessie_update"
+  - repository_name: "http_security.debian.org_jessie_update"
     repo: "deb http://security.debian.org/debian-security jessie/updates main"
     state: absent
 
-  - name: "http_security.debian.org_jessie_update_src"
+  - repository_name: "http_security.debian.org_jessie_update_src"
     repo: "deb-src http://security.debian.org/debian-security jessie/updates main"
     state: absent
 
-  - name: "http_ftp.debian.org_jessie_update"
+  - repository_name: "http_ftp.debian.org_jessie_update"
     repo: "deb http://ftp.debian.org/debian/ jessie-updates main"
     state: absent
 
+__os_common_packages:
+  - name :
+    - bash-completion
+    - htop
+    - vim
+    - sshpass
+    - curl
+    - tmux
+    - screen
+    - python3
+    - python3-apt
+    - python3-pexpect
+    - python3-pip
+    - telnet
+    - cifs-utils
+    - tree
+    - lvm2
+    - xfsprogs
+    allow_unauthenticated: true
 ...

@@ -4,7 +4,7 @@
     msg:
       - vg: "{{ vg | default('') }}"
       - lv: "{{ lv | default('') }}"
-    verbosity: "{{ os_common_debug_level | default(1) }}"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
   tags:
     - os_common
     - os_common_debug
@@ -103,7 +103,8 @@
     fstab: "{{ lv.mount_point.fstab | default(omit) }}"
     opts: "{{ lv.mount_point.opts | default('defaults') }}"
     passno: "{{ lv.mount_point.passno | default(omit) }}"
-  notify: "OS Common - Directories - Check"
+  notify:
+    - "Ensure Directories"
   tags:
     - os_common
     - os_common_lvm

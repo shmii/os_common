@@ -1,12 +1,13 @@
 ---
-__os_common_tools_packages:
-  - redhat-lsb-core
-  - bash-completion
-  - htop
-  - vim
-  - curl
-  - tmux
-  - screen
-  - python3-pexpect
-  - telnet
-  - cifs-utils
+__os_common_packages:
+  - name: 
+    - redhat-lsb-core
+    - bash-completion
+    - htop
+    - vim
+    - curl
+    - tmux
+    - screen
+    - python3-pexpect
+    - telnet
+    - cifs-utils

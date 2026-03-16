@@ -1,0 +1,113 @@
+---
+- name: "OS Common - Redhat Family - Packages - Package - Debug Informations : {{ package.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - "package: {{ package | default('') }}"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_rhel
+    - os_common_rhel_packages
+    - os_common_rhel_packages_package
+    - os_common_rhel_packages_package_debug
+
+- name: "OS Common - Redhat Family - Packages - Package - yum: {{ package.name | default('') }}"
+  ansible.builtin.yum:
+    allow_downgrade: "{{ package.allow_downgrade | default(omit) }}"
+    autoremove: "{{ package.autoremove | default(omit) }}"
+    bugfix: "{{ package.bugfix | default(omit) }}"
+    cacheonly: "{{ package.cacheonly | default(omit) }}"
+    conf_file: "{{ package.conf_file | default(omit) }}"
+    disable_excludes: "{{ package.disable_excludes | default(omit) }}"
+    disable_gpg_check: "{{ package.disable_gpg_check | default(omit) }}"
+    disable_plugin: "{{ package.disable_plugin | default(omit) }}"
+    disablerepo: "{{ package.disablerepo | default(omit) }}"
+    download_dir: "{{ package.download_dir | default(omit) }}"
+    download_only: "{{ package.download_only | default(omit) }}"
+    enable_plugin: "{{ package.enable_plugin | default(omit) }}"
+    enablerepo: "{{ package.enablerepo | default(omit) }}"
+    exclude: "{{ package.exclude | default(omit) }}"
+    install_repoquery: "{{ package.install_repoquery | default(omit) }}"
+    install_weak_deps: "{{ package.install_weak_deps | default(omit) }}"
+    installroot: "{{ package.installroot | default(omit) }}"
+    list: "{{ package.list | default(omit) }}"
+    lock_timeout: "{{ package.lock_timeout | default(omit) }}"
+    name: "{{ package.name }}"
+    releasever: "{{ package.releasever | default(omit) }}"
+    security: "{{ package.security | default(omit) }}"
+    skip_broken: "{{ package.skip_broken | default(omit) }}"
+    sslverify: "{{ package.sslverify | default(omit) }}"
+    state: "{{ package.state | default(omit) }}"
+    update_cache: "{{ package.update_cache | default(omit) }}"
+    update_only: "{{ package.update_only | default(omit) }}"
+    #use_backend: "{{ __os_common_package_manager_backend | default('auto') }}"
+    use_backend: "{{ package.use_backend | default(omit) }}"
+    validate_certs: "{{ package.validate_certs | default(omit) }}"
+  register: yum_res
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  until: yum_res is success
+  when:
+    - (__os_common_package_manager | default(ansible_pkg_mgr)) == 'yum'
+    - package.manage | default(true)
+    - package | default([]) | length > 0
+    - package.name | default('') | length > 0 
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_rhel
+    - os_common_rhel_packages
+    - os_common_rhel_packages_ensure
+    - os_common_rhel_packages_yum
+    - os_common_rhel_packages_yum_ensure
+
+- name: "OS Common - Redhat Family - Packages - dnf: {{ package.name | default('') }}"
+  ansible.builtin.dnf:
+    allow_downgrade: "{{ package.allow_downgrade | default(omit) }}"
+    allowerasing: "{{ package.allowerasing | default(omit) }}"
+    autoremove: "{{ package.autoremove | default(omit) }}"
+    best: "{{ package.best | default(omit) }}"
+    bugfix: "{{ package.bugfix | default(omit) }}"
+    cacheonly: "{{ package.cacheonly | default(omit) }}"
+    conf_file: "{{ package.conf_file | default(omit) }}"
+    disable_excludes: "{{ package.disable_excludes | default(omit) }}"
+    disable_gpg_check: "{{ package.disable_gpg_check | default(omit) }}"
+    disable_plugin: "{{ package.disable_plugin | default(omit) }}"
+    disablerepo: "{{ package.disablerepo | default(omit) }}"
+    download_dir: "{{ package.download_dir | default(omit) }}"
+    download_only: "{{ package.download_only | default(omit) }}"
+    enable_plugin: "{{ package.enable_plugin | default(omit) }}"
+    enablerepo: "{{ package.enablerepo | default(omit) }}"
+    exclude: "{{ package.exclude | default(omit) }}"
+    install_weak_deps: "{{ package.install_weak_deps | default(omit) }}"
+    installroot: "{{ package.installroot | default(omit) }}"
+    list: "{{ package.list | default(omit) }}"
+    lock_timeout: "{{ package.lock_timeout | default(omit) }}"
+    name: "{{ package.name }}"
+    nobest: "{{ package.nobest | default(omit) }}"
+    releasever: "{{ package.releasever | default(omit) }}"
+    security: "{{ package.security | default(omit) }}"
+    skip_broken: "{{ package.skip_broken | default(omit) }}"
+    sslverify: "{{ package.sslverify | default(omit) }}"
+    state: "{{ package.state | default(omit) }}"
+    update_cache: "{{ package.update_cache | default(omit) }}"
+    update_only: "{{ package.update_only | default(omit) }}"
+    use_backend: "{{ package.use_backend | default(omit) }}"
+    validate_certs: "{{ package.validate_certs | default(omit) }}"
+  register: dnf_res
+  retries: "{{ __os_common_repositories_retry | default('5') }}"
+  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  until: dnf_res is success
+  when:
+    - (__os_common_package_manager | default(ansible_pkg_mgr)) == 'dnf'
+    - package.manage | default(true)
+    - package | default([]) | length > 0 
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_rhel
+    - os_common_rhel_packages
+    - os_common_rhel_packages_dnf
+    - os_common_rhel_packages_dnf_ensure
+...

@@ -1,12 +1,14 @@
 ---
-__os_common_tools_packages:
-  - bash-completion
-  - htop
-  - vim
-  - curl
-  - tmux
-  - screen
-  - python3-pexpect
-  - telnet
-  - cifs-utils
-  - tree
+__os_common_packages:
+  - name:
+      - bash-completion
+      - htop
+      - vim
+      - curl
+      - tmux
+      - screen
+      - python3-pexpect
+      - telnet
+      - cifs-utils
+      - tree
+    enablerepo: "epel, {{ __os_common_powertools_repository_name }}"

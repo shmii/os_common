@@ -3,7 +3,7 @@
   ansible.builtin.debug:
     msg:
       - user: "{{ user | default({}) }}"
-    verbosity: "{{ os_common_debug_level | default(1) }}"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
   tags:
     - os_common
     - os_common_debug

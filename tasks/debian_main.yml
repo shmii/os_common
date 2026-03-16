@@ -2,20 +2,20 @@
 - name: "OS Common - Debian Family - Repositories"
   ansible.builtin.import_tasks: debian_repositories.yml
   when:
-    - __os_common_base_repo_update | default(false)
+    - __os_common_packages_manage | default(false)
   tags:
     - os_common
     - os_common_repositories
     - os_common_debian
     - os_common_debian_repositories
 
-- name: "OS Common - Debian Family - Tools"
-  ansible.builtin.import_tasks: debian_tools.yml
+- name: "OS Common - Debian Family - Packages"
+  ansible.builtin.import_tasks: debian_packages.yml
   tags:
     - os_common
-    - os_common_tools
+    - os_common_packages
     - os_common_debian
-    - os_common_debian_tools
+    - os_common_debian_packages
 
 - name: "OS Common - Debian Family - Groups"
   ansible.builtin.import_tasks: groups.yml

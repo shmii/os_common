@@ -1,44 +1,94 @@
 ---
+__os_common_package_manager: 'yum'
+__os_common_package_manager_backend: "dnf4"
+__os_common_repositories_manage: true
+
 __os_common_epel_repo_path: "https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm"
 __os_common_epel_repo_key: "https://archives.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7"
 
-__os_common_package_manager_backend: "dnf4"
-__os_common_repositories_manage: true
 __os_common_repositories:
-  - file : CentOS-Vault-managed
-    repositories:
-      - name: base
-        description: "CentOS-7 - Base (Vault)"
-        baseurl: "http://vault.centos.org/7.9.2009/os/$basearch/"
-      - name: updates
-        description: "CentOS-7 - Updates (Vault)"
-        baseurl: "http://vault.centos.org/7.9.2009/updates/$basearch/"
-      - name: extras
-        description: "CentOS-7 - Extras (Vault)"
-        baseurl: "http://vault.centos.org/7.9.2009/extras/$basearch/"
-      - name: centosplus
-        description: "CentOS-7 - Plus (Vault) [disabled]"
-        baseurl: "http://vault.centos.org/7.9.2009/centosplus/$basearch/"
-        enabled: false
-  - file : CentOS-Base
-    repositories:
-      - name: base
-        enabled: false
-      - name: updates
-        enabled: false
-      - name: extras
-        enabled: false
-      - name: centosplus
-        enabled: false
+  #file: "CentOS-Vault-managed"
+  - file: "CentOS-Vault-managed"
+    name: "CentOS-7.9.2009-base"
+    description: "CentOS-7 - Base"
+    baseurl: "http://vault.centos.org/7.9.2009/os/$basearch/"
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+    state: present
+    enabled: true
 
-__os_common_tools_packages:
-  - redhat-lsb-core
-  - bash-completion
-  - htop
-  - vim
-  - curl
-  - tmux
-  - screen
-  - telnet
-  - cifs-utils
+  - file: "CentOS-Vault-managed"
+    name: "CentOS-7.9.2009-updates"
+    description: "CentOS-7.9.2009 - Updates"
+    baseurl: "http://vault.centos.org/7.9.2009/updates/$basearch/"
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+    state: present
+    enabled: true
+
+  - file: "CentOS-Vault-managed"
+    name: "CentOS-7.9.2009-extras"
+    description: "CentOS-7.9.2009 - Extras"
+    baseurl: "http://vault.centos.org/7.9.2009/extras/$basearch/"
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+    state: present
+    enabled: true
+
+  - file: "CentOS-Vault-managed"
+    name: "CentOS-7.9.2009-centosplus"
+    description: "CentOS-7.9.2009 - CentOSPlus"
+    baseurl: "http://vault.centos.org/7.9.2009/centosplus/$basearch/"
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+    state: present
+    enabled: true
+
+  - file: "CentOS-Vault-managed"
+    name: "CentOS-7.9.2009-fasttrack"
+    description: "CentOS-7.9.2009 - Fasttrack"
+    baseurl: "http://vault.centos.org/7.9.2009/fasttrack/$basearch/"
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+    state: present
+    enabled: true
+  # Désactivation propre des dépôts CentOS-Base
+  - name: base
+    file: "CentOS-Base"
+    description: "CentOS-$releasever - Base"
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os&infra=$infra'
+    enabled: false
+    state: present
+  - name: updates
+    file: "CentOS-Base"
+    description: "CentOS-$releasever - Updates"
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates&infra=$infra'
+    enabled: false
+    state: present
+  - name: extras
+    file: "CentOS-Base"
+    description: "CentOS-$releasever - Extras"
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras&infra=$infra'
+    enabled: false
+    state: present
+  - name: centosplus
+    file: "CentOS-Base"
+    description: "CentOS-$releasever - Plus"
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus&infra=$infra'
+    enabled: false
+    state: present
+
+__os_common_packages:
+  - name:
+      - redhat-lsb-core
+      - bash-completion
+      - htop
+      - vim
+      - curl
+      - tmux
+      - screen
+      - telnet
+      - cifs-utils
+    enablerepo : "epel"
+
 ...

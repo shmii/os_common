@@ -6,7 +6,7 @@
       - "__os_common_package_manager_backend: {{ __os_common_package_manager_backend | default('') }}"
       - "__os_common_epel_repo_path: {{ __os_common_epel_repo_path | default('') }}"
       - "__os_common_epel_repo_key: {{ __os_common_epel_repo_key | default('') }}"
-    verbosity: "{{ os_common_debug_level | default(1) }}"
+    verbosity: "{{ os_common_debug_level | default(2) }}"
   tags:
     - os_common
     - os_common_repositories
@@ -48,7 +48,7 @@
     - os_common_rhel_repository_epel_check_uri
 
 - name: "OS Common - Redhat Family - Repositories - EPEL Repository - Check GPG Key."
-  rpm_key:
+  ansible.builtin.rpm_key:
     state: present
     key: "{{ __os_common_epel_repo_key }}"
   register: epel_key_check
@@ -69,7 +69,7 @@
       - epel_file_check: "{{ epel_file_check | default('') }}"
       - epel_uri_check: "{{ epel_uri_check | default('') }}"
       - peel_key_check: "{{ epel_key_check | default('') }}"
-    verbosity: "{{ os_common_debug_level | default(1) }}"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
   tags:
     - os_common
     - os_common_repositories
@@ -111,7 +111,7 @@
     - (ansible_distribution_major_version | int < 8)
     - not (ansible_distribution == "Amazon" and ansible_distribution_version is match("^2023"))
   notify:
-    - Update dnf cache
+    - "Update repository cache"
   tags:
     - os_common
     - os_common_repositories
@@ -135,7 +135,7 @@
     - (epel_file_check.stat.exists | default(false)) or (not epel_uri_check.failed | default(true))
     - (ansible_distribution_major_version | int >= 8) or (ansible_distribution == "Amazon" and ansible_distribution_version is match("^2023"))
   notify:
-    - Update dnf cache
+    - "Update repository cache"
   tags:
     - os_common
     - os_common_repositories

@@ -3,7 +3,7 @@
   ansible.builtin.debug:
     msg:
       - "group: {{ group | default('') }}"
-    verbosity: "{{ os_common_debug_level | default(1) }}"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
   tags:
     - os_common
     - os_common_debug
@@ -22,7 +22,9 @@
     state: "{{ group.state | default(omit) }}"
     system: "{{ group.system | default(omit) }}"
   when:
+    - group | default([]) | length > 0
     - group.manage | default(true)
+
   tags:
     - os_common
     - os_common_groups
@@ -40,10 +42,11 @@
     mode: '0440'
     validate: "visudo -cf %s"  # Valide le fichier sudoers pour éviter les erreurs de syntaxe
   when:
-    - group
-    - group.name is defined
+    - group | default([]) | length > 0
+    - group.name | default("") | length > 0
     - group.manage | default(true)
     - group.sudoer | default(false)
+
   tags:
     - os_common
     - os_common_groups

@@ -1,17 +1,44 @@
 ---
-- name: "Update yum cache"
+- name: "OS Common - Handlers - Yum - Update cache"
   ansible.builtin.yum:
     update_cache: true
   retries: "{{ __os_common_repositories_retry | default('5') }}"
   delay: "{{ __os_common_repositories_delay | default('10') }}"
+  register: yum_update_res
+  until: yum_update_res is success
+  when:
+    # - (ansible_distribution_major_version <= "7" and ansible_distribution == 'CentOS') or
+    #   (ansible_distribution_major_version <= "7" and ansible_distribution == 'RedHat') or
+    #   (ansible_distribution == 'Fedora') or (ansible_distribution == 'Amazon')
+    - (__os_common_package_manager | default(ansible_pkg_mgr)) == 'yum'
+  listen: "Update repository cache"
+  tags:
+    - os_common
+    - os_common_handlers
+    - os_common_handlers_update_repository_cache
+    - os_common_handlers_yum_update_cache
 
-- name: "Update dnf cache"
+
+- name: "OS Common - Handlers - DNF - Update cache"
   ansible.builtin.dnf:
     update_cache: true
   retries: "{{ __os_common_repositories_retry | default('5') }}"
   delay: "{{ __os_common_repositories_delay | default('10') }}"
+  register: yum_update_res
+  until: yum_update_res is success
+  when:
+    # - (ansible_distribution_major_version >= "8" and ansible_distribution == 'CentOS') or
+    #   (ansible_distribution != 'Fedora' and ansible_distribution != 'Amazon' and not
+    #   (ansible_distribution_major_version <= "7" and ansible_distribution == 'CentOS'))
+    - (__os_common_package_manager | default(ansible_pkg_mgr)) == 'dnf'
+  listen: "Update repository cache"
+  tags:
+    - os_common
+    - os_common_handlers
+    - os_common_handlers_update_repository_cache
+    - os_common_handlers_yum_update_cache
 
-- name: "OS Common - Directories - Check"
+- name: "OS Common - Handlers - Ensure Directories"
   ansible.builtin.include_tasks: directory.yml
   loop: "{{ os_common.directories | default([], true) }}"
   loop_control:
@@ -19,7 +46,9 @@
   when:
     - os_common.directories_manage | default(false)
     - os_common.directories
+  listen: "Ensure Directories"
   tags:
     - os_common
-    - os_common_directories
-    - os_common_directories_check
+    - os_common_handlers
+    - os_common_handlers_directories
+    - os_common_handlers_directories_ensure

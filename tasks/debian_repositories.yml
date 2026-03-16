@@ -1,40 +1,84 @@
 ---
-- name: "OS Common - Debian Family - Repository - Debug Informations"
+- name: "OS Common - Debian Family - Repositories - Debug Informations"
   ansible.builtin.debug:
     msg:
+      - "========== Ansible Facts ============================================="
       - "ansible_os_family: {{ ansible_os_family | default('') }}"
       - "ansible_distribution: {{ ansible_distribution | default('') }}"
       - "ansible_distribution_release: {{ ansible_distribution_release | default('') }}"
       - "ansible_distribution_major_version: {{ ansible_distribution_major_version | default('') }}"
       - "ansible_distribution_version: {{ ansible_distribution_version | default('') }}"
-    verbosity: "{{ os_common_debug_level | default(1) }}"
+      - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
+      - "========== Role Technical Variables (__os_common_*) =================="
+      - "__os_common_repositories_manage: {{ __os_common_repositories_manage | default('') }}"
+      - "__os_common_repositories: {{ __os_common_repositories | default([]) }}"
+      - "__os_common_repositories_retry (Task default 5): {{ __os_common_repositories_retry | default('') }}"
+      - "__os_common_repositories_delay (Task default 10): {{ __os_common_repositories_delay | default('') }}"
+      - "========== Role Variables ( os_common vars) =========================="
+      - "os_common.repositories_manage: {{ os_common.repositories_manage | default('') }}"
+      - "os_common.repositories: {{ os_common.repositories | default([]) }}"
+      - "========== Role Variables ( os_common vars) =========================="
+    verbosity: "{{ os_common_debug_level | default(2) }}"
   tags:
     - os_common
     - os_common_repositories
     - os_common_debian
     - os_common_debian_repositories
-    - os_common_debian_repositories
+    - os_common_debian_repositories_debug
 
-- name: "OS Common - Debian Family - Repo APT - Check"
+- name: "OS Common - Debian Family - Repositories - Compute Variables"
+  ansible.builtin.set_fact:
+    _repositories_manage: "{{ os_common.repositories_manage | default(true) or __os_common_repositories_manage | default(true) }}"
+    _repositories: "{{ ((os_common.repositories | default([])) + (__os_common_repositories | default([]))) | unique }}"
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_debian
+    - os_common_debian_repositories
+    - os_common_debian_repositories_vars
+
+- name: "OS Common - Debian Family - Repositories - Compute Variables - debug"
+  ansible.builtin.debug:
+    msg:
+      - "================= Repositories Vars =================================="
+      - "_repositories_manage: {{ _repositories_manage | default('') }}"
+      - "_repositories: {{ _repositories | default([]) }}"
+      - "========== Role Variables ( os_common vars) =========================="
+    verbosity: "{{ os_common_debug_level | default(3) }}"
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_debian
+    - os_common_debian_repositories
+    - os_common_debian_repositories_vars_debug
+
+- name: "OS Common - Debian Family - Repositories - Ensure Repositories"
   ansible.builtin.apt_repository:
     repo: "{{ repository.repo }}"
-    state: "{{ repository.state | default(omit) }}"
+    codename: "{{ repository.codename | default(omit) }}"
     filename: "{{ repository.filename | default(omit) }}"
-    validate_certs: "{{ repository.validate_certs | default(omit) }}"
+    install_python_apt: "{{ repository.install_python_apt | default(omit) }}"
+    mode: "{{ repository.mode | default(omit) }}"
+    state: "{{ repository.state | default(omit) }}"
     update_cache: "{{ repository.update_cache | default(false) }}"
     update_cache_retries: "{{ repository.update_cache_retries | default(omit) }}"
-  loop: "{{ __os_common_base_repo_list | default([], true) }}"
+    update_cache_retry_max_delay: "{{ repository.update_cache_retry_max_delay | default(omit) }}"
+    validate_certs: "{{ repository.validate_certs | default(omit) }}"
+  loop: "{{ _repositories }}"
   loop_control:
     loop_var: repository
   register: repository_check_status
-  retries: "{{ __os_common_repositories_retry | default('5') }}"
-  delay: "{{ __os_common_repositories_delay | default('10') }}"
+  retries: "{{ __os_common_repositories_retry | default(5) }}"
+  delay: "{{ __os_common_repositories_delay | default(10) }}"
   until: repository_check_status is success
   when:
-    - __os_common_base_repo_update | default(false)
+    - _repositories_manage
+    - _repositories | length > 0
   tags:
     - os_common
-    - os_common_repository
-    - os_common_repository_check
+    - os_common_repositories
+    - os_common_debian
+    - os_common_debian_repositories
+    - os_common_debian_repositories_ensure
 
 ...

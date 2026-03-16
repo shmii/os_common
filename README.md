@@ -6,7 +6,7 @@ Ansible role to manage Linux OS base configuration (Security, prerequisite packa
 This role :
 
 - Manage Extra Packages Repositories (epel, powertools, etc ... )
-- Manage useful Packages and sysadmin tools (through the default `__os_common_tools_packages` dictionary)
+- Manage useful Packages and sysadmin tools (through the default `os_common.packages` dictionary)
 - Manage base operating system (OS) configuration (groups, users, directories, LVM, etc ...)
   - Manage operating system groups (through the `os_common.groups` dictionary)
   - Manage operating system users (through the `os_common.users` dictionary)
@@ -23,29 +23,33 @@ This role :
     - [Requirements on Test and run environement](#requirements-on-test-and-run-environement)
   - [Role variables](#role-variables)
     - [1) The role dictionary : *`os_common`*](#1-the-role-dictionary--os_common)
-      - [1.a) Managing Groups](#1a-managing-groups)
-        - [1.a.1) Enable groups management : `os_common.groups_manage`](#1a1-enable-groups-management--os_commongroups_manage)
-        - [1.a.2) Groups management : `os_common.groups`](#1a2-groups-management--os_commongroups)
-        - [1.a.3) The 'group' Dictionary : `os_common.groups[n]`](#1a3-the-group-dictionary--os_commongroupsn)
-      - [1.b) Manage `users` Variables](#1b-manage-users-variables)
-        - [1.b.1) Enable users management : `os_common.users_manage`](#1b1-enable-users-management--os_commonusers_manage)
-        - [1.b.2) Users management :  `os_common.users`](#1b2-users-management---os_commonusers)
-        - [1.b.3) The 'User' Dictionary : `os_common.users[n]`](#1b3-the-user-dictionary--os_commonusersn)
-        - [1.b.4) Enable user ssh keys management : `os_common.users[n].authorized_keys_manage`](#1b4-enable-user-ssh-keys-management--os_commonusersnauthorized_keys_manage)
-        - [1.b.5) User ssh keys management :  `os_common.users[n].authorized_keys`](#1b5-user-ssh-keys-management---os_commonusersnauthorized_keys)
-        - [1.b.6) The User 'authorized\_key' Dictionary :  `os_common.users[n].authorized_keys`](#1b6-the-user-authorized_key-dictionary---os_commonusersnauthorized_keys)
-      - [1.c) Manage `directories` Variables](#1c-manage-directories-variables)
-        - [1.c.1) Enable directories management : `os_common.directories_manage`](#1c1-enable-directories-management--os_commondirectories_manage)
-        - [1.c.2) Directories management : `os_common.directories`](#1c2-directories-management--os_commondirectories)
-        - [1.c.3) The 'directory' Dictionary : `os_common.directories[n]`](#1c3-the-directory-dictionary--os_commondirectoriesn)
-      - [1.d) Logical Volume Management (`vgs`, and `disks`)](#1d-logical-volume-management-vgs-and-disks)
-        - [1.d.1) Enable lvm management : `os_common.lvm_manage`](#1d1-enable-lvm-management--os_commonlvm_manage)
-        - [1.d.2) Enable pvs management : `os_common.pvs_manage`](#1d2-enable-pvs-management--os_commonpvs_manage)
-        - [1.d.3) Enable lvs management : `os_common.lvs_manage`](#1d3-enable-lvs-management--os_commonlvs_manage)
-        - [1.d.4) Enable vgs management : `os_common.vgs_manage`](#1d4-enable-vgs-management--os_commonvgs_manage)
-        - [1.d.5) Vgs management : `os_common.vgs`](#1d5-vgs-management--os_commonvgs)
-        - [1.d.6) The 'vg' Dictionary : `os_common.vgs[n]`](#1d6-the-vg-dictionary--os_commonvgsn)
-        - [1.d.7) The 'lv' Dictionary : `os_common.vgs[n].lv[n]`](#1d7-the-lv-dictionary--os_commonvgsnlvn)
+      - [1.a) Managing Packages](#1a-managing-packages)
+        - [1.a.1) Enable groups management : `os_common.packages_manage`](#1a1-enable-groups-management--os_commonpackages_manage)
+        - [1.a.2) Groups management : `os_common.packages`](#1a2-groups-management--os_commonpackages)
+        - [1.a.3) The 'package' Dictionary : `os_common.packages[n]`](#1a3-the-package-dictionary--os_commonpackagesn)
+      - [1.b) Managing Groups](#1b-managing-groups)
+        - [1.b.1) Enable groups management : `os_common.groups_manage`](#1b1-enable-groups-management--os_commongroups_manage)
+        - [1.b.2) Groups management : `os_common.groups`](#1b2-groups-management--os_commongroups)
+        - [1.b.3) The 'group' Dictionary : `os_common.groups[n]`](#1b3-the-group-dictionary--os_commongroupsn)
+      - [1.c) Manage `users` Variables](#1c-manage-users-variables)
+        - [1.c.1) Enable users management : `os_common.users_manage`](#1c1-enable-users-management--os_commonusers_manage)
+        - [1.c.2) Users management :  `os_common.users`](#1c2-users-management---os_commonusers)
+        - [1.c.3) The 'User' Dictionary : `os_common.users[n]`](#1c3-the-user-dictionary--os_commonusersn)
+        - [1.c.4) Enable user ssh keys management : `os_common.users[n].authorized_keys_manage`](#1c4-enable-user-ssh-keys-management--os_commonusersnauthorized_keys_manage)
+        - [1.c.5) User ssh keys management :  `os_common.users[n].authorized_keys`](#1c5-user-ssh-keys-management---os_commonusersnauthorized_keys)
+        - [1.c.6) The User 'authorized\_key' Dictionary :  `os_common.users[n].authorized_keys`](#1c6-the-user-authorized_key-dictionary---os_commonusersnauthorized_keys)
+      - [1.d) Manage `directories` Variables](#1d-manage-directories-variables)
+        - [1.d.1) Enable directories management : `os_common.directories_manage`](#1d1-enable-directories-management--os_commondirectories_manage)
+        - [1.d.2) Directories management : `os_common.directories`](#1d2-directories-management--os_commondirectories)
+        - [1.d.3) The 'directory' Dictionary : `os_common.directories[n]`](#1d3-the-directory-dictionary--os_commondirectoriesn)
+      - [1.e) Logical Volume Management (`vgs`, and `disks`)](#1e-logical-volume-management-vgs-and-disks)
+        - [1.e.1) Enable lvm management : `os_common.lvm_manage`](#1e1-enable-lvm-management--os_commonlvm_manage)
+        - [1.e.2) Enable pvs management : `os_common.pvs_manage`](#1e2-enable-pvs-management--os_commonpvs_manage)
+        - [1.e.3) Enable lvs management : `os_common.lvs_manage`](#1e3-enable-lvs-management--os_commonlvs_manage)
+        - [1.e.4) Enable vgs management : `os_common.vgs_manage`](#1e4-enable-vgs-management--os_commonvgs_manage)
+        - [1.e.5) Vgs management : `os_common.vgs`](#1e5-vgs-management--os_commonvgs)
+        - [1.e.6) The 'vg' Dictionary : `os_common.vgs[n]`](#1e6-the-vg-dictionary--os_commonvgsn)
+        - [1.e.7) The 'lv' Dictionary : `os_common.vgs[n].lv[n]`](#1e7-the-lv-dictionary--os_commonvgsnlvn)
   - [Dependencies](#dependencies)
   - [Example Playbook](#example-playbook)
   - [Warning / known bugs](#warning--known-bugs)
@@ -53,8 +57,9 @@ This role :
     - [Sources](#sources)
     - [Bibliography \& Documentation](#bibliography--documentation)
       - [Ansible Modules](#ansible-modules)
-  - [Ansible-Module-ansible.posix.mount:                    https://docs.ansible.com/ansible/latest/collections/ansible/posix/mount\_module.html](#ansible-module-ansibleposixmount--------------------httpsdocsansiblecomansiblelatestcollectionsansibleposixmount_modulehtml)
   - [License](#license)
+  - [The license](#the-license)
+  - [License - explanation](#license---explanation)
   - [Author Information](#author-information)
 
 ---
@@ -123,14 +128,87 @@ Most of roles variables are regrouped on the `os_common` dictionary.
 By default role provide an empty `os_common` dictionary.
 *The `os_common` dictionary is not mendatory. (Only role defaults actions are applied)*
 
-#### 1.a) Managing Groups
+#### 1.a) Managing Packages
+
+Packages management is made throw this vars:
+
+- `os_common.packages_manage`  (*<span style="color: #7F00FF">boolean</span>*)
+- `os_common.packages`  (*<span style="color: #7F00FF">list of dictionaries</span>*)
+
+##### 1.a.1) Enable groups management : `os_common.packages_manage`
+
+| Variable | Description / Usage |
+|----------|-------------------|
+| __`os_common.packages_manage`__<br>*<span style="color: #008800">Role Specific Variable</span>*<br>*<span style="color: #7F00FF">boolean</span>* | Use the `os_common.packages_manage` variable to choose if you want to manage packages.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default)</span>__<br><span style="color: #0000FF">- false</span> |
+
+##### 1.a.2) Groups management : `os_common.packages`
+
+
+> :warning: This dictionary is merged with the default internal package dictionary `__os_common_packages`.
+You can override it if you don’t want the role’s suggested packages.
+
+| Variable | Description / Usage |
+|----------|-------------------|
+| __`os_common.packages`__<br>*<span style="color: #008800">Role Specific Variable</span>*<br>*<span style="color: #7F00FF">list of dictionaries</span>* | Use `os_common.packages` list of dictionaries to manage Packages.<br>It provides a list of `package` dictionaries with its __`name`__ and defined parameters.<br>To manage Packages, this role is based on the related package manager module:<br><br>- the `ansible.builtin.yum`[:link:][Ansible-Module-ansible.builtin.group] for __yum__ module.<br>- the `ansible.builtin.dnf`[:link:][Ansible-Module-ansible.builtin.group] for __dnf__ module.<br>- the `ansible.builtin.dnf`[:link:][Ansible-Module-ansible.builtin.group] for __apt__ module.<br>|
+
+All module variables are implemented and can be used on the `package` dictionary.
+
+>:warning: Not all available variables are specified below. Refer to the right ansible module documentation page to see all available variables and their uses.
+
+##### 1.a.3) The 'package' Dictionary : `os_common.packages[n]`
+
+__The Dictionary `package` parameters :__
+
+| Parameters      |    Comments    |
+|:----------------|:---------------|
+| __manage__ (`package`)<br>*<span style="color: #008800">Role Specific Variable</span>*<br><span style="color: #7F00FF">boolean</span> |  Used to manage or ignore this specifique `package`.<br>__Choices:__<br>__<span style="color: #FF0000">- true ← (default) </span>__ <br><span style="color: #0000FF">- false </span>|
+| __name__ <br><span style="color: #7F00FF">list / elements=string</span> / __<span style="color: #FF0000">required</span>__ |  A package name or package specifier with version, like name-1.0.<br>When using state=latest, this can be ‘*’ which means run: dnf -y update.<br>You can also pass a url or a local path to a package.<br>__<span style="color: #FF0000">(required for this role)</span>__ |
+| __enablerepo__ <br><span style="color: #7F00FF">list / elements=string</span> |  `Repoid` of repositories to enable for the install/update operation. These repos will not persist beyond the transaction. When specifying multiple repos, separate them with a “,”.<br>__<span style="color: #0000FF">Default :</span>__ <span style="color: #0000FF">`[]`</span> |
+| ... | ...|
+| __state__ <br><span style="color: #7F00FF">string</span> |  Whether to install (`present`, `latest`), or remove (`absent`) a package.<br>Default is `None`, however in effect the default action is `present` unless the `autoremove=true`, then `absent` is inferred.<br>__Choices:__<br> - `"absent"`<br> - `"present"`<br> - `"installed"`<br>- `"removed"`<br> - `"latest"` |
+| ... | ...|
+
+>:warning: Not all available variables are specified below. Refer to the right ansible module documentation page to see all available variables and their uses.
+
+__Example :__
+
+```yaml
+os_common:
+  #...
+  packages:
+    - name: sos
+      enablerepo: "epel,ol7_latest"
+    - name: httpd>=2.4
+      state: present
+    - name:
+      - insights-client 
+      - bash-completion
+      - htop
+      - vim
+      - curl
+      - tmux
+      - screen
+      - python3-pexpect
+      - telnet
+      - cifs-utils
+      - tree
+      - firewalld
+      enablerepo: "epel"
+      state: present
+    - name:
+      - ufw
+      state: absent
+  #...
+```
+
+#### 1.b) Managing Groups
 
 Groups management is made throw this vars:
 
 - `os_common.groups_manage`  (*<span style="color: #7F00FF">boolean</span>*)
 - `os_common.groups`  (*<span style="color: #7F00FF">list of dictionaries</span>*)
 
-##### 1.a.1) Enable groups management : `os_common.groups_manage`
+##### 1.b.1) Enable groups management : `os_common.groups_manage`
 
 __`os_common.groups_manage`__
 *<span style="color: #008800">Role Specific Variable</span>*
@@ -141,7 +219,7 @@ __Choices:__
 __<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
-##### 1.a.2) Groups management : `os_common.groups`
+##### 1.b.2) Groups management : `os_common.groups`
 
 `os_common.groups`
 *<span style="color: #7F00FF">list of dictionaries</span>*
@@ -152,7 +230,7 @@ To managed group, this role is based on the `ansible.builtin.group`  [:link:][An
 All module variables are implemented and can be used on the `group` dictionary.
 :warning: Not all available variables are specified below. Refer to the `ansible.builtin.group`  [:link:][Ansible-Module-ansible.builtin.group] module documentation page to see all available variables and their uses.
 
-##### 1.a.3) The 'group' Dictionary : `os_common.groups[n]`
+##### 1.b.3) The 'group' Dictionary : `os_common.groups[n]`
 
 __The Dictionary `group` parameters :__
 
@@ -189,9 +267,9 @@ os_common:
   ...
 ```
 
-#### 1.b) Manage `users` Variables
+#### 1.c) Manage `users` Variables
 
-##### 1.b.1) Enable users management : `os_common.users_manage`
+##### 1.c.1) Enable users management : `os_common.users_manage`
 
 `os_common.users_manage`
 *<span style="color: #008800">Role Specific Variable</span>*
@@ -202,7 +280,7 @@ __Choices:__
 __<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
-##### 1.b.2) Users management :  `os_common.users`
+##### 1.c.2) Users management :  `os_common.users`
 
 `os_common.users`
 *<span style="color: #7F00FF">list of `user` dictionaries</span>*
@@ -214,7 +292,7 @@ All module variables are implemented and can be used on the `user` dictionary.
 :warning: Not all available variables are specified below.
 Refer to the  `ansible.builtin.user`[:link:][Ansible-Module-ansible.builtin.user] module documentation page to see all available variables and their uses.
 
-##### 1.b.3) The 'User' Dictionary : `os_common.users[n]`
+##### 1.c.3) The 'User' Dictionary : `os_common.users[n]`
 
 __Mains dictionary `user` parameters :__
 
@@ -230,7 +308,7 @@ __Mains dictionary `user` parameters :__
 | ... | ...|
 | __system__ <br><span style="color: #7F00FF">boolean</span> |  When creating an account `state=present`, setting this to `true` makes the user a system account. <br> This setting cannot be changed on existing users.<br> __Choices:__ <br>__<span style="color: #0000FF">- false ← (default)</span>__<br><span style="color: #FF0000">- true </span>|
 
-##### 1.b.4) Enable user ssh keys management : `os_common.users[n].authorized_keys_manage`
+##### 1.c.4) Enable user ssh keys management : `os_common.users[n].authorized_keys_manage`
 
 `os_common.users[n].authorized_keys_manage`
 *<span style="color: #008800">Role Specific Variable</span>*
@@ -241,7 +319,7 @@ __Choices:__
 __<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
-##### 1.b.5) User ssh keys management :  `os_common.users[n].authorized_keys`
+##### 1.c.5) User ssh keys management :  `os_common.users[n].authorized_keys`
 
 `os_common.users[n].authorized_keys`
 *<span style="color: #7F00FF">list of `authorized_keys` dictionaries</span>*
@@ -253,7 +331,7 @@ All module variables are implemented and can be used on the `authorized_keys` di
 :warning: Not all available variables are specified below.
 Refer to the `ansible.posix.authorized_key`[:link:][Ansible-Module-ansible.posix.authorized_key] module documentation page to see all available variables and their uses.
 
-##### 1.b.6) The User 'authorized_key' Dictionary :  `os_common.users[n].authorized_keys`
+##### 1.c.6) The User 'authorized_key' Dictionary :  `os_common.users[n].authorized_keys`
 
 __mains Dictionary `authorized_keys` parameters :__
 
@@ -299,9 +377,9 @@ os_common:
   ...
 ```
 
-#### 1.c) Manage `directories` Variables
+#### 1.d) Manage `directories` Variables
 
-##### 1.c.1) Enable directories management : `os_common.directories_manage`
+##### 1.d.1) Enable directories management : `os_common.directories_manage`
 
 __`os_common.directories_manage`__
 *<span style="color: #008800">Role Specific Variable</span>*
@@ -312,7 +390,7 @@ __Choices:__
 __<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
-##### 1.c.2) Directories management : `os_common.directories`
+##### 1.d.2) Directories management : `os_common.directories`
 
 `os_common.directories`
 *<span style="color: #7F00FF">list of dictionaries</span>*
@@ -324,7 +402,7 @@ All module variables are implemented and can be used on the `group` dictionary.
 :warning: Not all available variables are specified below.
 Refer to the `ansible.builtin.file`[:link:][Ansible-Module-ansible.builtin.file] module documentation page to see all available variables and their uses.
 
-##### 1.c.3) The 'directory' Dictionary : `os_common.directories[n]`
+##### 1.d.3) The 'directory' Dictionary : `os_common.directories[n]`
 
 __The Dictionary `directory` parameters :__
 
@@ -367,7 +445,7 @@ os_common:
   ...
 ```
 
-#### 1.d) Logical Volume Management (`vgs`, and `disks`)
+#### 1.e) Logical Volume Management (`vgs`, and `disks`)
 
 Logical Volume Management is made throw this vars:
 
@@ -419,7 +497,7 @@ os_common:
   ...
 ```
 
-##### 1.d.1) Enable lvm management : `os_common.lvm_manage`
+##### 1.e.1) Enable lvm management : `os_common.lvm_manage`
 
 __`os_common.lvm_manage`__
 *<span style="color: #008800">Role Specific Variable</span>*
@@ -430,7 +508,7 @@ __Choices:__
 __<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
-##### 1.d.2) Enable pvs management : `os_common.pvs_manage`
+##### 1.e.2) Enable pvs management : `os_common.pvs_manage`
 
 __`os_common.pvs_manage`__
 *<span style="color: #008800">Role Specific Variable</span>*
@@ -441,7 +519,7 @@ __Choices:__
 __<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
-##### 1.d.3) Enable lvs management : `os_common.lvs_manage`
+##### 1.e.3) Enable lvs management : `os_common.lvs_manage`
 
 __`os_common.lvs_manage`__
 *<span style="color: #008800">Role Specific Variable</span>*
@@ -452,7 +530,7 @@ __Choices:__
 __<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
 
-##### 1.d.4) Enable vgs management : `os_common.vgs_manage`
+##### 1.e.4) Enable vgs management : `os_common.vgs_manage`
 
 __`os_common.vgs_manage`__
 *<span style="color: #008800">Role Specific Variable</span>*
@@ -464,7 +542,7 @@ __<span style="color: #FF0000">- true ← (default) </span>__
 <span style="color: #0000FF">- false </span>
       vgs_manage: true
 
-##### 1.d.5) Vgs management : `os_common.vgs`
+##### 1.e.5) Vgs management : `os_common.vgs`
 
 `os_common.vgs`
 *<span style="color: #7F00FF">list of dictionaries</span>*
@@ -481,7 +559,7 @@ All modules variables are implemented and can be used on there respectives dicti
 :warning: Not all available variables are specified below.
 Refer to the appropriate module documentation page to see all available variables and their usages.
 
-##### 1.d.6) The 'vg' Dictionary : `os_common.vgs[n]`
+##### 1.e.6) The 'vg' Dictionary : `os_common.vgs[n]`
 
 __The `vg` Dictionary parameters :__
 
@@ -539,7 +617,7 @@ os_common:
   ...
 ```
 
-##### 1.d.7) The 'lv' Dictionary : `os_common.vgs[n].lv[n]`
+##### 1.e.7) The 'lv' Dictionary : `os_common.vgs[n].lv[n]`
 
 __The `lv` Dictionary parameters :__
 
@@ -635,16 +713,16 @@ Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 
 #### Ansible Modules
 
-| Sources                                           | Tutorials                                                        |
-| ------------------------------------------------- |:---------------------------------------------------------------- |
-| Ansible - Module : `ansible.builtin.group`        | [:link:][Ansible-Module-ansible.builtin.group]                   |
-| Ansible - Module : `ansible.builtin.user`         | [:link:][Ansible-Module-ansible.builtin.user]                    |
-| Ansible - Module : `ansible.posix.authorized_key` | [:link:][Ansible-Module-ansible.posix.authorized_key]            |
-| Ansible - Module : `ansible.builtin.file`         | [:link:][Ansible-Module-ansible.builtin.file]                    |
-| Ansible - Module : `community.general.lvg`        | [:link:][Ansible-Module-community.general.lvg]                   |
-| Ansible - Module : `community.general.lvol`       | [:link:][Ansible-Module-community.general.lvol]                  |
-| Ansible - Module : `community.general.filesystem` | [:link:][Ansible-Module-community.community.general.filesystem]  |
-| Ansible - Module : `ansible.posix.mount`          | [:link:][Ansible-Module-ansible.posix.mount]                     |
+| Sources                                           | Tutorials                                                                                                           |
+| ------------------------------------------------- |:------------------------------------------------------------------------------------------------------------------- |
+| Ansible - Module : `ansible.builtin.group`        | [:link: docs.ansible.com (`ansible.builtin.group`)][Ansible-Module-ansible.builtin.group]                           |
+| Ansible - Module : `ansible.builtin.user`         | [:link: docs.ansible.com (`ansible.builtin.user`)][Ansible-Module-ansible.builtin.user]                             |
+| Ansible - Module : `ansible.posix.authorized_key` | [:link: docs.ansible.com (`ansible.posix.authorized_key`)][Ansible-Module-ansible.posix.authorized_key]             |
+| Ansible - Module : `ansible.builtin.file`         | [:link: docs.ansible.com (`ansible.builtin.file`)][Ansible-Module-ansible.builtin.file]                             |
+| Ansible - Module : `community.general.lvg`        | [:link: docs.ansible.com (`community.general.lvg`)][Ansible-Module-community.general.lvg]                           |
+| Ansible - Module : `community.general.lvol`       | [:link: docs.ansible.com (`community.general.lvol`)][Ansible-Module-community.general.lvol]                         |
+| Ansible - Module : `community.general.filesystem` | [:link: docs.ansible.com (`community.general.filesystem`)][Ansible-Module-community.community.general.filesystem]   |
+| Ansible - Module : `ansible.posix.mount`          | [:link: docs.ansible.com (`ansible.posix.mount`)][Ansible-Module-ansible.posix.mount]                               |
 
 [Ansible-Module-ansible.builtin.group]:                  https://docs.ansible.com/ansible/9/collections/ansible/builtin/group_module.html
 [Ansible-Module-ansible.builtin.user]:                   https://docs.ansible.com/ansible/9/collections/ansible/builtin/user_module.html
@@ -654,13 +732,42 @@ Redde Caesari quae sunt Caesaris, et quae sunt Dei Deo !
 [Ansible-Module-community.general.lvol]:                 https://docs.ansible.com/ansible/latest/collections/community/general/lvol_module.html
 [Ansible-Module-community.community.general.filesystem]: https://docs.ansible.com/ansible/latest/collections/community/general/filesystem_module.html
 [Ansible-Module-ansible.posix.mount]:                    https://docs.ansible.com/ansible/latest/collections/ansible/posix/mount_module.html
----
 
 ## License
 
-MIT - Copyright 2024 - Thomas CHALMEL (Shmii)
+## The license
 
----
+__MIT - Copyright 2022 - Thomas CHALMEL (Shmii)__
+
+MIT License
+
+Copyright (c) [2022] [Thomas CHALMEL (Shmii)]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## License - explanation
+
+This project is licensed under the MIT License.
+What this means for you:
+
+- ✅ You are free to use, copy, modify, and distribute this code for any purpose.
+- ✅ You must keep the original copyright notice and license in any copy or derivative work.
 
 ## Author Information
 

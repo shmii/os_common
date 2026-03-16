@@ -4,7 +4,7 @@
     msg:
       - "os_common.groups: {{ os_common.groups | default('') }}"
       - "os_common.groups_manage: {{ os_common.groups_manage | default('') }}"
-    verbosity: "{{ os_common_debug_level | default(1) }}"
+    verbosity: "{{ os_common_debug_level | default(2) }}"
   tags:
     - os_common
     - os_common_debug
@@ -18,7 +18,7 @@
     loop_var: group
   when:
     - os_common.groups_manage | default(true)
-    - os_common.groups
+    - os_common.groups | default([]) | length > 0 
   tags:
     - os_common
     - os_common_groups

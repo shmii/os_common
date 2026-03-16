@@ -1,0 +1,93 @@
+---
+- name: "OS Common - Debian Family - Packages - Debug Informations: {{ package.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - "package: {{ package | default('') }}"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_packages_debug
+    - os_common_debian
+    - os_common_debian_packages
+    - os_common_debian_packages_debug
+
+- name: "OS Common - Debian Family - Packages- flush_handlers"
+  ansible.builtin.meta: flush_handlers
+
+- name: "OS Common - Debian Family - Packages - Vars"
+  ansible.builtin.set_fact:
+    _packages_manage: "{{ os_common.packages_manage | default(true) or __os_common_packages_manage | default(true) }}"
+    _packages: "{{ ((os_common.packages | default([])) + (__os_common_packages | default([]))) | unique }}"
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_packages_vars
+    - os_common_debian
+    - os_common_debian_packages
+    - os_common_debian_packages_vars
+
+- name: "OS Common - Debian Family - Packages - Vars - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - "================= Packages Vars ======================================"
+      - "_packages_manage: {{ _packages_manage | default('') }}"
+      - "_packages: {{ _packages | default([]) }}"
+      - "======================================================================"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_packages_debug
+    - os_common_debian
+    - os_common_debian_packages
+    - os_common_debian_packages_vars
+    - os_common_debian_packages_vars_debug
+
+- name: "OS Common - Debian Family - Packages - Ensure"
+  ansible.builtin.apt:
+    allow_change_held_packages: "{{ package.allow_change_held_packages | default(omit) }}"
+    allow_downgrade: "{{ package.allow_downgrade | default(omit) }}"
+    allow_unauthenticated: "{{  package.allow_unauthenticated | default(omit) }}"
+    auto_install_module_deps: "{{ package.auto_install_module_deps | default(omit) }}"
+    autoclean: "{{ package.autoclean | default(omit) }}"
+    autoremove: "{{ package.autoremove | default(omit) }}"
+    cache_valid_time: "{{ package.cache_valid_time | default(omit) }}"
+    clean: "{{ package.clean | default(omit) }}"
+    deb: "{{ package.deb | default(omit) }}"
+    default_release: "{{ package.default_release | default(omit) }}"
+    dpkg_options: "{{ package.dpkg_options | default(omit) }}"
+    fail_on_autoremove: "{{ package.fail_on_autoremove | default(omit) }}"
+    force: "{{ package.force | default(omit) }}"
+    force_apt_get: "{{ package.force_apt_get | default(omit) }}"
+    install_recommends: "{{ package.install_recommends | default(omit) }}"
+    lock_timeout: "{{ package.lock_timeout | default(omit) }}"
+    name: "{{ package.name | default(omit) }}"
+    only_upgrade: "{{ package.only_upgrade | default(omit) }}"
+    policy_rc_d: "{{ package.policy_rc_d | default(omit) }}"
+    purge: "{{ package.purge | default(omit) }}"
+    state: "{{ package.state | default(omit) }}"
+    update_cache: "{{ package.update_cache | default(omit) }}"
+    update_cache_retries: "{{ __os_common_repositories_retry | default(5) }}"
+    update_cache_retry_max_delay: "{{ __os_common_repositories_delay | default(10) }}"
+    upgrade: "{{ package.upgrade | default(omit) }}"
+  loop: "{{ _packages }}"
+  loop_control:
+    loop_var: package
+  register: apt_res
+  retries: "{{ __os_common_repositories_retry | default(5) }}"
+  delay: "{{ __os_common_repositories_delay | default(10) }}"
+  until: apt_res is success
+  when:
+    - _packages_manage | default(true)
+    - _packages | default([]) | length > 0 
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_packages_ensure
+    - os_common_packages_ensure_unauthenticated
+    - os_common_debian
+    - os_common_debian_packages
+    - os_common_debian_packages_ensure
+
+...
