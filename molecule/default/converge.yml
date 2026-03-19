@@ -6,7 +6,7 @@
   roles:
     - role: os_common
   vars:
-    os_common_debug_level: 0
+    #os_common_debug_level: 0
     os_common:
       packages:
         - name:

@@ -5,7 +5,6 @@ __os_common_packages:
     - bash-completion
     - htop
     - vim
-    - sshpass
     - curl
     - tmux
     - screen
@@ -18,5 +17,6 @@ __os_common_packages:
     - tree
     - lvm2
     - xfsprogs
-
+    force_apt_get: true
+    update_cache: true
 ...

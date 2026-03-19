@@ -1,1 +1,71 @@
 ---
+__os_common_repositories_manage: true
+__os_common_repositories:
+  #####################################
+  #remove old debian repos
+  #####################################
+  # deb.debian.org/debian - Discontinued in favor of archive.debian.org/debian
+  - repo: "deb http://deb.debian.org/debian/ bullseye contrib main non-free"
+    state: absent
+  - repo: "deb-src http://deb.debian.org/debian/ bullseye contrib main non-free"
+    state: absent
+  # deb.debian.org/debian - Discontinued in favor of archive.debian.org/debian
+  - repo: "deb http://deb.debian.org/debian/ bullseye-updates contrib main non-free non-free-firmware"
+    state: absent
+  - repo: "deb-src http://deb.debian.org/debian/ bullseye-updates contrib main non-free non-free-firmware"
+    state: absent
+  # security.debian.org/debian-security - Still available
+  - repo: "deb http://security.debian.org/debian-security bullseye-security contrib main non-free non-free-firmware updates"
+    state: present
+  - repo: "deb-src http://security.debian.org/debian-security bullseye-security contrib main non-free non-free-firmware updates"
+    state: present
+
+  #####################################
+  # Add "debian-archive" repositories
+  #####################################
+  # archive.debian.org/debian
+  - filename: "debian-archive"
+    repo: "deb http://archive.debian.org/debian/ bullseye contrib main non-free"
+    validate_certs: false
+    state: present
+  - filename: "debian-archive"
+    repo: "deb http://archive.debian.org/debian/ bullseye-updates contrib main non-free non-free-firmware"
+    validate_certs: false
+    state: present
+  - filename: "debian-archive"
+    repo: "deb http://archive.debian.org/debian/ bullseye-proposed-updates contrib main non-free non-free-firmware"
+    validate_certs: false
+    state: present
+  - filename: "debian-archive"
+    repo: "deb http://archive.debian.org/debian/ bullseye-backports contrib main non-free non-free-firmware"
+    validate_certs: false
+    state: present
+  # archive.debian.org/debian-security - /!\ not yet available for bullseye, but added for consistency with previous versions
+  - filename: "debian-archive"
+    repo: "deb http://archive.debian.org/debian-security/ bullseye/updates contrib main non-free non-free-firmware"
+    validate_certs: false
+    state: absent
+
+
+__os_common_packages:
+  - name :
+    - bash-completion
+    - htop
+    - vim
+    - curl
+    - tmux
+    - screen
+    - python3
+    - python3-apt
+    - python3-pexpect
+    - python3-pip
+    - telnet
+    - cifs-utils
+    - tree
+    - lvm2
+    - xfsprogs
+    state: present
+    force_apt_get: true
+    update_cache: true
+    allow_unauthenticated: true
+...

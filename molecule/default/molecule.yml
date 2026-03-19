@@ -25,8 +25,6 @@ platforms:
   # sudo yum install -y rh-python38
   # sudo ln -sf /opt/rh/rh-python38/root/usr/bin/python3 /usr/bin/python3
 
-
-
   # === generic/centos7
   # sudo sed -i \
   # -e 's|^mirrorlist=|#mirrorlist=|' \
@@ -45,149 +43,61 @@ platforms:
   #       sudo ln -sf /usr/local/bin/python3.8 /usr/bin/python3
   #       sudo ln -sf /usr/local/bin/pip3.8 /usr/bin/pip3
 
-  - name: instance-vagrant-centos7
-    box: generic/centos7
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.9
-    # instance_raw_config_args:
-    #   - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
-    #   - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
-    #   - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap_cento-7.sh", destination: "/tmp/bootstrap_cento-7.sh"'
-    #   - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap_cento-7.sh && /tmp/bootstrap_cento-7.sh"'
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
 
-  - name: instance-vagrant-rhel7
-    box: generic/rhel7
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.10
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
 
-  - name: instance-vagrant-rhel8
-    box: generic/rhel8
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.11
-    instance_raw_config_args:
-      - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
-      - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
-      - 'vm.provision :file, source: "~/.credentials/ansible_molecule.env", destination: "/tmp/ansible_molecule.env"'
-      - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap_rhel8.sh", destination: "/tmp/bootstrap_rhel8.sh"'
-      - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap_rhel8.sh && /tmp/bootstrap_rhel8.sh"'
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
-
-  - name: instance-vagrant-rhel9
-    box: generic/rhel9
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.12
-    instance_raw_config_args:
-      # - 'vm.synced_folder ".", "/vagrant", type: "rsync"'
-      # - 'vm.provision :shell, inline: "/vagrant/molecule/default/bootstrap.sh"'
-      - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
-      - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
-
-  - name: instance-vagrant-alma8
-    box: generic/alma8
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.13
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
-
-  - name: instance-vagrant-alma9
-    box: generic/alma9
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.14
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
-
-  - name: instance-vagrant-rockylinux8
-    box: generic/rocky8
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.15
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
-
-  - name: instance-vagrant-rockylinux9
-    box: generic/rocky9
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.16
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
-
-  # - name: instance-vagrant-amazonlinux2
-  #   box: jaredeh/amazonlinux2
+  # - name: instance-vagrant-alma8
+  #   box: generic/alma8
   #   interfaces:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.17
+  #       ip: 192.168.10.5
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-alma9
+  #   box: generic/alma9
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.6
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-alma10
+  #   box: generic/alma9
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.7
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # The Amazon Linux AMI (also called Amazon Linux 1) 
+  # - name: instance-vagrant-amazonlinux-1
+  #   box: jonnangle/amazonlinux
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.20
   #   memory: 1024
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
@@ -197,28 +107,14 @@ platforms:
   #   groups:
   #     - molecule_vm
 
-  - name: instance-vagrant-debian8
-    box: generic/debian8
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: static
-        ip: 192.168.10.20
-    provider_raw_config_args:
-      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-    groups:
-      - molecule_vm
-
-  # - name: instance-vagrant-debian9
-  #   box: generic/debian9
+  # - name: instance-vagrant-amazonlinux-2
+  #   box:  jaredeh/amazonlinux2
   #   interfaces:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
   #       ip: 192.168.10.21
+  #   memory: 1024
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -227,13 +123,14 @@ platforms:
   #   groups:
   #     - molecule_vm
 
-  # - name: instance-vagrant-debian10
-  #   box: generic/debian10
+  # - name: instance-vagrant-amazonlinux-2023
+  #   box: crystax/amazon2023
   #   interfaces:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
   #       ip: 192.168.10.22
+  #   memory: 1024
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -242,13 +139,18 @@ platforms:
   #   groups:
   #     - molecule_vm
 
-  # - name: instance-vagrant-debian11
-  #   box: generic/debian11
+  # - name: instance-vagrant-centos7
+  #   box: generic/centos7
   #   interfaces:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
   #       ip: 192.168.10.23
+  #   # instance_raw_config_args:
+  #   #   - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
+  #   #   - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
+  #   #   - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap_cento-7.sh", destination: "/tmp/bootstrap_cento-7.sh"'
+  #   #   - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap_cento-7.sh && /tmp/bootstrap_cento-7.sh"'
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -257,8 +159,8 @@ platforms:
   #   groups:
   #     - molecule_vm
 
-  # - name: instance-vagrant-debian12
-  #   box: generic/debian12
+  # - name: instance-vagrant-rhel7
+  #   box: generic/rhel7
   #   interfaces:
   #     - auto_config: true
   #       network_name: private_network
@@ -272,13 +174,120 @@ platforms:
   #   groups:
   #     - molecule_vm
 
+  # - name: instance-vagrant-rhel8
+  #   box: generic/rhel8
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.25
+  #   instance_raw_config_args:
+  #     - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
+  #     - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
+  #     - 'vm.provision :file, source: "~/.credentials/ansible_molecule.env", destination: "/tmp/ansible_molecule.env"'
+  #     - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap_rhel8.sh", destination: "/tmp/bootstrap_rhel8.sh"'
+  #     - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap_rhel8.sh && /tmp/bootstrap_rhel8.sh"'
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-rhel9
+  #   box: generic/rhel9
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.26
+  #   instance_raw_config_args:
+  #     # - 'vm.synced_folder ".", "/vagrant", type: "rsync"'
+  #     # - 'vm.provision :shell, inline: "/vagrant/molecule/default/bootstrap.sh"'
+  #     - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
+  #     - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-rhel10
+  #   box: generic/rhel10
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.27
+  #   instance_raw_config_args:
+  #     # - 'vm.synced_folder ".", "/vagrant", type: "rsync"'
+  #     # - 'vm.provision :shell, inline: "/vagrant/molecule/default/bootstrap.sh"'
+  #     - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
+  #     - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-rockylinux8
+  #   box: generic/rocky8
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.28
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-rockylinux9
+  #   box: generic/rocky9
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.29
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-rockylinux10
+  #   box: generic/rocky10
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.30
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+
   # - name: instance-vagrant-fedora29
   #   box: generic/fedora29
   #   interfaces:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.30
+  #       ip: 192.168.10.50
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -293,7 +302,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.31
+  #       ip: 192.168.10.51
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -308,7 +317,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.32
+  #       ip: 192.168.10.52
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -323,7 +332,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.33
+  #       ip: 192.168.10.53
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -338,7 +347,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.34
+  #       ip: 192.168.10.54
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -353,7 +362,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.35
+  #       ip: 192.168.10.55
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -368,7 +377,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.36
+  #       ip: 192.168.10.56
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -383,7 +392,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.37
+  #       ip: 192.168.10.57
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -398,7 +407,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.38
+  #       ip: 192.168.10.58
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -407,13 +416,13 @@ platforms:
   #   groups:
   #     - molecule_vm
 
-  # - name: instance-vagrant-ubuntu1604
-  #   box: generic/ubuntu1604
+  # - name: instance-vagrant-fedora38
+  #   box: generic/fedora38
   #   interfaces:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.41
+  #       ip: 192.168.10.59
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -421,6 +430,208 @@ platforms:
   #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
   #   groups:
   #     - molecule_vm
+
+  # - name: instance-vagrant-fedora39
+  #   box: generic/fedora39
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.60
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-fedora40
+  #   box: generic/fedora40
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.61
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-fedora41
+  #   box: generic/fedora41
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.62
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-fedora42
+  #   box: generic/fedora42
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.63
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-fedora43
+  #   box: generic/fedora43
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.64
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-fedora44
+  #   box: generic/fedora44
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.65
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+
+  # - name: instance-vagrant-debian8
+  #   box: generic/debian8
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.100
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-debian9
+  #   box: generic/debian9
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.101
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-debian10
+  #   box: generic/debian10
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.102
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-debian11
+  #   box: generic/debian11
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.103
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-debian12
+  #   box: generic/debian12
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.104
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-debian13
+  #   box: generic/debian12
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.105
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  - name: instance-vagrant-ubuntu1604
+    box: generic/ubuntu1604
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: static
+        ip: 192.168.10.150
+    instance_raw_config_args:
+      - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap.sh", destination: "/tmp/bootstrap.sh"'
+      - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap.sh && /tmp/bootstrap.sh"'
+      - 'vm.provision :file, source: "~/.credentials/ansible_molecule.env", destination: "/tmp/ansible_molecule.env"'
+      - 'vm.provision :file, source: "~/Git/Thomas/github.com/AnsibleWorkPlan/roles/os_common/molecule/default/bootstrap_ubuntu1604.sh", destination: "/tmp/bootstrap_ubuntu1604.sh"'
+      - 'vm.provision :shell, inline: "chmod +x /tmp/bootstrap_ubuntu1604.sh && /tmp/bootstrap_ubuntu1604.sh"'
+    provider_raw_config_args:
+      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+    groups:
+      - molecule_vm
 
   # - name: instance-vagrant-ubuntu1804
   #   box: generic/ubuntu1804
@@ -428,7 +639,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.42
+  #       ip: 192.168.10.151
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -443,7 +654,7 @@ platforms:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.43
+  #       ip: 192.168.10.152
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -453,12 +664,27 @@ platforms:
   #     - molecule_vm
 
   # - name: instance-vagrant-ubuntu2204
-  #   box: generic/ubuntu2204
+  #   box: bento/ubuntu-22.04
   #   interfaces:
   #     - auto_config: true
   #       network_name: private_network
   #       type: static
-  #       ip: 192.168.10.44
+  #       ip: 192.168.10.153
+  #   provider_raw_config_args:
+  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+  #   groups:
+  #     - molecule_vm
+
+  # - name: instance-vagrant-ubuntu2404
+  #   box: bento/ubuntu-24.04
+  #   interfaces:
+  #     - auto_config: true
+  #       network_name: private_network
+  #       type: static
+  #       ip: 192.168.10.154
   #   provider_raw_config_args:
   #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
   #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
@@ -478,6 +704,8 @@ provisioner:
         ansible_python_interpreter: /usr/bin/python
       instance-vagrant-rhel8:
         ansible_python_interpreter: /usr/bin/python3.9
+      instance-vagrant-ubuntu1604:
+        ansible_python_interpreter: /usr/bin/python2.7
       instance-vagrant-debian8:
         ansible_ssh_common_args: >
           -o PubkeyAcceptedAlgorithms=+ssh-rsa

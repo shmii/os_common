@@ -4,7 +4,7 @@
     msg:
       - os_common.disks: "{{ os_common.disks | default('') }}"
       - vg: "{{ vg | default('') }}"
-    verbosity: "{{ os_common_debug_level | default(ansible_verbosity) }}"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
   tags:
     - os_common
     - os_common_debug

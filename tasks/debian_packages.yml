@@ -28,9 +28,6 @@
     - os_common_debian_packages
     - os_common_debian_packages_debug
 
-- name: "OS Common - Debian Family - Packages- flush_handlers"
-  ansible.builtin.meta: flush_handlers
-
 - name: "OS Common - Debian Family - Packages - Vars"
   ansible.builtin.set_fact:
     _packages_manage: "{{ os_common.packages_manage | default(true) or __os_common_packages_manage | default(true) }}"
@@ -59,6 +56,9 @@
     - os_common_debian_packages
     - os_common_debian_packages_vars
     - os_common_debian_packages_vars_debug
+
+- name: "OS Common - Debian Family - Packages- flush_handlers"
+  ansible.builtin.meta: flush_handlers
 
 - name: "OS Common - Redhat Family - Packages - Package - Loop"
   ansible.builtin.include_tasks: debian_package.yml

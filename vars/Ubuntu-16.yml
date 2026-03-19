@@ -1,1 +1,49 @@
 ---
+__os_common_repositories_manage: true
+__os_common_repositories:
+  #####################################
+  #remove old Ubuntu repositories
+  #####################################
+  # n/a
+
+  #####################################
+  # Add Ubuntu archive repositories
+  #####################################
+  # archive.ubuntu.com/ubuntu
+  - repo: "deb http://archive.ubuntu.com/ubuntu/ xenial main restricted universe multiverse"
+    validate_certs: false
+    state: present
+  - repo: "deb http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted universe multiverse"
+    validate_certs: false
+    state: present
+  - repo: "deb http://security.ubuntu.com/ubuntu xenial-security main restricted universe multiverse"
+    validate_certs: false
+    state: present
+  # - repo: "deb http://archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse"
+  #   validate_certs: false
+  #   state: present
+  - repo: "deb http://archive.canonical.com/ubuntu xenial partner"
+    validate_certs: false
+    state: present
+
+__os_common_packages:
+  - name :
+    - bash-completion
+    - htop
+    - vim
+    - curl
+    - tmux
+    - screen
+    - python3
+    - python3-apt
+    - python3-pexpect
+    - python3-pip
+    - telnet
+    - cifs-utils
+    - tree
+    - lvm2
+    - xfsprogs
+    state: present
+    force_apt_get: true
+    update_cache: true
+    allow_unauthenticated: true

@@ -1,5 +1,5 @@
 ---
-- name: "OS Common - Debian Family - Packages - Debug Informations: {{ package.name | default('') }}"
+- name: "OS Common - Debian Family - Packages - Package - Debug Informations: {{ package.name | default('') }}"
   ansible.builtin.debug:
     msg:
       - "package: {{ package | default('') }}"
@@ -12,10 +12,7 @@
     - os_common_debian_packages
     - os_common_debian_packages_debug
 
-- name: "OS Common - Debian Family - Packages- flush_handlers"
-  ansible.builtin.meta: flush_handlers
-
-- name: "OS Common - Debian Family - Packages - Ensure"
+- name: "OS Common - Debian Family - Packages - Package - Ensure: {{ package.name | default('') }}"
   ansible.builtin.apt:
     allow_change_held_packages: "{{ package.allow_change_held_packages | default(omit) }}"
     allow_downgrade: "{{ package.allow_downgrade | default(omit) }}"

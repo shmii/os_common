@@ -7,8 +7,10 @@
 .cache
 defaults/secret.yml
 ansible.cfg
-out.txt
+*.out
 *.log
+out.txt
+
 
 .ansible/
 .tox/

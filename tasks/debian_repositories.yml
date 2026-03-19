@@ -71,6 +71,8 @@
   retries: "{{ __os_common_repositories_retry | default(5) }}"
   delay: "{{ __os_common_repositories_delay | default(10) }}"
   until: repository_check_status is success
+  notify:
+    - "Update debian repository cache"
   when:
     - _repositories_manage
     - _repositories | length > 0
