@@ -31,6 +31,7 @@
     move_home: "{{ user.login_class | default(omit) }}"
     non_unique: "{{ user.non_unique | default(omit) }}"
     password: "{{ user.password | default(omit) }}"
+    password_expire_account_disable: "{{ user.password_expire_account_disable | default(omit) }}"
     password_expire_max: "{{ user.password_expire_max | default(omit) }}"
     password_expire_min: "{{ user.password_expire_min | default(omit) }}"
     password_expire_warn: "{{ user.password_expire_warn | default(omit) }}"
@@ -49,6 +50,8 @@
     state: "{{ user.state | default(omit) }}"
     system: "{{ user.system | default(omit) }}"
     uid: "{{ user.uid | default(omit) }}"
+    uid_max: "{{ user.uid_max | default(omit) }}"
+    uid_min: "{{ user.uid_min | default(omit) }}"
     umask: "{{ user.umask | default(omit) }}"
     update_password: "{{ user.update_password | default(omit) }}"
   when:

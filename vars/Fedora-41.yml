@@ -1,1 +1,5 @@
 ---
+__os_common_package_manager: 'yum'
+__os_common_package_manager_backend: "dnf4"
+
+...

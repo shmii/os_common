@@ -23,7 +23,7 @@
   register: dnf_update_res
   until: dnf_update_res is success
   when:
-    - (__os_common_package_manager | default(ansible_pkg_mgr)) == 'dnf'
+    - (__os_common_package_manager | default(ansible_pkg_mgr)) == 'dnf' or (__os_common_package_manager | default(ansible_pkg_mgr)) == 'dnf5'
   listen: "Update rhel repository cache"
   tags:
     - os_common

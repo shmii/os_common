@@ -100,7 +100,7 @@
   delay: "{{ __os_common_repositories_delay | default('10') }}"
   until: dnf_res is success
   when:
-    - (__os_common_package_manager | default(ansible_pkg_mgr)) == 'dnf'
+    - (__os_common_package_manager | default(ansible_pkg_mgr)) == 'dnf' or (__os_common_package_manager | default(ansible_pkg_mgr)) == 'dnf5'
     - package.manage | default(true)
     - package | default([]) | length > 0 
   tags:

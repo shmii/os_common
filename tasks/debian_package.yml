@@ -30,7 +30,7 @@
     force_apt_get: "{{ package.force_apt_get | default(omit) }}"
     install_recommends: "{{ package.install_recommends | default(omit) }}"
     lock_timeout: "{{ package.lock_timeout | default(omit) }}"
-    name: "{{ package.name }}"
+    name: "{{ package.name | default(omit) }}"
     only_upgrade: "{{ package.only_upgrade | default(omit) }}"
     policy_rc_d: "{{ package.policy_rc_d | default(omit) }}"
     purge: "{{ package.purge | default(omit) }}"
@@ -46,7 +46,7 @@
   when:
     - package.manage | default(true)
     - package | default([]) | length > 0
-    - package.name | default('') | length > 0 
+    #- package.name | default('') | length > 0 
   tags:
     - os_common
     - os_common_packages

@@ -42,4 +42,20 @@
         - ansible_os_family == 'RedHat'
         - ansible_distribution == 'RedHat'
 
+    - name: 'Molecule(os_common): prepare.yml - Redhat Familly - Pré-requists packages - Force install of python3-libdnf5'
+      ansible.builtin.command: 'dnf install -y python3-libdnf5'
+      ignore_errors: true
+      register: ignore_errors_register  # <- Stores errors and failures for evaluation.
+      when:
+        - (ansible_os_family == 'RedHat')
+        - (ansible_pkg_mgr == 'dnf5') 
+
+    - name: 'Molecule(os_common): prepare.yml - Redhat Familly - Pré-requists packages - Force install of python3-dnf'
+      ansible.builtin.command: 'dnf install -y python3-dnf'
+      ignore_errors: true
+      register: ignore_errors_register  # <- Stores errors and failures for evaluation.
+      when:
+        - (ansible_os_family == 'RedHat')
+        - (ansible_pkg_mgr == 'dnf')
+
 ...
