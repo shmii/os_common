@@ -45,35 +45,35 @@ platforms:
 
 
 
-  # - name: instance-vagrant-alma8
-  #   box: generic/alma8
-  #   interfaces:
-  #     - auto_config: true
-  #       network_name: private_network
-  #       type: static
-  #       ip: 192.168.10.5
-  #   provider_raw_config_args:
-  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-  #   groups:
-  #     - molecule_vm
+  - name: instance-vagrant-alma8
+    box: generic/alma8
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: static
+        ip: 192.168.10.5
+    provider_raw_config_args:
+      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+    groups:
+      - molecule_vm
 
-  # - name: instance-vagrant-alma9
-  #   box: generic/alma9
-  #   interfaces:
-  #     - auto_config: true
-  #       network_name: private_network
-  #       type: static
-  #       ip: 192.168.10.6
-  #   provider_raw_config_args:
-  #     - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
-  #     - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
-  #     - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
-  #     - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
-  #   groups:
-  #     - molecule_vm
+  - name: instance-vagrant-alma9
+    box: generic-x64/alma9
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: static
+        ip: 192.168.10.6
+    provider_raw_config_args:
+      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => '1G'"
+      - "storage :file, :type => 'qcow2', :device => 'vde', :size => '1G'"
+    groups:
+      - molecule_vm
 
   # - name: instance-vagrant-alma10
   #   box: generic/alma9
