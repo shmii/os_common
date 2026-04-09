@@ -28,6 +28,20 @@
     - os_common_vars_debug
 
 # Run Tasks.
+- name: "OS Common - Hostname"
+  ansible.builtin.import_tasks: hostname.yml
+  tags:
+    - os_common
+    - os_common_hostname
+
+# Run Tasks.
+- name: "OS Common - Hosts File"
+  ansible.builtin.import_tasks: hosts.yml
+  tags:
+    - os_common
+    - os_common_hosts
+
+# Run Tasks.
 - name: "OS Common - Redhat Familly"
   ansible.builtin.import_tasks: rhel_main.yml
   when: ( ansible_os_family == 'RedHat' or ansible_os_family == 'Rocky' )

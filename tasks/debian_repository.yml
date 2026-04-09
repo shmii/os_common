@@ -1,0 +1,66 @@
+---
+- name: "OS Common - Debian Family - Repositories - Repository - Debug Informations: {{ repository.repo | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - "repository: {{ repository | default('') }}"
+      - "repository.certs: {{ repository.certs | default('') }}"
+    verbosity: "{{ os_common_debug_level | default(0) }}"
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_debian
+    - os_common_debian_repositories
+    - os_common_debian_repositories_repository
+    - os_common_debian_repositories_repository_debug
+
+- name: "OS Common - Debian Family - Repositories - Repository - Ensure Repository certs"
+  ansible.builtin.get_url:
+    url: "{{ cert.url }}"
+    dest: "{{ cert.dest }}"
+    mode: '0644'
+  loop: "{{ repository.certs }}"
+  loop_control:
+    loop_var: cert
+  when:
+    - ( repository.certs | default([]) | length > 0 )
+    - ( repository.certs_manage | default(true) )
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_debian
+    - os_common_debian_repositories
+    - os_common_debian_repositories_repository
+    - os_common_debian_repositories_repository_certs
+
+
+- name: "OS Common - Debian Family - Repositories - Repository - Ensure Repository"
+  ansible.builtin.apt_repository:
+    repo: "{{ repository.repo }}"
+    codename: "{{ repository.codename | default(omit) }}"
+    filename: "{{ repository.filename | default(omit) }}"
+    install_python_apt: "{{ repository.install_python_apt | default(omit) }}"
+    mode: "{{ repository.mode | default(omit) }}"
+    state: "{{ repository.state | default(omit) }}"
+    update_cache: "{{ repository.update_cache | default(false) }}"
+    update_cache_retries: "{{ repository.update_cache_retries | default(omit) }}"
+    update_cache_retry_max_delay: "{{ repository.update_cache_retry_max_delay | default(omit) }}"
+    validate_certs: "{{ repository.validate_certs | default(omit) }}"
+  register: repository_check_status
+  retries: "{{ __os_common_repositories_retry | default(5) }}"
+  delay: "{{ __os_common_repositories_delay | default(10) }}"
+  until: repository_check_status is success
+  notify:
+    - "Update debian repository cache"
+  when:
+    - repository.manage  | default(true)
+    - repository.repo | default('') | length > 0
+    - repository | default([]) | length > 0 
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_debian
+    - os_common_debian_repositories
+    - os_common_debian_repositories_repository
+    - os_common_debian_repositories_repository_ensure
+
+...

@@ -12,6 +12,29 @@
     - os_common_debian_packages
     - os_common_debian_packages_debug
 
+- name: "OS Common - Debian Family - Packages - Package - Ensure debconf Preseed: {{ package.name | default('') }}"
+  ansible.builtin.debconf:
+    name: "{{ debconf.name }}"
+    question: "{{ debconf.question | default(omit) }}"
+    unseen: "{{ debconf.unseen | default(omit) }}"
+    value: "{{ debconf.value | default(omit) }}"
+    vtype: "{{ debconf.vtype | default(omit) }}"
+  loop: "{{ package.debconf }}"
+  loop_control:
+    loop_var: debconf
+  register: debconf_result
+  when:
+    - ( package.manage | default(true) )
+    - ( package | default([]) | length > 0 )
+    - ( package.debconf | default([]) | length > 0 )
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_packages_debug
+    - os_common_debian
+    - os_common_debian_packages
+    - os_common_debian_packages_debconf
+
 - name: "OS Common - Debian Family - Packages - Package - Ensure: {{ package.name | default('') }}"
   ansible.builtin.apt:
     allow_change_held_packages: "{{ package.allow_change_held_packages | default(omit) }}"
@@ -39,14 +62,15 @@
     update_cache_retries: "{{ __os_common_repositories_retry | default(5) }}"
     update_cache_retry_max_delay: "{{ __os_common_repositories_delay | default(10) }}"
     upgrade: "{{ package.upgrade | default(omit) }}"
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   register: apt_res
-  retries: "{{ __os_common_repositories_retry | default(5) }}"
-  delay: "{{ __os_common_repositories_delay | default(10) }}"
+  retries: "{{ __os_common_packages_retry | default(5) }}"
+  delay: "{{ __os_common_packages_delay | default(10) }}"
   until: apt_res is success
   when:
-    - package.manage | default(true)
-    - package | default([]) | length > 0
-    #- package.name | default('') | length > 0 
+    - ( package.manage | default(true) )
+    - ( package | default([]) | length > 0 )
   tags:
     - os_common
     - os_common_packages
@@ -56,4 +80,53 @@
     - os_common_debian_packages
     - os_common_debian_packages_ensure
 
+
+- name: "OS Common - Debian Family - Packages - Package - Check if reboot needed: {{ package.name | default('') }}"
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: reboot_required_file
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_packages_ensure
+    - os_common_packages_ensure_unauthenticated
+    - os_common_debian
+    - os_common_debian_packages
+    - os_common_debian_packages_reboot_ensure
+
+- name: "OS Common - Debian Family - Packages - Package - Debug reboot: {{ package.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - "reboot_required_file.stat.exists: {{ reboot_required_file.stat.exists | default('') }}"
+      - "package: {{ package | default([]) }}"
+    verbosity: "{{ os_common_debug_level | default(0) }}"
+  when:
+    - ( package.manage | default(true) )
+    - ( package | default([]) | length > 0 )
+    - ( reboot_required_file |  default([]) | length > 0 )
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_packages_ensure
+    - os_common_packages_ensure_unauthenticated
+    - os_common_debian
+    - os_common_debian_packages
+    - os_common_debian_packages_reboot_debug
+
+- name: "OS Common - Debian Family - Packages - Package - Ensure reboot if needed: {{ package.name | default('') }}"
+  ansible.builtin.reboot:
+    reboot_timeout: 600   # attendre jusqu'à 10 minutes
+    test_command: whoami  # commande pour tester si le serveur est prêt
+  when:
+    - ( package | default([]) | length > 0 )
+    - ( package.manage | default(true) )
+    - ( (package.reboot | default(false)) or (reboot_required_file.stat.exists | default(false)) )
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_packages_ensure
+    - os_common_packages_ensure_unauthenticated
+    - os_common_debian
+    - os_common_debian_packages
+    - os_common_debian_packages_reboot
 ...

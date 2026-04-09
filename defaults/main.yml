@@ -1,5 +1,7 @@
 ---
 __os_common_repositories_retry: 5
-__os_common_repositories_delay: 1
+__os_common_repositories_delay: 10
+__os_common_packages_retry: 5
+__os_common_packages_delay: 10
 __os_common_password_salt: 'MyS3cr3tS@lt'
 ...

@@ -1,8 +1,6 @@
 ---
 - name: "OS Common - Debian Family - Repositories"
   ansible.builtin.import_tasks: debian_repositories.yml
-  when:
-    - __os_common_packages_manage | default(false)
   tags:
     - os_common
     - os_common_repositories

@@ -31,7 +31,7 @@
 - name: "OS Common - Debian Family - Packages - Vars"
   ansible.builtin.set_fact:
     _packages_manage: "{{ os_common.packages_manage | default(true) or __os_common_packages_manage | default(true) }}"
-    _packages: "{{ ((os_common.packages | default([])) + (__os_common_packages | default([]))) | unique }}"
+    _packages: "{{ (__os_common_packages | default([])) + ((os_common.packages | default([]))) | unique }}"
   tags:
     - os_common
     - os_common_packages
@@ -60,14 +60,14 @@
 - name: "OS Common - Debian Family - Packages- flush_handlers"
   ansible.builtin.meta: flush_handlers
 
-- name: "OS Common - Redhat Family - Packages - Package - Loop"
+- name: "OS Common - Debian Family - Packages - Package - Loop"
   ansible.builtin.include_tasks: debian_package.yml
   loop: "{{ _packages }}"
   loop_control:
     loop_var: package
   when:
-    - _packages_manage | default(true)
-    - _packages | default([]) | length > 0 
+    - ( _packages | default([]) | length > 0 )
+    - ( _packages_manage | default(true) )
   tags:
     - os_common
     - os_common_packages

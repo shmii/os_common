@@ -1,0 +1,55 @@
+---
+- name: "OS Common - Hostname - Debug Informations: {{ os_common.hostname.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - "os_common.hostname: {{ os_common.hostname | default([]) }}"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_hostname
+    - os_common_hostname_debug
+
+- name: "OS Common - Hostname - Ensure: {{ os_common.hostname.name | default('') }}"
+  ansible.builtin.hostname:
+    name: "{{ os_common.hostname.name }}"
+    use: "{{ os_common.hostname.use | default(omit) }}"
+  register: hostname_result
+  when:
+    - ( os_common.hostname | default([]) | length > 0 )
+    - ( os_common.hostname_manage | default(true) )
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_hostname
+    - os_common_hostname_ensure
+
+- name: "OS Common - Hostname - Debug reboot: {{ os_common.hostname.name | default('') }}"
+  ansible.builtin.debug:
+    msg:
+      - "hostname_result: {{ hostname_result | default([]) }}"
+      - "os_common.hostname.reboot: {{ os_common.hostname.reboot | default('') }}"
+    verbosity: "{{ os_common_debug_level | default(0) }}"
+  tags:
+    - os_common
+    - os_common_debug
+    - os_common_hostname
+    - os_common_hostname_reboot_debug
+
+- name: "OS Common - Hostname - Ensure reboot if needed: {{ os_common.hostname.name | default('') }}"
+  ansible.builtin.reboot:
+    reboot_timeout: 600   # attendre jusqu'à 10 minutes
+    test_command: whoami  # commande pour tester si le serveur est prêt
+  when:
+    - ( os_common.hostname | default([]) | length > 0 )
+    - ( os_common.hostname_manage | default(true) )
+    - ( (os_common.hostname.reboot | default(false)) or (hostname_result.changed | default(false)) )
+  tags:
+    - os_common
+    - os_common_packages
+    - os_common_packages_ensure
+    - os_common_packages_ensure_unauthenticated
+    - os_common_debian
+    - os_common_debian_packages
+    - os_common_debian_packages_reboot
+...

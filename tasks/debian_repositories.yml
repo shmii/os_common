@@ -53,29 +53,13 @@
     - os_common_debian_repositories_vars_debug
 
 - name: "OS Common - Debian Family - Repositories - Ensure Repositories"
-  ansible.builtin.apt_repository:
-    repo: "{{ repository.repo }}"
-    codename: "{{ repository.codename | default(omit) }}"
-    filename: "{{ repository.filename | default(omit) }}"
-    install_python_apt: "{{ repository.install_python_apt | default(omit) }}"
-    mode: "{{ repository.mode | default(omit) }}"
-    state: "{{ repository.state | default(omit) }}"
-    update_cache: "{{ repository.update_cache | default(false) }}"
-    update_cache_retries: "{{ repository.update_cache_retries | default(omit) }}"
-    update_cache_retry_max_delay: "{{ repository.update_cache_retry_max_delay | default(omit) }}"
-    validate_certs: "{{ repository.validate_certs | default(omit) }}"
+  ansible.builtin.include_tasks: debian_repository.yml
   loop: "{{ _repositories }}"
   loop_control:
     loop_var: repository
-  register: repository_check_status
-  retries: "{{ __os_common_repositories_retry | default(5) }}"
-  delay: "{{ __os_common_repositories_delay | default(10) }}"
-  until: repository_check_status is success
-  notify:
-    - "Update debian repository cache"
   when:
-    - _repositories_manage
-    - _repositories | length > 0
+    - ( _repositories | default([]) | length > 0 )
+    - ( _repositories_manage | default(true) )
   tags:
     - os_common
     - os_common_repositories
