@@ -1,0 +1,22 @@
+#
+# {{ repository.filename }}
+#
+
+{% if repository.types is defined and repository.types %}
+Types: {{ repository.types }}
+{% endif %}
+{% if repository.uris is defined and repository.uris %}
+URIs: {{ repository.uris }}
+{% endif %}
+{% if repository.suites is defined and repository.suites %}
+Suites: {{ repository.suites }}
+{% endif %}
+{% if repository.components is defined and repository.components %}
+Components: {{ repository.components }}
+{% endif %}
+{% if repository.signed_by is defined and repository.signed_by %}
+Signed-By: {{ repository.signed_by }}
+{% endif %}
+{% if repository.enabled is defined %}
+Enabled: {{ 'yes' if repository.enabled else 'no' }}
+{% endif %}

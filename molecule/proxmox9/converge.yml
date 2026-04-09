@@ -6,7 +6,6 @@
   roles:
     - role: os_common
   vars:
-    #os_common_debug_level: 0
     os_common:
       hostname:
         name: 'proxmoxtest01'
@@ -27,8 +26,16 @@
               dest: '/usr/share/keyrings/proxmox-archive-keyring.gpg'
           state: present
         - format: sources
-          filename: "pve-enterprise.sources"
-          types: absent
+          types: deb
+          uris: https://enterprise.proxmox.com/debian/pve
+          suites: trixie
+          components: pve-enterprise
+          signed_by: '/usr/share/keyrings/proxmox-archive-keyring.gpg'
+          enabled: false
+          filename: 'pve-enterprise'
+          certs:
+            - url: 'https://enterprise.proxmox.com/debian/proxmox-archive-keyring-trixie.gpg'
+              dest: '/usr/share/keyrings/proxmox-archive-keyring.gpg'
 
       packages:
         # Install prerequists and tools

@@ -76,14 +76,14 @@
     path: "{{ authorized_key.path | default(omit) }}"
     state: "{{ authorized_key.state | default(omit) }}"
     validate_certs: "{{ authorized_key.validate_certs | default(omit) }}"
-  loop: "{{ user.authorized_keys | default([], true) }}"
+  loop: "{{ user.authorized_keys }}"
   loop_control:
     loop_var: authorized_key
   when:
-    - user
-    - user.manage | default(true)
-    - user.authorized_keys_manage | default(true)
-    - user.authorized_keys
+    - ( user | default([]) | length > 0 )
+    - ( user.get('manage', true) )
+    - ( user.get('authorized_keys_manage', true) )
+    - ( user.authorized_keys | default([]) | length > 0 )
   tags:
     - os_common
     - os_common_users
@@ -102,10 +102,10 @@
     mode: '0440'
     validate: "visudo -cf %s"  # Valide le fichier sudoers pour éviter les erreurs de syntaxe
   when:
-    - user
-    - user.name is defined
-    - user.manage | default(true)
-    - user.sudoer | default(false)
+    - ( user | default([]) | length > 0 )
+    - ( user.name | default('') | length > 0 )
+    - ( user.get('manage', true) )
+    - ( user.get('sudoer', false) )
   tags:
     - os_common
     - os_common_users

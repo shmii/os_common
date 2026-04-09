@@ -33,7 +33,7 @@
     - os_common_debian_repositories_repository_certs
 
 
-- name: "OS Common - Debian Family - Repositories - Repository - Ensure Repository"
+- name: "OS Common - Debian Family - Repositories - Repository - Ensure Repository (.list)"
   ansible.builtin.apt_repository:
     repo: "{{ repository.repo }}"
     codename: "{{ repository.codename | default(omit) }}"
@@ -52,9 +52,11 @@
   notify:
     - "Update debian repository cache"
   when:
-    - repository.manage  | default(true)
-    - repository.repo | default('') | length > 0
-    - repository | default([]) | length > 0 
+    - ( repository.manage  | default(true) )
+    - ( repository.repo | default('') | length > 0 )
+    - ( repository | default([]) | length > 0 )
+    - ( repository.format | default('') | length > 0 )
+    - ( repository.format == 'list' | default('list') )
   tags:
     - os_common
     - os_common_repositories
@@ -62,5 +64,31 @@
     - os_common_debian_repositories
     - os_common_debian_repositories_repository
     - os_common_debian_repositories_repository_ensure
+    - os_common_debian_repositories_repository_ensure_list
 
+- name: "OS Common - Debian Family - Repositories - Repository - Ensure Repository (.sources)"
+  ansible.builtin.template:
+    src: repository.sources.j2
+    dest: "/etc/apt/sources.list.d/{{ repository.filename }}.sources"
+    mode: '0644'
+  register: repository_check_status
+  retries: "{{ __os_common_repositories_retry | default(5) }}"
+  delay: "{{ __os_common_repositories_delay | default(10) }}"
+  until: repository_check_status is success
+  notify:
+    - "Update debian repository cache"
+  when:
+    - ( repository.manage  | default(true) )
+    - ( repository | default([]) | length > 0 )
+    - ( repository.format | default('') | length > 0 )
+    - ( repository.format == 'sources' | default('list') )
+    - ( repository.filename | default('') | length > 0 )
+  tags:
+    - os_common
+    - os_common_repositories
+    - os_common_debian
+    - os_common_debian_repositories
+    - os_common_debian_repositories_repository
+    - os_common_debian_repositories_repository_ensure
+    - os_common_debian_repositories_repository_ensure_sources
 ...
