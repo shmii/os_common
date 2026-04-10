@@ -6,7 +6,9 @@
   roles:
     - role: os_common
   vars:
+    os_common_debug_level: 0
     os_common:
+
       hostname:
         name: 'proxmoxtest01'
         use: debian
@@ -75,6 +77,7 @@
             - open-iscsi
             - chrony
           state: present
+          #reboot: true
         # Remove the Debian Kernel
         - name:
           - linux-image-amd64

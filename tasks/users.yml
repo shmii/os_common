@@ -17,8 +17,8 @@
   loop_control:
     loop_var: user
   when:
-    - ( os_common.users_manage  | default(true) )
-    - ( os_common.users | default([]) | length > 0 )
+    - os_common.get('users', []) | length > 0
+    - os_common.get('users_manage', true)
   tags:
     - os_common
     - os_common_users

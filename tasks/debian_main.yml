@@ -1,6 +1,12 @@
 ---
 - name: "OS Common - Debian Family - Repositories"
   ansible.builtin.import_tasks: debian_repositories.yml
+  when: >
+    (
+      (__os_common_repositories | default([]) | length > 0 and __os_common_repositories_manage | default(true))
+      or
+      (os_common.get('repositories', []) | length > 0 and os_common.get('repositories_manage', true))
+    )
   tags:
     - os_common
     - os_common_repositories
@@ -9,14 +15,27 @@
 
 - name: "OS Common - Debian Family - Packages"
   ansible.builtin.import_tasks: debian_packages.yml
+  when: >
+    (
+      (__os_common_packages | default([]) | length > 0 and __os_common_packages_manage | default(true))
+      or
+      (os_common.get('packages', []) | length > 0 and os_common.get('packages_manage', true))
+    )
   tags:
     - os_common
     - os_common_packages
     - os_common_debian
     - os_common_debian_packages
 
+
 - name: "OS Common - Debian Family - Groups"
   ansible.builtin.import_tasks: groups.yml
+  when: >
+    (
+      (__os_common_groups | default([]) | length > 0 and __os_common_groups_manage | default(true))
+      or
+      (os_common.get('groups', []) | length > 0 and os_common.get('groups_manage', true))
+    )
   tags:
     - os_common
     - os_common_groups
@@ -25,6 +44,12 @@
 
 - name: "OS Common - Debian Family - Users"
   ansible.builtin.import_tasks: users.yml
+  when: >
+    (
+      (__os_common_users | default([]) | length > 0 and __os_common_users_manage | default(true))
+      or
+      (os_common.get('users', []) | length > 0 and os_common.get('users_manage', true))
+    )
   tags:
     - os_common
     - os_common_users
@@ -33,6 +58,12 @@
 
 - name: "OS Common - Debian Family - Directories"
   ansible.builtin.import_tasks: directories.yml
+  when: >
+    (
+      (__os_common_directories | default([]) | length > 0 and __os_common_directories_manage | default(true))
+      or
+      (os_common.get('directories', []) | length > 0 and os_common.get('directories_manage', true))
+    )
   tags:
     - os_common
     - os_common_directories
@@ -41,6 +72,8 @@
 
 - name: "OS Common - Debian Family - LVM"
   ansible.builtin.import_tasks: lvm.yml
+  when:
+    - os_common.get('lvm_manage', true)
   tags:
     - os_common
     - os_common_lvms
