@@ -41,19 +41,22 @@
     - os_common
     - os_common_hosts
 
-# Run Tasks.
-- name: "OS Common - Redhat Familly"
-  ansible.builtin.import_tasks: rhel_main.yml
-  when: ( ansible_os_family == 'RedHat' or ansible_os_family == 'Rocky' )
+- name: OS Common - Redhat Family
+  when: ansible_os_family in ['RedHat', 'Rocky']
   tags:
     - os_common
     - os_common_rhel
+  block:
+    - name: OS Common - Redhat Family - Include RHEL tasks
+      ansible.builtin.include_tasks: rhel_main.yml
 
 - name: "OS Common - Debian Familly"
-  ansible.builtin.import_tasks: debian_main.yml
-  when: (ansible_facts['os_family'] == "Debian")
+  when: ansible_os_family in ['Debian']
   tags:
     - os_common
     - os_common_debian
+  block:
+    - name: OS Common - Debian Family - Include Debian tasks
+      ansible.builtin.include_tasks: debian_main.yml
 
 ...
