@@ -12,8 +12,8 @@
       - "========== Role Technical Variables (__os_common_*) =================="
       - "__os_common_repositories_manage: {{ __os_common_repositories_manage | default('') }}"
       - "__os_common_repositories: {{ __os_common_repositories | default([]) }}"
-      - "__os_common_repositories_retry (Task default 5): {{ __os_common_repositories_retry | default('') }}"
-      - "__os_common_repositories_delay (Task default 10): {{ __os_common_repositories_delay | default('') }}"
+      - "__os_common_repositories_retry: {{ __os_common_repositories_retry | default('') }}"
+      - "__os_common_repositories_delay: {{ __os_common_repositories_delay | default('') }}"
       - "========== Role Variables ( os_common vars) =========================="
       - "os_common.repositories_manage: {{ os_common.repositories_manage | default('') }}"
       - "os_common.repositories: {{ os_common.repositories | default([]) }}"
@@ -26,10 +26,10 @@
     - os_common_debian_repositories
     - os_common_debian_repositories_debug
 
-- name: "OS Common - Debian Family - Repositories - Compute Variables"
+- name: "OS Common - Debian Family - Repositories - Merge internal and external variables"
   ansible.builtin.set_fact:
-    _repositories_manage: "{{ os_common.repositories_manage | default(true) or __os_common_repositories_manage | default(true) }}"
-    _repositories: "{{ ((os_common.repositories | default([])) + (__os_common_repositories | default([]))) | unique }}"
+    _repositories_manage: "{{ (__os_common_repositories_manage | default(true)) or (os_common.repositories_manage | default(true)) }}"
+    _repositories: "{{ ((__os_common_repositories | default([])) + (os_common.repositories | default([]))) | unique }}"
   tags:
     - os_common
     - os_common_repositories
@@ -58,13 +58,15 @@
   loop_control:
     loop_var: repository
   when:
-    - ( _repositories | default([]) | length > 0 )
-    - ( _repositories_manage | default(true) )
+    - _repositories | default([]) | length > 0
+    - _repositories_manage is not defined or _repositories_manage is boolean
+    - _repositories_manage | default(true)
   tags:
     - os_common
     - os_common_repositories
     - os_common_debian
     - os_common_debian_repositories
-    - os_common_debian_repositories_ensure
+    - os_common_debian_repositories_repository
+    - os_common_debian_repositories_repository_loop
 
 ...

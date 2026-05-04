@@ -30,8 +30,8 @@
 
 - name: "OS Common - Debian Family - Packages - Merge internal and external variables"
   ansible.builtin.set_fact:
-    _packages_manage: "{{ os_common.packages_manage | default(true) or __os_common_packages_manage | default(true) }}"
-    _packages: "{{ (__os_common_packages | default([])) + ((os_common.packages | default([]))) | unique }}"
+    packages_manage: "{{ (__os_common_packages_manage | default(true)) or (os_common.packages_manage | default(true)) }}"
+    packages: "{{ (__os_common_packages | default([])) + ((os_common.packages | default([]))) | unique }}"
   tags:
     - os_common
     - os_common_packages
@@ -44,8 +44,8 @@
   ansible.builtin.debug:
     msg:
       - "================= Packages Vars ======================================"
-      - "_packages_manage: {{ _packages_manage | default('') }}"
-      - "_packages: {{ _packages | default([]) }}"
+      - "packages_manage: {{ packages_manage | default('') }}"
+      - "packages: {{ packages | default([]) }}"
       - "======================================================================"
     verbosity: "{{ os_common_debug_level | default(3) }}"
   tags:
@@ -62,13 +62,13 @@
 
 - name: "OS Common - Debian Family - Packages - Package - Loop"
   ansible.builtin.include_tasks: debian_package.yml
-  loop: "{{ _packages }}"
+  loop: "{{ packages }}"
   loop_control:
     loop_var: package
   when:
-    - _packages | default([]) | length > 0
-    - _packages_manage is not defined or _packages_manage is boolean
-    - _packages_manage | default(true)
+    - packages | default([]) | length > 0
+    - packages_manage is not defined or packages_manage is boolean
+    - packages_manage | default(true)
   tags:
     - os_common
     - os_common_packages
