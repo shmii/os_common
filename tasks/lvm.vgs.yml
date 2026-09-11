@@ -18,8 +18,10 @@
   loop_control:
     loop_var: vg
   when:
+    - os_common.vgs | default([]) | length > 0
+    - os_common.vgs_manage is not defined or os_common.vgs_manage is boolean
     - os_common.vgs_manage | default(true)
-    - os_common.vgs
+
   tags:
     - os_common
     - os_common_lvm

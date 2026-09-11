@@ -46,9 +46,6 @@
             - ca-certificates
             - gnupg
             - htop
-            - lvm2
-            - xfsprogs
-            - e2fsprogs
           update_cache: yes
           autoclean: true
           state: present

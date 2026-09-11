@@ -32,11 +32,11 @@
   loop_control:
     loop_var: disk
   when:
-    - vg
-    - vg.tag
-    - disk
-    - disk.tag
-    - disk.path
+    - vg | default([]) | length > 0
+    - vg.tag | default('') | length > 0
+    - disk | default([]) | length > 0
+    - disk.tag | default('') | length > 0
+    - disk.path | default('') | length > 0
     - vg.tag == disk.tag
   tags:
     - os_common
@@ -70,9 +70,11 @@
     pvs: "{{ pvs }}"
   when:
     - vgs_manage | default(true)
+    - vgs_manage is not defined or vgs_manage is boolean
     - vg.manage | default(true)
-    - vg.name
-    - pvs
+    - vg.manage is not defined or vg.manage is boolean
+    - vg.name | default('') | length > 0
+    - pvs | default([]) | length > 0
   tags:
     - os_common
     - os_common_lvm
