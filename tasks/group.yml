@@ -22,9 +22,8 @@
     state: "{{ group.state | default(omit) }}"
     system: "{{ group.system | default(omit) }}"
   when:
-    - group | default([]) | length > 0
-    - group.manage | default(true)
-
+    - ( group | default([]) | length > 0 )
+    - ( group.manage | default(true) )
   tags:
     - os_common
     - os_common_groups
@@ -42,11 +41,10 @@
     mode: '0440'
     validate: "visudo -cf %s"  # Valide le fichier sudoers pour éviter les erreurs de syntaxe
   when:
-    - group | default([]) | length > 0
-    - group.name | default("") | length > 0
-    - group.manage | default(true)
-    - group.sudoer | default(false)
-
+    - ( group | default([]) | length > 0 )
+    - ( group.manage | default(true) )
+    - ( group.name | default("") | length > 0 )
+    - ( group.sudoer | default(false) )
   tags:
     - os_common
     - os_common_groups

@@ -30,9 +30,9 @@
     state: "{{ lv.state | default(omit) }}"
     thinpool: "{{ lv.thinpool | default(omit) }}"
   when:
-    - lv.manage | default( true )
-    - vg.name
-    - lv.name
+    - ( lv.manage | default( true ) )
+    - ( vg.name | default('') | length > 0 )
+    - ( lv.name | default('') | length > 0 )
   tags:
     - os_common
     - os_common_lvm
@@ -52,11 +52,11 @@
     state: "{{ lv.fs.state | default(omit) }}"
     uuid: "{{ lv.fs.uuid | default(omit) }}"
   when:
-    - lv.manage | default( true )
-    - lv.fs.manage | default( true )
-    - vg.name
-    - lv.name
-    - lv.fs
+    - ( lv.manage | default( true ) )
+    - ( vg.name | default('') | length > 0 )
+    - ( lv.name | default('') | length > 0 )
+    - ( lv.fs | default('') | length > 0 )
+    - ( lv.fs.manage | default( true ) )
   tags:
     - os_common
     - os_common_lvm
@@ -74,13 +74,14 @@
     follow: false
     mode: "{{ lv.mount_point.mode | default(omit) }}"
   when:
-    - lv.manage | default( true )
-    - lv.fs.manage | default( true )
-    - lv.mount_point.manage | default( true )
-    - vg.name
-    - lv.name
-    - lv.fs
-    - lv.mount_point.path
+    - ( lv.manage | default( true ) )
+    - ( vg.name | default('') | length > 0 )
+    - ( lv.name | default('') | length > 0 )
+    - ( lv.fs | default('') | length > 0 )
+    - ( lv.fs.manage | default( true ) )
+    - ( lv.mount_point | default([]) | length > 0 )
+    - ( lv.mount_point.manage | default( true ) )
+    - ( lv.mount_point.path | default('') | length > 0 )
   tags:
     - os_common
     - os_common_lvm
@@ -105,6 +106,15 @@
     passno: "{{ lv.mount_point.passno | default(omit) }}"
   notify:
     - "Ensure Directories"
+  when:
+    - ( lv.manage | default( true ) )
+    - ( vg.name | default('') | length > 0 )
+    - ( lv.name | default('') | length > 0 )
+    - ( lv.fs | default('') | length > 0 )
+    - ( lv.fs.manage | default( true ) )
+    - ( lv.mount_point | default([]) | length > 0 )
+    - ( lv.mount_point.manage | default( true ) )
+    - ( lv.mount_point.path | default('') | length > 0 )
   tags:
     - os_common
     - os_common_lvm

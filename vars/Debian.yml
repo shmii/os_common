@@ -17,6 +17,7 @@ __os_common_packages:
     - tree
     - lvm2
     - xfsprogs
+    - e2fsprogs
     force_apt_get: true
     update_cache: true
 ...

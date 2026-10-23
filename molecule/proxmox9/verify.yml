@@ -1,0 +1,147 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Load vars"
+      ansible.builtin.include_vars:
+        file: vars.yml
+
+    - name: "Verify - Packages - Debug"
+      ansible.builtin.debug:
+        msg:
+          - "+----------------------------------------------------------------------------------+"
+          - "os_common : {{ os_common | default([]) }}"
+          - "+----------------------------------------------------------------------------------+"
+
+    - name: "Verify - Packages - Gather Facts"
+      ansible.builtin.package_facts:
+
+    - name: "Verify - Packages - Build Missing list"
+      ansible.builtin.set_fact:
+        missing_packages: >-
+          {{ os_common.packages | difference(ansible_facts.packages.keys() | list) }}
+
+    - name: "Verify - Packages - Check Missing"
+      ansible.builtin.fail:
+        msg: >
+          Error this packages are missing: {{ missing_packages | join(', ') }}
+      when: missing_packages | length > 0
+
+    - name: "Verify - Packages - Capabilities - Find missing capability"
+      ansible.builtin.command: "which {{ capability }}"
+      loop: "{{ os_common.capabilities }}"
+      loop_control:
+        loop_var: capability
+      register: capabilities_check
+      changed_when: false
+      ignore_errors: true
+
+    - name: "Verify - Packages - Capabilities - Build Missing list"
+      ansible.builtin.set_fact:
+        missing_capabilities: >-
+          {{
+            capabilities_check.results
+            | selectattr('rc', '!=', 0)
+            | map(attribute='capability')
+            | list
+          }}
+
+    - name: "Verify - Packages - Capabilities - Check Missing"
+      ansible.builtin.fail:
+        msg: "Les binaries suivants sont manquants : {{ missing_capabilities | join(', ') }}"
+      when: missing_capabilities | length > 0
+
+    - name: "Verify - Users"
+      ansible.builtin.user:
+        name: "{{ user.name }}"
+        append: "{{ user.append | default(omit) }}"
+        authorization: "{{ user.authorization | default(omit) }}"
+        comment: "{{ user.comment | default(omit) }}"
+        create_home: "{{ user.create_home | default(omit) }}"
+        expires: "{{ user.expires | default(omit) }}"
+        force: "{{ user.force | default(omit) }}"
+        generate_ssh_key: "{{ user.generate_ssh_key | default(omit) }}"
+        group: "{{ user.group | default(omit) }}"
+        groups: "{{ user.groups | default(omit) }}"
+        hidden: "{{ user.hidden | default(omit) }}"
+        home: "{{ user.home | default(omit) }}"
+        local: "{{ user.local | default(omit) }}"
+        login_class: "{{ user.login_class | default(omit) }}"
+        move_home: "{{ user.login_class | default(omit) }}"
+        non_unique: "{{ user.non_unique | default(omit) }}"
+        password: "{{ user.password | default(omit) }}"
+        password_expire_max: "{{ user.password_expire_max | default(omit) }}"
+        password_expire_min: "{{ user.password_expire_min | default(omit) }}"
+        password_expire_warn: "{{ user.password_expire_warn | default(omit) }}"
+        password_lock: "{{ user.password_lock | default(omit) }}"
+        profile: "{{ user.profile | default(omit) }}"
+        remove: "{{ user.remove | default(omit) }}"
+        role: "{{ user.role | default(omit) }}"
+        seuser: "{{ user.seuser | default(omit) }}"
+        shell: "{{ user.shell | default(omit) }}"
+        skeleton: "{{ user.skeleton | default(omit) }}"
+        ssh_key_bits: "{{ user.ssh_key_bits | default(omit) }}"
+        ssh_key_comment: "{{ user.ssh_key_comment | default(omit) }}"
+        ssh_key_file: "{{ user.ssh_key_file | default(omit) }}"
+        ssh_key_passphrase: "{{ user.ssh_key_passphrase | default(omit) }}"
+        ssh_key_type: "{{ user.ssh_key_type | default(omit) }}"
+        state: "{{ user.state | default(omit) }}"
+        system: "{{ user.system | default(omit) }}"
+        uid: "{{ user.uid | default(omit) }}"
+        umask: "{{ user.umask | default(omit) }}"
+        update_password: "{{ user.update_password | default(omit) }}"
+      loop: "{{ os_common.users }}"
+      loop_control:
+        loop_var: user
+      check_mode: true
+      register: user_result
+      failed_when: user_result is changed or user_result is failed
+
+    - name: "Verify - Groups"
+      ansible.builtin.group:
+        name: "{{ group.name }}"
+        force: "{{ group.force | default(omit) }}"
+        gid: "{{ group.gid | default(omit) }}"
+        local: "{{ group.local | default(omit) }}"
+        non_unique: "{{ group.non_unique | default(omit) }}"
+        state: "{{ group.state | default(omit) }}"
+        system: "{{ group.system | default(omit) }}"
+      loop: "{{ os_common.groups }}"
+      loop_control:
+        loop_var: group
+      check_mode: true
+      register: group_result
+      failed_when: group_result is changed or group_result is failed
+
+    - name: "Verify - Directories"
+      ansible.builtin.file:
+        path: "{{ directory.path }}"
+        state: directory
+        access_time: "{{ directory.access_time | default(omit) }}"
+        access_time_format: "{{ directory.access_time_format | default(omit) }}"
+        attributes: "{{ directory.attributes | default(omit) }}"
+        follow: "{{ directory.follow | default(omit) }}"
+        force: "{{ directory.force | default(omit) }}"
+        group: "{{ directory.group | default(omit) }}"
+        mode: "{{ directory.mode | default(omit) }}"
+        modification_time: "{{ directory.modification_time | default(omit) }}"
+        modification_time_format: "{{ directory.modification_time_format | default(omit) }}"
+        owner: "{{ directory.owner | default(omit) }}"
+        recurse: "{{ directory.recurse | default(omit) }}"
+        selevel: "{{ directory.selevel | default(omit) }}"
+        serole: "{{ directory.serole | default(omit) }}"
+        setype: "{{ directory.setype | default(omit) }}"
+        unsafe_writes: "{{ directory.unsafe_writes | default(omit) }}"
+      loop: "{{ os_common.directories }}"
+      loop_control:
+        loop_var: directory
+      check_mode: true
+      register: directory_result
+      failed_when: directory_result is changed or directory_result is failed
+
+
+
+
+...

@@ -11,7 +11,8 @@
 # Variable OS distribution version specific.
 - name: Include OS Debian Family distributions version specific Variables.
   ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
-  when: ansible_os_family == 'Debian'
+  when:
+    - ansible_os_family == 'Debian'
   tags:
     - os_common
     - os_common_vars
@@ -58,7 +59,8 @@
 
 - name: Include OS Amazon Distributions version specific Variables.
   ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  when: ansible_distribution == 'Amazon'
+  when:
+    - ansible_distribution == 'Amazon'
   tags:
     - os_common
     - os_common_vars
@@ -68,7 +70,8 @@
 
 - name: Include OS CentOS Distributions version specific Variables.
   ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  when: ansible_distribution == 'CentOS'
+  when:
+    - ansible_distribution == 'CentOS'
   tags:
     - os_common
     - os_common_vars

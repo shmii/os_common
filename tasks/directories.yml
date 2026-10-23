@@ -17,8 +17,8 @@
   loop_control:
     loop_var: directory
   when:
-    - os_common.directories_manage | default(false)
-    - os_common.directories
+    - ( os_common.directories | default([]) | length > 0 )
+    - ( os_common.directories_manage | default(false) )
   tags:
     - os_common
     - os_common_directories
