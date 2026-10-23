@@ -16,7 +16,7 @@
           - "ansible_distribution_version: {{ ansible_distribution_version }}"
           - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
 
-    - name: 'Molecule(os_common): prepare.yml - Debian Familly - Pré-requists packages - Force install of python-apt'
+    - name: 'Molecule(os_common): prepare.yml - Debian Familly - Pré-requists packages'
       when:
         - (ansible_os_family == 'Debian')
         - (ansible_distribution_major_version != '11' and
@@ -27,10 +27,19 @@
           ignore_errors: true
           register: ignore_errors_register  # <- Stores errors and failures for evaluation.
 
-        - name: 'Molecule(os_common): prepare.yml - Debian Familly - Pré-requists packages - Install'
+        - name: 'Molecule(os_common): prepare.yml - Debian Familly - Pré-requists packages - Install (major_versio != 13)'
           ansible.builtin.command: 'apt-get install python-apt -y'
           ignore_errors: true
           register: ignore_errors_register  # <- Stores errors and failures for evaluation.
+          when:
+            - ansible_distribution_major_version != '13'
+
+        - name: 'Molecule(os_common): prepare.yml - Debian Familly - Pré-requists packages - Install (major_versio == 13)'
+          ansible.builtin.command: 'apt-get install python3-apt -y'
+          ignore_errors: true
+          register: ignore_errors_register  # <- Stores errors and failures for evaluation.
+          when:
+            - ansible_distribution_major_version == '13'
 
     - name: "Molecule(os_common): prepare.yml - Redhat Familly - RHEL - Register Subscriptions"
       community.general.redhat_subscription:

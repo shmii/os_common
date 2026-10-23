@@ -1,0 +1,63 @@
+---
+role_name_check: 1
+dependency:
+  name: galaxy
+
+driver:
+  name: vagrant
+  provision: true
+  provider:
+    name: libvirt
+
+platforms:
+  - name: instance-vagrant-debian13
+    box:  cloud-image/debian-13
+    memory: 8192
+    cpus: 4
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: static
+        ip: 192.168.10.105
+    provider_raw_config_args:
+      - "storage :file, :type => 'qcow2', :device => 'vdb', :size => 1024"
+      - "storage :file, :type => 'qcow2', :device => 'vdc', :size => 1024"
+      - "storage :file, :type => 'qcow2', :device => 'vdd', :size => 1024"
+      - "storage :file, :type => 'qcow2', :device => 'vde', :size => 1024"
+    groups:
+      - molecule_vm
+
+provisioner:
+  name: ansible
+  inventory:
+    host_vars:
+      instance-vagrant-centos7:
+        # ansible_python_interpreter: /usr/bin/python3
+        ansible_python_interpreter: /usr/bin/python
+      instance-vagrant-rhel7:
+        ansible_python_interpreter: /usr/bin/python
+      instance-vagrant-rhel8:
+        ansible_python_interpreter: /usr/bin/python3.9
+      instance-vagrant-ubuntu1604:
+        ansible_python_interpreter: /usr/bin/python2.7
+      instance-vagrant-debian8:
+        ansible_ssh_common_args: >
+          -o PubkeyAcceptedAlgorithms=+ssh-rsa
+          -o HostKeyAlgorithms=+ssh-rsa
+  log: true
+
+  env:
+    RHEL_ACCOUNT_USER: ${RHEL_ACCOUNT_USER:-"xxx"}
+    RHEL_ACCOUNT_PASSWORD: ${RHEL_ACCOUNT_PASSWORD:-"xxx"}
+  scenario:
+    name: default
+
+verifier:
+  name: ansible
+
+lint: |
+    set -e
+    yamllint .
+    ansible-lint
+
+...

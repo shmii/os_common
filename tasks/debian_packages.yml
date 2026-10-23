@@ -10,9 +10,9 @@
       - "ansible_distribution_version: {{ ansible_distribution_version | default('') }}"
       - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
       - "========== Role Technical Variables (__os_common_*) =================="
-      - "__os_common_repositories_retry (Task default 5): {{ __os_common_repositories_retry | default('') }}"
-      - "__os_common_repositories_delay (Task default 10): {{ __os_common_repositories_delay | default('') }}"
       - "__os_common_package_manager_backend: {{ __os_common_package_manager_backend | default('') }}"
+      - "__os_common_packages_retry: {{ __os_common_packages_retry | default('') }}"
+      - "__os_common_packages_delay: {{ __os_common_packages_delay | default('') }}"
       - "__os_common_packages_manage: {{ __os_common_packages_manage | default('') }}"
       - "__os_common_packages: {{ __os_common_packages | default([]) }}"
       - "========== Role Variables ( os_common vars) =========================="
@@ -28,10 +28,10 @@
     - os_common_debian_packages
     - os_common_debian_packages_debug
 
-- name: "OS Common - Debian Family - Packages - Vars"
+- name: "OS Common - Debian Family - Packages - Merge internal and external variables"
   ansible.builtin.set_fact:
-    _packages_manage: "{{ os_common.packages_manage | default(true) or __os_common_packages_manage | default(true) }}"
-    _packages: "{{ ((os_common.packages | default([])) + (__os_common_packages | default([]))) | unique }}"
+    packages_manage: "{{ (__os_common_packages_manage | default(true)) or (os_common.packages_manage | default(true)) }}"
+    packages: "{{ (__os_common_packages | default([])) + ((os_common.packages | default([]))) | unique }}"
   tags:
     - os_common
     - os_common_packages
@@ -44,8 +44,8 @@
   ansible.builtin.debug:
     msg:
       - "================= Packages Vars ======================================"
-      - "_packages_manage: {{ _packages_manage | default('') }}"
-      - "_packages: {{ _packages | default([]) }}"
+      - "packages_manage: {{ packages_manage | default('') }}"
+      - "packages: {{ packages | default([]) }}"
       - "======================================================================"
     verbosity: "{{ os_common_debug_level | default(3) }}"
   tags:
@@ -60,14 +60,15 @@
 - name: "OS Common - Debian Family - Packages- flush_handlers"
   ansible.builtin.meta: flush_handlers
 
-- name: "OS Common - Redhat Family - Packages - Package - Loop"
+- name: "OS Common - Debian Family - Packages - Package - Loop"
   ansible.builtin.include_tasks: debian_package.yml
-  loop: "{{ _packages }}"
+  loop: "{{ packages }}"
   loop_control:
     loop_var: package
   when:
-    - _packages_manage | default(true)
-    - _packages | default([]) | length > 0 
+    - packages | default([]) | length > 0
+    - packages_manage is not defined or packages_manage is boolean
+    - packages_manage | default(true)
   tags:
     - os_common
     - os_common_packages

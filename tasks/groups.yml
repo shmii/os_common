@@ -17,8 +17,8 @@
   loop_control:
     loop_var: group
   when:
-    - os_common.groups_manage | default(true)
-    - os_common.groups | default([]) | length > 0 
+    - ( os_common.groups | default([]) | length > 0 )
+    - ( os_common.groups_manage | default(true) )
   tags:
     - os_common
     - os_common_groups

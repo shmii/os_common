@@ -1,0 +1,70 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    rhel_account_user: "{{ lookup('env', 'RHEL_ACCOUNT_USER') }}"
+    rhel_account_password: "{{ lookup('env', 'RHEL_ACCOUNT_PASSWORD') }}"
+  tasks:
+    - name: "Molecule(os_common): prepare.yml - Display Distribution informations"
+      ansible.builtin.debug:
+        msg:
+          - "ansible_os_family: {{ ansible_os_family }}"
+          - "ansible_distribution: {{ ansible_distribution }}"
+          - "ansible_distribution_release: {{ ansible_distribution_release }}"
+          - "ansible_distribution_version: {{ ansible_distribution_version }}"
+          - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
+
+    - name: 'Molecule(os_common): prepare.yml - Debian Familly - Pré-requists packages'
+      when:
+        - (ansible_os_family == 'Debian')
+        - (ansible_distribution_major_version != '11' and
+           ansible_distribution_major_version != '12')
+      block:
+        - name: 'Molecule(os_common): prepare.yml - Debian Familly - Pré-requists packages - Force update'
+          ansible.builtin.command: 'apt-get update'
+          ignore_errors: true
+          register: ignore_errors_register  # <- Stores errors and failures for evaluation.
+
+        - name: 'Molecule(os_common): prepare.yml - Debian Familly - Pré-requists packages - Install (major_versio != 13)'
+          ansible.builtin.command: 'apt-get install python-apt debconf debconf-utils -y'
+          ignore_errors: true
+          register: ignore_errors_register  # <- Stores errors and failures for evaluation.
+          when:
+            - ansible_distribution_major_version != '13'
+
+        - name: 'Molecule(os_common): prepare.yml - Debian Familly - Pré-requists packages - Install (major_versio == 13)'
+          ansible.builtin.command: 'apt-get install python3-apt gnupg dirmngr apt-transport-https debconf debconf-utils  -y'
+          ignore_errors: true
+          register: ignore_errors_register  # <- Stores errors and failures for evaluation.
+          when:
+            - ansible_distribution_major_version == '13'
+
+    - name: "Molecule(os_common): prepare.yml - Redhat Familly - RHEL - Register Subscriptions"
+      community.general.redhat_subscription:
+        state: present
+        username: "{{ rhel_account_user }}"
+        password: "{{ rhel_account_password }}"
+        auto_attach: true
+      when:
+        - ansible_os_family == 'RedHat'
+        - ansible_distribution == 'RedHat'
+
+    - name: 'Molecule(os_common): prepare.yml - Redhat Familly - Pré-requists packages - Force install of python3-libdnf5'
+      ansible.builtin.command: 'dnf install -y python3-libdnf5'
+      ignore_errors: true
+      register: ignore_errors_register  # <- Stores errors and failures for evaluation.
+      when:
+        - (ansible_os_family == 'RedHat')
+        - (ansible_pkg_mgr == 'dnf5') 
+
+    - name: 'Molecule(os_common): prepare.yml - Redhat Familly - Pré-requists packages - Force install of python3-dnf'
+      ansible.builtin.command: 'dnf install -y python3-dnf'
+      ignore_errors: true
+      register: ignore_errors_register  # <- Stores errors and failures for evaluation.
+      when:
+        - (ansible_os_family == 'RedHat')
+        - (ansible_pkg_mgr == 'dnf')
+
+...
