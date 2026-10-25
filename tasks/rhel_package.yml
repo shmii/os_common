@@ -126,7 +126,7 @@
 - name: "OS Common - Redhat Family - Packages - Package - Debug reboot: {{ package.name | default('') }}"
   ansible.builtin.debug:
     msg:
-      - "yum_res: {{ apt_res | default([]) }}"
+      - "yum_res: {{ yum_res | default([]) }}"
       - "dnf_res: {{ dnf_res | default([]) }}"
       - "reboot_required_rh: {{ reboot_required_rh | default('') }}"
       - "reboot_required: {{ reboot_required | default('') }}"
