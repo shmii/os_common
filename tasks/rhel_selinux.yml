@@ -1,0 +1,10 @@
+---
+- name: OS Common - Redhat Family - SELinux - Package - Ensure required packages
+  ansible.builtin.import_tasks: rhel_selinux_packages.yml
+  tags:
+    - os_common
+    - os_common_selinux
+    - os_common_selinux_packages
+    - os_common_rhel
+    - os_common_rhel_selinux
+    - os_common_rhel_selinux_packages

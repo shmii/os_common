@@ -27,7 +27,6 @@
     - os_common_debian
     - os_common_debian_packages
 
-
 - name: "OS Common - Debian Family - Groups"
   ansible.builtin.import_tasks: groups.yml
   when: >

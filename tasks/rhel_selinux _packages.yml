@@ -1,0 +1,85 @@
+---
+- name: "OS Common - Redhat Family - SELinux - Packages - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - "========== Ansible Facts ============================================="
+      - "ansible_os_family: {{ ansible_os_family | default('') }}"
+      - "ansible_distribution: {{ ansible_distribution | default('') }}"
+      - "ansible_distribution_release: {{ ansible_distribution_release | default('') }}"
+      - "ansible_distribution_major_version: {{ ansible_distribution_major_version | default('') }}"
+      - "ansible_distribution_version: {{ ansible_distribution_version | default('') }}"
+      - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
+      - "========== Role Technical Variables (__os_common_*) =================="
+      - "__os_common_repositories_retry (Task default 5): {{ __os_common_repositories_retry | default('') }}"
+      - "__os_common_repositories_delay (Task default 10): {{ __os_common_repositories_delay | default('') }}"
+      - "__os_common_package_manager_backend: {{ __os_common_package_manager_backend | default('') }}"
+      - "__os_common_selinux_manage: {{ __os_common_selinux_manage | default(false) }}"
+      - "__os_common_selinux_packages: {{ __os_common_selinux_packages | default([]) }}"
+      - "========== Role Variables ( os_common vars) =========================="
+      - "os_common.selinux_manage: {{ os_common.selinux_manage | default(false) }}"
+      - "os_common.selinux_packages: {{ os_common.selinux_packages | default([]) }}"
+      - "======================================================================"
+    verbosity: "{{ os_common_debug_level | default(2) }}"
+  tags:
+    - os_common
+    - os_common_selinux
+    - os_common_selinux_packages
+    - os_common_selinux_packages_debug
+    - os_common_rhel
+    - os_common_rhel_selinux
+    - os_common_rhel_selinux_packages
+    - os_common_rhel_selinux_packages_debug
+
+- name: "OS Common - Redhat Family - SELinux - Packages - Flush Handlers"
+  ansible.builtin.meta: flush_handlers
+
+- name: "OS Common - Redhat Family - SELinux - Packages - Vars"
+  ansible.builtin.set_fact:
+    _selinux_manage: "{{ os_common.selinux_manage | default(false) or __os_common_selinux_manage | default(false) }}"
+    _selinux_packages: "{{ ((os_common.selinux_packages | default([])) + (__os_common_selinux_packages | default([]))) | unique }}"
+  tags:
+    - os_common
+    - os_common_selinux
+    - os_common_selinux_packages
+    - os_common_selinux_packages_vars
+    - os_common_rhel
+    - os_common_rhel_selinux
+    - os_common_rhel_selinux_packages
+    - os_common_rhel_selinux_packages_vars
+
+- name: "OS Common - Redhat Family - SELinux - Packages - Vars - Debug Informations"
+  ansible.builtin.debug:
+    msg:
+      - "================= Packages Vars ======================================"
+      - "ansible_pkg_mgr: {{ ansible_pkg_mgr | default('') }}"
+      - "__os_common_package_manager: {{ __os_common_package_manager | default('') }}"
+      - "_selinux_manage: {{ _selinux_manage | default('') }}"
+      - "_selinux_packages: {{ _selinux_packages | default([]) }}"
+      - "======================================================================"
+    verbosity: "{{ os_common_debug_level | default(3) }}"
+  tags:
+    - os_common
+    - os_common_selinux
+    - os_common_selinux_packages
+    - os_common_selinux_packages_vars
+    - os_common_selinux_packages_vars_debug
+    - os_common_rhel_selinux_packages
+    - os_common_rhel_selinux_packages_vars
+    - os_common_rhel_selinux_packages_vars_debug
+
+- name: "OS Common - Redhat Family - SELinux - Packages - Package - Loop"
+  ansible.builtin.include_tasks: rhel_package.yml
+  loop: "{{ _selinux_packages }}"
+  loop_control:
+    loop_var: selinux_package
+  when:
+    - _selinux_manage | default(true)
+    - _selinux_packages | default([]) | length > 0 
+  tags:
+    - os_common
+    - os_common_selinux
+    - os_common_selinux_packages
+    - os_common_selinux_packages_loop
+    - os_common_rhel_selinux_packages
+    - os_common_rhel_selinux_packages_loop
+...
