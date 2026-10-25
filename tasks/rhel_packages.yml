@@ -43,7 +43,7 @@
     - os_common_rhel_packages
     - os_common_rhel_packages_vars
 
-- name: "OS Common - Debian Family - Packages - Vars - Debug Informations"
+- name: "OS Common - Redhat Family - Packages - Vars - Debug Informations"
   ansible.builtin.debug:
     msg:
       - "================= Packages Vars ======================================"
