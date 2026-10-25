@@ -7,6 +7,8 @@
   tags:
     - os_common
     - os_common_packages
+    - os_common_packages_package
+    - os_common_packages_package_debug
     - os_common_rhel
     - os_common_rhel_packages
     - os_common_rhel_packages_package
@@ -56,11 +58,14 @@
   tags:
     - os_common
     - os_common_packages
+    - os_common_packages_package
+    - os_common_packages_package_ensure
+    - os_common_packages_package_ensure_yum
     - os_common_rhel
     - os_common_rhel_packages
-    - os_common_rhel_packages_ensure
-    - os_common_rhel_packages_yum
-    - os_common_rhel_packages_yum_ensure
+    - os_common_rhel_packages_package
+    - os_common_rhel_packages_package_ensure
+    - os_common_rhel_packages_package_ensure_yum
 
 - name: "OS Common - Redhat Family - Packages - Package - dnf - Ensure: {{ package.name | default('') }}"
   ansible.builtin.dnf:
@@ -106,10 +111,14 @@
   tags:
     - os_common
     - os_common_packages
+    - os_common_packages_package
+    - os_common_packages_package_ensure
+    - os_common_packages_package_ensure_dnf
     - os_common_rhel
     - os_common_rhel_packages
-    - os_common_rhel_packages_dnf
-    - os_common_rhel_packages_dnf_ensure
+    - os_common_rhel_packages_package
+    - os_common_rhel_packages_package_ensure
+    - os_common_rhel_packages_package_ensure_dnf
 
 # # /!\ Not working without "yum-utils" and not idenpotent
 # # So the reboot instruction need to be pass on the "package.reboot: true" vars
@@ -130,7 +139,7 @@
       - "dnf_res: {{ dnf_res | default([]) }}"
       - "reboot_required_rh: {{ reboot_required_rh | default('') }}"
       - "reboot_required: {{ reboot_required | default('') }}"
-      - "package: {{ package | default([]) }}"
+      - "package: {{ selinux_package | default([]) }}"
     verbosity: "{{ os_common_debug_level | default(0) }}"
   tags:
     - os_common
