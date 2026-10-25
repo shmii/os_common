@@ -122,7 +122,7 @@
 
 # # /!\ Not working without "yum-utils" and not idenpotent
 # # So the reboot instruction need to be pass on the "package.reboot: true" vars
-# - name: "OS Common - Redhat Family - Packages - Package - Check if reboot needed: {{ package.name | default('') }}"
+# - name: "OS Common - Redhat Family - Packages - Package - Check Whether a Reboot Is Required: {{ package.name | default('') }}"
 #   ansible.builtin.command: needs-restarting -r
 #   register: reboot_required_rh
 #   ignore_errors: yes
@@ -139,21 +139,25 @@
       - "dnf_res: {{ dnf_res | default([]) }}"
       - "reboot_required_rh: {{ reboot_required_rh | default('') }}"
       - "reboot_required: {{ reboot_required | default('') }}"
-      - "package: {{ selinux_package | default([]) }}"
+      - "package: {{ package | default([]) }}"
     verbosity: "{{ os_common_debug_level | default(0) }}"
   tags:
     - os_common
     - os_common_packages
-    - os_common_packages_ensure
-    - os_common_packages_ensure_unauthenticated
+    - os_common_packages_package
+    - os_common_packages_package_reboot
+    - os_common_packages_package_reboot_debug
     - os_common_rhel
     - os_common_rhel_packages
-    - os_common_rhel_packages_reboot_debug
+    - os_common_rhel_packages_package
+    - os_common_rhel_packages_package_reboot
+    - os_common_rhel_packages_package_reboot_debug
 
-- name: "OS Common - Redhat Family - Packages - Package - Ensure reboot if needed: {{ package.name | default('') }}"
+
+- name: "OS Common - Redhat Family - Packages - Package - Ensure reboot if needed : {{ package.name | default('') }}"
   ansible.builtin.reboot:
-    reboot_timeout: 600   # attendre jusqu'à 10 minutes
-    test_command: whoami  # commande pour tester si le serveur est prêt
+    reboot_timeout: 600   # Wait up to 10 minutes.
+    test_command: whoami  # Command used to verify that the server is ready.
   when:
     - package.manage | default(true)
     - ((package.reboot | default(false)) or (reboot_required | default(false)))
@@ -161,9 +165,12 @@
   tags:
     - os_common
     - os_common_packages
-    - os_common_packages_ensure
-    - os_common_packages_ensure_unauthenticated
+    - os_common_packages_package
+    - os_common_packages_package_reboot
+    - os_common_packages_package_reboot_ensure
     - os_common_rhel
     - os_common_rhel_packages
-    - os_common_rhel_packages_reboot_debug
+    - os_common_rhel_packages_package
+    - os_common_rhel_packages_package_reboot
+    - os_common_rhel_packages_package_reboot_ensure
 ...
